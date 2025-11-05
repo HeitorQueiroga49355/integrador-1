@@ -86,3 +86,40 @@ h3 {
   height: 1rem;
   object-fit: contain;
 }
+
+/* responsividade */
+@media (max-width: 768px) {
+  .table_meus_projetos thead {
+    display: none;
+  }
+
+  .table_meus_projetos,
+  .table_meus_projetos tbody,
+  .table_meus_projetos tr,
+  .table_meus_projetos td {
+    display: block;
+    width: 100%;
+  }
+
+  .table_meus_projetos tr {
+    margin: 0 1rem 1rem 0;
+    background: var(--branco);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+  }
+
+  .table_meus_projetos td {
+    padding: 0.8rem 1rem;
+    text-align: right;
+    position: relative;
+  }
+
+  .table_meus_projetos td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    top: 0.8rem;
+    font-weight: bold;
+    color: #333;
+  }
+}
