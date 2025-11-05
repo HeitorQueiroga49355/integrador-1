@@ -1,5 +1,8 @@
 :root {
-  --background-color-main: #E3EDF9;
+  --azul-principal: #1E3E91;
+  --azul-claro: #E3EDF9;
+  --branco: #ffffff;
+  --borda-radius: 0.5rem;
   --background-table: #ffffff;
 }
 
@@ -10,7 +13,7 @@
 }
 
 body{
-  background-color: var(--background-color-main);
+  background-color: var(--azul-claro);
 }
 
 .main_pesquisador_conteudo{
@@ -24,6 +27,56 @@ h3 {
   margin: 2rem 0 2rem 0;
 }
 
+/* Tabela */
+
+.conteudo_tabela {
+  background-color: var(--branco);
+  border-radius: var(--borda-radius);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
 .table_meus_projetos {
-  background-color: var(--background-table);
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+
+  background-color: var(--branco);
+}
+
+.table_meus_projetos thead {
+  background-color: var(--azul-principal);
+  color: var(--branco);
+}
+
+.table_meus_projetos th,
+.table_meus_projetos td {
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+.table_meus_projetos th:first-child {
+  border-top-left-radius: var(--borda-radius);
+}
+
+.table_meus_projetos th:last-child {
+  border-top-right-radius: var(--borda-radius);
+}
+
+/* .table_meus_projetos tbody tr {
+  border-top: 1px solid #eee;
+}
+
+.table_meus_projetos tbody tr:hover {
+  background-color: #f8f9fd;
+} */
+
+/* status */
+.status {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 120px;
 }
