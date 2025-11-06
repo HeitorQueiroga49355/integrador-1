@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Título da página</title>
+    <meta charset="utf-8">
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data" action="{% url 'validate_proposal' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enviar Proposta</button>
+
+        </form>
+    </body>
+</html>
