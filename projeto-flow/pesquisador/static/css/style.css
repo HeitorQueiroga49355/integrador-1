@@ -89,16 +89,30 @@ h3 {
 
 /* responsividade */
 @media (max-width: 768px) {
+  .conteudo_tabela{
+    margin: 1rem 1rem;
+  }
+
   .table_meus_projetos thead {
     display: none;
   }
 
   .table_meus_projetos,
   .table_meus_projetos tbody,
-  .table_meus_projetos tr,
-  .table_meus_projetos td {
+    .table_meus_projetos tr,
+    .table_meus_projetos td 
+  {
     display: block;
     width: 100%;
+  }
+  .table_meus_projetos tr{
+    border-radius: 1rem;
+    margin: 1rem;
+    padding: 1rem; 
+  }
+
+  .table_meus_projetos tbody{
+    background-color: var(--azul-claro);
   }
 
   .table_meus_projetos tr {
@@ -108,9 +122,14 @@ h3 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.8);
   }
 
+  .titulo_projeto{
+    background-color: var(--azul-principal);
+    color: var(--branco);
+  }
+
   .table_meus_projetos td {
     padding: 0.8rem 1rem;
-    text-align: right;
+    text-align: left;
     position: relative;
   }
 
