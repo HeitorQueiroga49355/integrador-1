@@ -2,6 +2,7 @@
 
 :root {
   --azul-principal: #1E3E91;
+  --azul-escuro: #3b538e;
   --azul-claro: #E3EDF9;
   --branco: #ffffff;
   --borda-radius: 0.5rem;
@@ -36,7 +37,7 @@ h3 {
   background-color: var(--branco);
   border-radius: var(--borda-radius);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .table_meus_projetos {
@@ -135,59 +136,80 @@ h3 {
   color: var(--branco);
   border-radius: .5rem;
   font-weight: 500;
+   
+}
+
+.btn_editar_projeto:hover{
+  background: var(--azul-escuro);
+  cursor: pointer; 
 }
 /* responsividade */
-@media (max-width: 768px) {
-  .conteudo_tabela{
-    margin: 1rem 1rem;
-  }
-
-  .table_meus_projetos thead {
-    display: none;
-  }
-
-  .table_meus_projetos,
-  .table_meus_projetos tbody,
-    .table_meus_projetos tr,
-    .table_meus_projetos td 
-  {
-    display: block;
-    width: 100%;
-  }
-  .table_meus_projetos tr{
-    border-radius: 1rem;
-    margin: 1rem;
-    padding: 1rem; 
-  }
-
-  .table_meus_projetos tbody{
-    background-color: var(--azul-claro);
-  }
-
-  .table_meus_projetos tr {
-    margin: 0 1rem 1rem 0;
-    background: var(--branco);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.8);
-  }
-
-  .titulo_projeto{
-    background-color: var(--azul-principal);
-    color: var(--branco);
-  }
-
+@media (max-width: 1024px) {
+  .table_meus_projetos th,
   .table_meus_projetos td {
-    padding: 0.8rem 1rem;
-    text-align: left;
-    position: relative;
+    padding: 0.75rem;
+    font-size: 0.9rem;
   }
 
-  .table_meus_projetos td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 1rem;
-    top: 0.8rem;
-    font-weight: bold;
-    color: #333;
+  .status {
+    gap: 0.4rem;
+  }
+
+  .status img {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main_pesquisador_conteudo {
+    padding: 0 1rem;
+  }
+
+  .table_meus_projetos th,
+  .table_meus_projetos td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .status {
+    gap: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .status img {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .table_meus_projetos th,
+  .table_meus_projetos td {
+    padding: 0.45rem;
+    font-size: 0.75rem;
+  }
+
+  .status {
+    gap: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .status img {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  .conteudo_tabela {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 }
