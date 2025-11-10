@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
+
 :root {
   --azul-principal: #1E3E91;
   --azul-claro: #E3EDF9;
@@ -10,6 +12,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Afacad", sans-serif ;
 }
 
 body{
@@ -114,6 +117,7 @@ h3 {
 .status_projeto{
   display: flex;
   flex-direction: row ;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -121,6 +125,7 @@ h3 {
   width: 1rem;
   height: 1rem;
   object-fit: contain;
+  
 }
 
 .btn_editar_projeto{
