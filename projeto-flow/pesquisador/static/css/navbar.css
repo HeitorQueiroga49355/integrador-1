@@ -1,0 +1,62 @@
+html {
+    padding: 0;
+}
+
+.navPesquisador {
+    height: 6rem;
+    width: 100%;
+
+    background: #fff;
+
+    padding: 0 0 0 24%;
+    margin: 0;
+
+    display: flex;
+    align-items: flex-end;
+
+    position: relative;
+}
+
+.navPesquisador-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+}
+
+.navPesquisador-list__item {
+    font-family: Afacad;
+    font-size: 1.25rem;
+    font-style: normal;
+
+    text-align: center;
+
+    height: 3.56rem;
+    width: 10rem;
+}
+
+.--active {
+    border-bottom: 0.3125rem solid #253D90;
+}
+
+.navPesquisador-profileButton {
+    position: absolute;
+    right: 5.78rem;
+    bottom: 1rem;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.navPesquisador-profileButton__img {
+    width: 3.01339rem;
+    height: 3.01339rem;
+
+    background: #f00;
+    border-radius: 100% ;
+
+    margin: 0 0.5rem 0 0;
+}
