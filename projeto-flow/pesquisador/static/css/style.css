@@ -7,6 +7,8 @@
   --branco: #ffffff;
   --borda-radius: 0.5rem;
   --background-table: #ffffff;
+  --verde-botoes: #3F861E;
+  --cinza-botoes:#858684;
 }
 
 *{
@@ -143,6 +145,60 @@ h3 {
   background: var(--azul-escuro);
   cursor: pointer; 
 }
+
+/* Editais */
+.subtitulo_editais{
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+
+.paragrafo_info_editais{
+  text-align: justify;
+  margin-top: 1rem;
+  line-height: 1.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.info_btn_editais{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.botoes_editais{
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-verde{
+  background-color: var(--verde-botoes);
+  padding: 0.2rem 1rem;
+  border: none;
+  color: var(--branco);
+  border-radius: .5rem;
+  height: 3rem;
+
+}
+.btn-verde:hover{
+  background-color: #356716;
+  cursor: pointer; 
+}
+
+.btn-cinza{
+  background-color: var(--cinza-botoes);
+  padding: 0.2rem 1rem;
+  border: none;
+  color: var(--branco);
+  border-radius: .5rem;
+  height: 3rem;
+}
+.btn-cinza:hover{
+  background-color: #707477;
+  cursor: pointer; 
+}
+
+
 /* responsividade */
 @media (max-width: 1024px) {
   .table_meus_projetos th,
