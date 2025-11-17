@@ -72,6 +72,10 @@ h3 {
   border-top-right-radius: var(--borda-radius);
 }
 
+.titulo_projeto:hover{
+  background-color: var(--azul-claro);
+}
+
 /* .table_meus_projetos tbody tr {
   border-top: 1px solid #eee;
 }
