@@ -16,6 +16,11 @@
   font-family: "Afacad", sans-serif ;
 }
 
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
 body{
   background-color: var(--azul-claro);
 }
