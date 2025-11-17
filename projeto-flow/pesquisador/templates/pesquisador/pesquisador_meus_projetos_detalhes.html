@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../static/css/style.css">
-</head>
-<body>
-  <main class="main_pesquisador_conteudo">
-    <h3>Meus Projetos</h3>
+{% extends './pesquisador_meus_projetos_tabela.html' %}
+
+{% block content_pesquisador %}
+    <h3>Meus Projetos > Detalhes</h3>
     <section class="detalhes_projeto">
       <div class="sobre_projeto sub_title_project">
         <h4>Nº 14/2025-PROEN/IFRN</h4>
@@ -30,6 +23,4 @@
       </div>
 
     </section>
-  </main>
-</body>
-</html>
+{% endblock content_pesquisador %}

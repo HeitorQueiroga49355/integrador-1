@@ -4,6 +4,7 @@
 
   <main class="main_pesquisador_conteudo">
 
+    {% block content_pesquisador %}
     <h3>Meus Projetos</h3>
     <section class="conteudo_tabela">
       <table class="table_meus_projetos">
@@ -16,22 +17,19 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody>
-          
-            <tr>
-              
-              <td class="titulo_projeto"><a href="{% url 'pesquisador-projetos-detalhes' %}">Projeto Flow</a></td>
-              <td>Nº 14/2025-PROEN/IFRN</td>
-              <td>11/03/2025</td>
-              <td>23/11/2025</td>
-              <td>
-                <div class="status">
-                  <img src="../../static/icons/aprovado.svg" alt="">
-                  <p>Aprovado</p>
-                </div>
-              </td>
-              
-            </tr>
+        <tbody>   
+          <tr>           
+            <td class="titulo_projeto"><a href="{% url 'pesquisador-projetos-detalhes' %}">Projeto Flow</a></td>
+            <td>Nº 14/2025-PROEN/IFRN</td>
+            <td>11/03/2025</td>
+            <td>23/11/2025</td>
+            <td>
+              <div class="status">
+                <img src="../../static/icons/aprovado.svg" alt="">
+                <p>Aprovado</p>
+              </div>
+            </td>          
+          </tr>
           <tr>
             <td class="titulo_projeto">Projeto Flow</td>
             <td>Nº 14/2025-PROEN/IFRN</td>
@@ -59,5 +57,6 @@
         </tbody>
       </table>
     </section>
+    {% endblock content_pesquisador %}
   </main>
 {% endblock content %}
