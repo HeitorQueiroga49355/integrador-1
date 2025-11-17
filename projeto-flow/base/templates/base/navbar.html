@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<style>
+    /* Centraliza os itens */
+    .navbar-nav {
+        margin: 0 auto;
+        gap: 40px;
+    }
+
+    /* Deixa os links limpos */
+    .nav-link {
+        font-size: 14px;
+        color: #000 !important;
+        position: relative;
+    }
+
+    /* Linha azul do item ativo */
+    .nav-link.active::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: #1e40af;
+        border-radius: 3px;
+    }
+
+    /* Avatar */
+    .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: url("{% static 'img/avatar.png' %}") center/cover no-repeat;
+        border: 2px solid #1e40af;
+    }
+
+    /* Barra azul clarinha abaixo */
+    .navbar-bottom-bar {
+        background: #e8f0fe;
+        height: 30px;
+        width: 100%;
+    }
+</style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container">
+
+        <!-- Centro -->
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a href="{% url 'proposals' %}" class="nav-link {% block proposals %}{% endblock %}">
+                    Editais
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'submissions' %}" class="nav-link {% block submissions %}{% endblock %}">
+                    Submissões
+                </a>
+            </li>
+        </ul>
+
+        <!-- Avatar à direita -->
+        <div class="avatar"></div>
+
+    </div>
+</nav>
+
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
