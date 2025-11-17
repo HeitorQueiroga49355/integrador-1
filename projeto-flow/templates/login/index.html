@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../static/css/login.css">
+</head>
+<body>
+<main>
+    <div class="mainContentWrapper">
+        <div class="title">
+            <h2 class="title-text">Login</h2>
+            <span class="title-subtitle">Entre com sua conta.</span>
+        </div>
+        <form class="loginForm">
+            <label class="loginForm-label" for="emailInput">
+                <span class="loginForm-label__inputTitle">E-mail</span>
+                <input placeholder="Insira seu e-mail" class="loginForm-label__input" id="emailInput" type="email"/>
+            </label>
+
+            <label class="loginForm-label" for="senhaInput">
+                <span class="loginForm-label__inputTitle">Senha</span>
+                <input placeholder="Insira sua senha" class="loginForm-label__input" id="senhaInput" type="password"/>
+            </label>
+            <div class="loginForm-bottomButtons">
+                <label for="rememberMeInput" class="loginForm-bottomButtons__rememberLabel">
+                    <input type="checkbox" id="rememberMeInput"
+                           class="loginForm-bottomButtons__rememberLabel__checkbox"/>
+                    <span class="loginForm-bottomButtons__rememberLabel__text">Lembre-me</span>
+                </label>
+                <a class="textButton" href="/forgot-password">Esqueceu a senha?</a>
+            </div>
+            <button type="submit" class="loginForm-signButton">Sign In</button>
+        </form>
+        <div class="callRegister">
+            Ainda não tem uma conta? <a href="/register" class="textButton"> Registrar-se </a>
+        </div>
+    </div>
+</main>
+<div class="side">
+    <img class="side-img" alt="person delivering document to other" src="../../static/img/login-side-image.png">
+    <div class="side-overlay"></div>
+    <div class="side-title">Submeta seus projetos</div>
+</div>
+</body>
+</html>
