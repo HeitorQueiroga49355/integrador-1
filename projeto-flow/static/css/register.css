@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
+
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    margin: 0;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    z-index: 1;
+}
+
+.mainContentWrapper {
+    width: 90%;
+    max-width: 38.3125rem;
+}
+
+.title {
+    margin: 0 0 3.06rem 0;
+}
+
+.title-text {
+    color: #253D90;
+    font-family: Afacad;
+    font-size: 3.5rem;
+    font-weight: 700;
+
+    margin: 0 0 2.36rem 0;
+}
+
+.title-subtitle {
+    color: #969696;
+    font-family: Afacad;
+    font-size: 1.875rem;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginForm-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginForm-label__inputTitle {
+    color: #253D90;
+    font-family: Afacad;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.loginForm-label__input {
+    border-radius: 0.375rem;
+    border: 2px solid #CBB4B4;
+    background: #FFF;
+    box-shadow: 5px 2px 10px 3px rgba(0, 0, 0, 0.05);
+
+    width: calc(100% - 2rem);
+    height: 3.8125rem;
+
+    margin: 0.75rem 0 0.75rem 0;
+    padding: 0 1rem 0 1rem;
+
+    font-size: 1.25rem;
+    font-family: Afacad;
+
+    color: #8F8F8F;
+}
+
+select.loginForm-label__input {
+    width: 100%;
+}
+
+option {
+    color: #8F8F8F;
+}
+
+.loginForm-bottomButtons {
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+
+    margin: 0 0 2.5rem 0;
+}
+
+.loginForm-bottomButtons__rememberLabel {
+    display: flex;
+    align-items: center;
+}
+
+.loginForm-bottomButtons__rememberLabel__checkbox {
+    width: 1.875rem;
+    height: 1.625rem;
+
+    border-radius: 0.375rem;
+    border: 2px solid #CBB4B4;
+    background: #FFF;
+    box-shadow: 5px 2px 10px 3px rgba(0, 0, 0, 0.05);
+}
+
+.loginForm-bottomButtons__rememberLabel__text {
+    color: #8F8F8F;
+    font-family: Afacad;
+    font-size: 1.25rem;
+
+    margin: 0 0 0 0.75rem;
+}
+
+.loginForm-signButton {
+    border-radius: 0.375rem;
+    background: #253D90;
+    box-shadow: 5px 2px 10px 3px rgba(0, 0, 0, 0.05);
+
+    border: none;
+
+    height: 3.8125rem;
+    width: 100%;
+
+    color: #FFF;
+    font-family: Afacad;
+    font-size: 1.25rem;
+}
+
+.callRegister {
+    color: #8F8F8F;
+    font-family: Afacad;
+    font-size: 1.25rem;
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    margin: 2.5rem 0 0 0;
+}
+
+.textButton {
+    border: none;
+    background: none;
+
+    color: #253D90;
+    font-family: Afacad;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.callRegister > a {
+    margin: 0 0 0 0.5rem;
+}
+
+.side {
+    width: 100%;
+    height: 100vh;
+
+    position: relative;
+}
+
+.side-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background: #001895;
+    opacity: 0.8;
+}
+
+.side-img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+
+    position: absolute;
+}
+
+.side-title {
+    color: #fff;
+    position: absolute;
+    top: 10%;
+
+    left: 4rem;
+
+    color: #FFF;
+    font-family: Afacad;
+    font-size: 3.125rem;
+    font-weight: 700;
+}
+
+.twoElementsPerLine {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+}
+
+@media (max-width: 1023px) {
+    body {
+        display: flex;
+    }
+
+    main {
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+    }
+
+    .mainContentWrapper {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+
+        width: 70%;
+
+        margin: 2rem 0;
+
+        overflow-y: auto;
+    }
+
+    .side {
+        position: absolute;
+        z-index: 0;
+
+        top: 0;
+    }
+
+    .side-title {
+        display: none;
+    }
+}
