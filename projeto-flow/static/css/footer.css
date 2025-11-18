@@ -1,0 +1,14 @@
+.site-footer{
+  margin-top: 1.5rem;                      
+  padding: 0.75rem 0;                      
+  background: #253D90;
+  text-align: center;
+}
+
+.footer_text{
+  margin: 0;
+  color: #fff;
+  font-size: 0.7rem; 
+  line-height: 1.4;
+  opacity: 0.9;
+}
