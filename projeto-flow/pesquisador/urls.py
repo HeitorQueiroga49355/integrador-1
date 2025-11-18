@@ -8,6 +8,6 @@ urlpatterns = [
     path('', pesquisador_editais, name='pesquisador_editais'),
     path('projetos/', pesquisador_projetos, name='pesquisador_projetos'),
 
-    path('pesquisador/meus-projetos/', views.pesquisador_projetos, name='pesquisador-projetos'),
-    path('pesquisador/meus-projetos-detalhes/', views.pesquisador_projetos_detalhes, name='pesquisador-projetos-detalhes')
+    path('meus-projetos/', views.pesquisador_projetos, name='pesquisador-projetos'),
+    path('meus-projetos-detalhes/', views.pesquisador_projetos_detalhes, name='pesquisador-projetos-detalhes')
 ]
