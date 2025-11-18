@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../static/css/style.css">
-</head>
-<body>
+{% extends 'base/base.html' %}
+
+{% block content %}
+
   <main class="main_pesquisador_conteudo">
+
+    {% block content_pesquisador %}
     <h3>Meus Projetos</h3>
     <section class="conteudo_tabela">
       <table class="table_meus_projetos">
@@ -20,9 +17,9 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
+        <tbody>   
+          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">  
+            <td>Projeto Flow</td>
             <td>Nº 14/2025-PROEN/IFRN</td>
             <td>11/03/2025</td>
             <td>23/11/2025</td>
@@ -31,10 +28,10 @@
                 <img src="../../static/icons/aprovado.svg" alt="">
                 <p>Aprovado</p>
               </div>
-            </td>
+            </td>          
           </tr>
-          <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
+          <tr class="titulo_projeto">
+            <td >Projeto Flow</td>
             <td>Nº 14/2025-PROEN/IFRN</td>
             <td>11/03/2025</td>
             <td>23/11/2025</td>
@@ -45,8 +42,8 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
+          <tr class="titulo_projeto">
+            <td>Projeto Flow</td>
             <td>Nº 14/2025-PROEN/IFRN</td>
             <td>11/03/2025</td>
             <td>23/11/2025</td>
@@ -60,6 +57,6 @@
         </tbody>
       </table>
     </section>
+    {% endblock content_pesquisador %}
   </main>
-</body>
-</html>
+{% endblock content %}

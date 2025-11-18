@@ -3,89 +3,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/navbar.css">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-<style>
-    /* Centraliza os itens */
-    .navbar-nav {
-        margin: 0 auto;
-        gap: 40px;
-    }
+    <style>
+        /* Centraliza os itens */
+        .navbar-nav {
+            margin: 0 auto;
+            gap: 40px;
+        }
 
-    /* Deixa os links limpos */
-    .nav-link {
-        font-size: 14px;
-        color: #000 !important;
-        position: relative;
-    }
+        /* Deixa os links limpos */
+        .nav-link {
+            font-size: 14px;
+            color: #000 !important;
+            position: relative;
+        }
 
-    /* Linha azul do item ativo */
-    .nav-link.active::after {
-        content: "";
-        position: absolute;
-        bottom: -6px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: #1e40af;
-        border-radius: 3px;
-    }
+        /* Linha azul do item ativo */
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #1e40af;
+            border-radius: 3px;
+        }
 
-    /* Avatar */
-    .avatar {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: url("{% static 'img/avatar.png' %}") center/cover no-repeat;
-        border: 2px solid #1e40af;
-    }
+        /* Avatar */
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: url("{% static 'img/avatar.png' %}") center/cover no-repeat;
+            border: 2px solid #1e40af;
+        }
 
-    /* Barra azul clarinha abaixo */
-    .navbar-bottom-bar {
-        background: #e8f0fe;
-        height: 30px;
-        width: 100%;
-    }
-</style>
+        /* Barra azul clarinha abaixo */
+        .navbar-bottom-bar {
+            background: #e8f0fe;
+            height: 30px;
+            width: 100%;
+        }
+    </style>
 
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg bg-white">
-    <div class="container">
-        <!-- Logo à esquerda -->
-        <a class="navbar-brand" href="{% url 'proposals' %}">
-            <img src="{% static 'images/logo_projetoflow_login.png' %}" alt="Logo" height="40">
-        </a>
-
-        <!-- Centro -->
-        <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a href="{% url 'proposals' %}"
-                class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
-                    Editais
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{% url 'submissions' %}"
-                class="nav-link {% if request.resolver_match.url_name == 'submissions' %}active{% endif %}">
-                    Submissões
-                </a>
-            </li>
-        </ul>
-
-        <!-- Avatar à direita -->
-        <div class="avatar"></div>
-
+<nav class="navPesquisador">
+    <h1><a> <img alt="Logo do projeto flow" class="navPesquisador-logo" src="/static/img/logo-with-name-side.png"></a>
+    </h1>
+    <ul class="navPesquisador-list">
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'proposals' %}--active{% endif %}">
+            <a class="navPesquisador-list__item__link" href="{% url 'proposals' %}">Editais</a></li>
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'submissions' %}--active{% endif %}">
+            <a class="navPesquisador-list__item__link" href="{% url 'submissions' %}">Submissões</a></li>
+    </ul>
+    <div class="navPesquisador-profileButton">
+        <img src="/static/img/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img"></img>
+        <i class="fas fa-chevron-down"></i>
     </div>
 </nav>
 

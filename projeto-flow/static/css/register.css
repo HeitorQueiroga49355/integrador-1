@@ -66,14 +66,24 @@ main {
     background: #FFF;
     box-shadow: 5px 2px 10px 3px rgba(0, 0, 0, 0.05);
 
-    width: calc(100% - 1rem);
+    width: calc(100% - 2rem);
     height: 3.8125rem;
 
-    margin: 0.75rem 0 2.37rem 0;
-    padding: 0 0 0 1rem;
+    margin: 0.75rem 0 0.75rem 0;
+    padding: 0 1rem 0 1rem;
 
     font-size: 1.25rem;
     font-family: Afacad;
+
+    color: #8F8F8F;
+}
+
+select.loginForm-label__input {
+    width: 100%;
+}
+
+option {
+    color: #8F8F8F;
 }
 
 .loginForm-bottomButtons {
@@ -175,12 +185,6 @@ main {
     position: absolute;
 }
 
-.login-logo img {
-    max-width: 300px;
-    width: 100%;
-    height: auto;
-}
-
 .side-title {
     color: #fff;
     position: absolute;
@@ -192,6 +196,12 @@ main {
     font-family: Afacad;
     font-size: 3.125rem;
     font-weight: 700;
+}
+
+.twoElementsPerLine {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
 }
 
 @media (max-width: 1023px) {
