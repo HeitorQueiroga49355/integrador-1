@@ -88,7 +88,7 @@ h3 {
 .status {
   display: flex;
   text-align: center;
-  align-items: center;  
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
   font-weight: 500;
@@ -135,7 +135,7 @@ h3 {
   width: 1rem;
   height: 1rem;
   object-fit: contain;
-  
+
 }
 
 .btn_editar_projeto{
@@ -145,12 +145,12 @@ h3 {
   color: var(--branco);
   border-radius: .5rem;
   font-weight: 500;
-   
+
 }
 
 .btn_editar_projeto:hover{
   background: var(--azul-escuro);
-  cursor: pointer; 
+  cursor: pointer;
 }
 /* responsividade */
 @media (max-width: 1024px) {

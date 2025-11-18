@@ -3,7 +3,8 @@ html {
 }
 
 .navPesquisador {
-    height: 6rem;
+    height: 5rem;
+
     width: 100%;
 
     background: #fff;
@@ -27,12 +28,12 @@ html {
 
 .navPesquisador-list__item {
     font-family: Afacad;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-style: normal;
 
     text-align: center;
 
-    height: 3.56rem;
+    height: 3rem;
     width: 10rem;
 }
 
@@ -52,11 +53,20 @@ html {
 }
 
 .navPesquisador-profileButton__img {
-    width: 3.01339rem;
-    height: 3.01339rem;
+    width: 2.5rem;
+    height: 2.5rem;
 
-    background: #f00;
     border-radius: 100% ;
 
     margin: 0 0.5rem 0 0;
+}
+
+.navPesquisador-logo {
+    position: absolute;
+    width: 9rem;
+    top: 1rem;
+    left: 3rem;
+    object-fit: contain;
+
+    cursor: pointer;
 }

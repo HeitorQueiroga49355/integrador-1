@@ -13,12 +13,14 @@
 <body>
 
 <nav class="navPesquisador">
+    <h1><a> <img alt="Logo do projeto flow" class="navPesquisador-logo" src="/static/img/logo-with-name-side.png"></a>
+    </h1>
     <ul class="navPesquisador-list">
         <li class="navPesquisador-list__item">Editais</li>
         <li class="navPesquisador-list__item --active"><a href="{% url 'pesquisador-projetos' %}">Meus Projetos</a></li>
     </ul>
     <div class="navPesquisador-profileButton">
-        <div class="navPesquisador-profileButton__img"></div>
+        <img src="/static/img/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img"></img>
         <i class="fas fa-chevron-down"></i>
     </div>
 </nav>
