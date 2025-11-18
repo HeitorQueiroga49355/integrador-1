@@ -143,7 +143,7 @@ JAZZMIN_SETTINGS = {
     "site_brand": "ProjetoFlow",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "images/logo_projetoflow_login.png",
+    "site_logo": "images/logo-fundo-branco.png",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
     "custom_css": "css/login.css",
