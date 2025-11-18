@@ -14,8 +14,8 @@
 
 <nav class="navPesquisador">
     <ul class="navPesquisador-list">
-        <li class="navPesquisador-list__item"><a href="{% url 'pesquisador-editais' %}">Editais</a></li>
-        <li class="navPesquisador-list__item --active"><a href="{% url 'pesquisador-projetos' %}">Meus Projetos</a></li>
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'pesquisador-editais' %}--active{% endif %}"><a href="{% url 'pesquisador-editais' %}">Editais</a></li>
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'pesquisador-projetos' or request.resolver_match.url_name == 'pesquisador-projetos-detalhes' %}--active{% endif %}"><a href="{% url 'pesquisador-projetos' %}">Meus Projetos</a></li>
     </ul>
     <div class="navPesquisador-profileButton">
         <div class="navPesquisador-profileButton__img"></div>
