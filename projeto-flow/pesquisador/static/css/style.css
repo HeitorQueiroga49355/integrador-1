@@ -200,13 +200,21 @@ h3 {
 
 
 /* Adicionar Projeto */
+.titulo_com_btn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--branco);
+  border-radius: .5rem;
+  padding: 0 1rem;
+}
+
 .form-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:1rem 1rem;
       align-items:center;
 }
-
 
 
 .label_form_pesquisador{
