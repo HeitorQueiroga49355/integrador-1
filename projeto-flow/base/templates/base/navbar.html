@@ -65,13 +65,15 @@
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-                <a href="{% url 'proposals' %}" class="nav-link {% block proposals %}{% endblock %}">
+                <a href="{% url 'proposals' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
                     Editais
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'submissions' %}" class="nav-link {% block submissions %}{% endblock %}">
+                <a href="{% url 'submissions' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'submissions' %}active{% endif %}">
                     Submissões
                 </a>
             </li>
