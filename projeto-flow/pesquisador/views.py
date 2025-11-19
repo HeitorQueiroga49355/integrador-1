@@ -15,3 +15,6 @@ def pesquisador_projetos(request):
 
 def pesquisador_projetos_detalhes(request):
   return render(request, 'pesquisador/pesquisador_meus_projetos_detalhes.html')
+
+def pesquisador_adicionar_projeto(request):
+  return render(request, 'pesquisador/adicionar_projeto.html')
