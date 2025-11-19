@@ -47,3 +47,9 @@ def submissions(request):
         # dados do banco futuramente
     }
     return render(request, 'proposals/submissions.html', context)
+
+def reviewers(request):
+    context = {
+        # dados do banco futuramente
+    }
+    return render(request, 'proposals/reviewers.html', context)

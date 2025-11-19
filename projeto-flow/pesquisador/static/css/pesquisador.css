@@ -25,11 +25,16 @@ a {
 
 body {
     background-color: var(--azul-claro);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .main_pesquisador_conteudo {
+    flex: 1; 
     margin: 0 auto;
     max-width: 1200px;
+    width: 100%;
 }
 
 h3 {
@@ -207,6 +212,78 @@ h3 {
 .btn-cinza:hover {
     background-color: #707477;
     cursor: pointer;
+}
+
+/* Adicionar Projeto */
+.titulo_com_btn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--branco);
+  border-radius: .5rem;
+  padding: 0 1rem;
+}
+
+.form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:1rem 1rem;
+      align-items:center;
+}
+
+
+.label_form_pesquisador{
+  display:block;
+  font-size:1rem;
+  color:#23363a;
+  margin-bottom:0.2rem;
+  font-weight:1rem;
+}
+
+.completo{
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border-width: 0.1rem;
+}
+
+.input_pesquisador input[type="text"], input[type="date"], select, textarea{
+  width:100%;
+  min-width: 0; 
+  padding:0.625rem 0.75rem; 
+  border-radius:0.5rem;
+  border:0;
+  background:var(--input-bg);
+  color:#21333a;
+  font-size:0.875rem; 
+  display:block;
+  box-sizing:border-box;
+  max-width: 100%;
+
+}
+
+
+.upload {
+  margin-top:1rem;
+  background:linear-gradient(180deg,#fff,#fbfcfd);
+  border-radius:0.5rem;
+  border:1px dashed var(--line);
+  padding: 2rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+  color:#23323a;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
 }
 
 

@@ -67,6 +67,8 @@
             <a class="navPesquisador-list__item__link" href="{% url 'proposals' %}">Editais</a></li>
         <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'submissions' %}--active{% endif %}">
             <a class="navPesquisador-list__item__link" href="{% url 'submissions' %}">Submissões</a></li>
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'reviewers' %}--active{% endif %}">
+            <a class="navPesquisador-list__item__link" href="{% url 'reviewers' %}">Avaliadores</a></li>
     </ul>
     <div class="navPesquisador-profileButton">
         <img src="/static/img/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img"></img>
