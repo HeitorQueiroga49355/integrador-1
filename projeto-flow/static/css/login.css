@@ -122,6 +122,10 @@ main {
     font-size: 1rem;
 }
 
+.loginForm-signButton:hover{
+    background-color: #001895;
+    cursor: pointer;
+}
 .callRegister {
     color: #8F8F8F;
     font-family: Afacad;
@@ -183,7 +187,7 @@ main {
 .side-title {
     color: #fff;
     position: absolute;
-    top: 10%;
+    top: 13%;
 
     left: 4rem;
 
