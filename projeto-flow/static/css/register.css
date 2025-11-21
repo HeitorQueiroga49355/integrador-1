@@ -229,6 +229,12 @@ option {
         overflow-y: auto;
     }
 
+    .twoElementsPerLine {
+        display: flex;
+        flex-direction: column;
+    }
+
+
     .side {
         position: absolute;
         z-index: 0;
