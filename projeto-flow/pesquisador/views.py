@@ -18,3 +18,6 @@ def pesquisador_projetos_detalhes(request):
 
 def pesquisador_adicionar_projeto(request):
   return render(request, 'pesquisador/adicionar_projeto.html')
+
+def pesquisador_editar_projeto(request):
+  return render(request, 'pesquisador/editar_projeto.html')

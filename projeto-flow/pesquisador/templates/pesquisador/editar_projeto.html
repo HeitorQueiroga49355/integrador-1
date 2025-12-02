@@ -1,0 +1,121 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <main class="main_pesquisador_conteudo">
+        <h3>Editar Projeto</h3>
+
+        <div class="titulo_com_btn">
+            <h3>EDITAL N° 14/2025-PROEN/IFRN</h3>
+            <button class="btn-cinza">Ver arquivo</button>
+        </div>
+
+        <h3>Dados Gerais</h3>
+
+        <section class="detalhes_projeto">
+            <form id= "form_pesquisador" action="" enctype="multipart/form-data" novalidate>
+                <div class="form_grid">
+
+                    <div>
+                        <label class="label_form_pesquisador" for="Campus">Campus:</label>
+                        <select name="campus" id="campus" aria-label class="label_form_pesquisador"="Campus">
+                            <option value="">Selecione o campus</option>
+                            <option value="campus1">Campus Natal</option>
+                            <option value="campus2">Campus Currais Novos</option>
+                            <option value="campus3">Campus Pau dos Ferros</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label_form_pesquisador" for="curso">Curso:</label >
+                            <select id="curso" name="curso" aria-label="Curso">
+                                <option value="">Selecione o curso</option>
+                                <option>Curso ADS</option>
+                                <option>Curso Dados</option>
+                            </select>
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="titulo">Título do projeto:</label>
+                        <input class="input_pesquisador completo" id="titulo" name="titulo" type="text" placeholder="Digite o título do projeto">
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="carga-coord">Carga Horária Semanal do Coordenador:</label>
+                        <input class="input_pesquisador completo" id="carga-coord" name="carga-coord" type="text" placeholder="Ex: 10 horas/semana">
+                    </div>
+                </div>
+        </section>
+
+        <h3>Dados do Projeto</h3>
+        <section class="detalhes_projeto">
+            <div class="form_grid">
+
+                <div>
+                    <label class="label_form_pesquisador" for="inicio">Início da Execução</label>
+                    <input class="input_pesquisador" id="inicio" name="inicio" type="date">
+                </div>
+
+                <div>
+                    <label class="label_form_pesquisador" for="termino">Término da Execução</label>
+                    <input class="input_pesquisador" id="termino" name="termino" type="date">
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador " for="carga-total">Carga horária total para desenvolvimento do projeto</label>
+                    <input class="input_pesquisador completo" id="carga-total" name="carga-total" type="text" placeholder="Horas totais previstas">
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="eixo">Eixo Temático</label>
+                    <input class="input_pesquisador completo" id="eixo" name="eixo" type="text" placeholder="Descreva o eixo temático">
+                </div>
+
+                <div class="completo">
+                    <div class="checkbox-row">
+                        <label class="label_form_pesquisador">Projeto Interdisciplinar?</label>
+                        <label class="label_form_pesquisador"><input class="input_pesquisador" type="checkbox" name="interdisciplinar"> Sim</label>
+                    </div>
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="disciplinas">Disciplinas</label>
+                    <input class="input_pesquisador completo" id="disciplinas" name="disciplinas" type="text" placeholder="Liste as disciplinas envolvidas">
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="cursos">Cursos</label>
+                    <input class="input_pesquisador completo" id="cursos" name="cursos" type="text" placeholder="Liste os cursos relacionados">
+                </div>
+
+            </div>
+        </section>
+
+        <h3>Adiçao do Projeto</h3>
+
+        <section class="detalhes_projeto">
+            
+            <div class="">
+                <label class="label_form_pesquisador" class="completo" for="file-upload"></label>
+
+                <div class="upload" id="dropzone" role="region" aria-label class="label_form_pesquisador"="Área de envio de arquivo">
+                    <p>Selecione ou arraste seu arquivo aqui</p>
+                    <input class="input_pesquisador" id="file-upload" type="file" aria-hidden="true">
+                </div>
+            </div>
+
+            <div class="">
+                <div class="info_btn_editais">
+                    <label class="label_form_pesquisador" for="aceito">
+                        <input class="input_pesquisador" class="paragrafo_info_editais" id="aceito" name="aceito" type="checkbox">
+                        Aceito o Termo de Compromisso
+                    </label>
+
+                    <button class="btn-verde" id="submitBtn" type="button">Adicionar Projeto</button>
+
+                </div>
+                               
+            </div>
+            </form>
+        </section>
+    </main>
+{% endblock content %}
