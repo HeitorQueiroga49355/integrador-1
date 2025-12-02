@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
+
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    margin: 0;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mainContentWrapper {
+    width: 80%;
+    max-width: 38.3125rem;
+}
+
+.title {
+    margin: 0 0 3.06rem 0;
+}
+
+.title-text {
+    color: #253D90;
+    font-family: Afacad;
+    font-size: 3.5rem;
+    font-weight: 700;
+
+    margin: 0 0 2.36rem 0;
+}
+
+.title-subtitle {
+    color: #969696;
+    font-family: Afacad;
+    font-size: 1.875rem;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.side {
+    width: 100%;
+    height: 100vh;
+
+    position: relative;
+}
+
+.side-img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+
+    position: absolute;
+}

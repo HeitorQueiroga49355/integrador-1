@@ -1,0 +1,183 @@
+{% extends 'base/navbar.html' %}
+
+{% block content %}
+
+    <div class="container-fluid py-4">
+        <!-- Barra superior com botão -->
+        <div class="top-bar">
+            <div></div>
+             
+            
+        </div>
+
+        <!-- Seção Editais Abertos -->
+        <style>
+            .table-container {
+                background-color: #1e40af;
+                border-radius: 8px;           
+                overflow: hidden;
+                margin-bottom: 30px;
+            }
+            
+            .table {
+                margin-bottom: 0;
+            }
+            
+            .table thead th {
+                background-color: #1e40af;
+                color: white;
+                font-size: 14px;
+                font-weight: 500;
+                border: none;
+                padding: 15px;
+                vertical-align: middle;
+            }
+        </style>
+
+
+        <div class="section-header d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-success"></i>
+                <h5 class="m-0">Editais Abertos</h5>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-success" data-bs-toggle="modal" data-bs-target="#proposalModal">
+                Lançar Edital
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Ano</th>
+                        <th style="width: 40%;">Descrição</th>
+                        <th style="width: 25%;">Inscrições</th>
+                        <th style="width: 12%;" class="text-center">Status</th>
+                        <th style="width: 13%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for edital in editais_abertos %}
+                    <tr>
+                        <td>{{ edital.ano }}</td>
+                        <td>{{ edital.descricao }}</td>
+                        <td>{{ edital.data_inicio_inscricao|date:"d/m/Y" }} até {{ edital.data_fim_inscricao|date:"d/m/Y" }}</td>
+                        <td class="text-center">
+                            <span class="btn-status btn-aberto">aberto</span>
+                        </td>
+                        <td class="text-center">
+                            <a href="#" class="btn-detalhes">detalhes</a> <!--{% url 'detalhes_edital' edital.pk %}-->
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Nenhum edital aberto no momento</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Seção Editais Fechados -->
+        <div class="section-header d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-danger"></i>
+                <h5 class="m-0">Editais Fechados</h5>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Ano</th>
+                        <th style="width: 40%;">Descrição</th>
+                        <th style="width: 25%;">Inscrições</th>
+                        <th style="width: 12%;" class="text-center">Status</th>
+                        <th style="width: 13%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for edital in editais_fechados %}
+                    <tr>
+                        <td>{{ edital.ano }}</td>
+                        <td>{{ edital.descricao }}</td>
+                        <td>{{ edital.data_inicio_inscricao|date:"d/m/Y" }} até {{ edital.data_fim_inscricao|date:"d/m/Y" }}</td>
+                        <td class="text-center">
+                            <span class="btn-status btn-fechado">fechado</span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'detalhes_edital' edital.pk %}" class="btn-detalhes">detalhes</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Nenhum edital fechado</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Modal -->
+<style>
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+}
+
+.modal-body label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+</style>
+<div class="modal fade" id="proposalModal" tabindex="-1" aria-labelledby="porposalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="porposalModalLabel">Novo Edital</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" action="{% url 'proposals' %}">
+          {% csrf_token %}
+          
+          {% for field in form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+              {% endif %}
+              {% if field.errors %}
+                <div class="text-danger">
+                  {% for error in field.errors %}
+                    <small>{{ error }}</small>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Lançar Edital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
