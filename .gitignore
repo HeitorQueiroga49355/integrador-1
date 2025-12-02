@@ -3,3 +3,19 @@ nohup.err
 nohup*
 .~lock.Documento de Requisitos.odt#
 .~lock*
+venv
+__pycache__/
+vscode/
+*.pyc
+.DS_Store
+.idea/
+*.iml
+out/
+build/
+dist/
+*.log
+*.aux
+*.toc
+*.out
+*.gz
+*.log
