@@ -9,11 +9,27 @@
     <link rel="stylesheet" href="/static/css/navbar.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+   
 
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    {% endblock %}
 
     <style>
+        /* Estrutura para manter footer no final */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         /* Centraliza os itens */
         .navbar-nav {
             margin: 0 auto;
@@ -55,6 +71,31 @@
             height: 30px;
             width: 100%;
         }
+
+        /* Container principal - cresce para empurrar footer */
+        .container.mt-4 {
+            flex: 1;
+        }
+
+        .site-footer{
+            padding: 0.75rem 0;
+            background: #253D90;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+          
+        .footer_text{
+            margin: 0;
+            color: #fff;
+            font-size: 1rem;
+            height: 1.4rem;
+            opacity: 0.9;
+        }
+          
+        .footerSpace {
+            height: 3rem;
+        }
     </style>
 
 </head>
@@ -79,6 +120,11 @@
 <div class="container mt-4">
     {% block content %}{% endblock %}
 </div>
+
+<div class="footerSpace"></div>
+<footer class="site-footer" aria-label="Rodapé da página">
+    <p class="footer_text">© 2025 ProjetoFlow. Todos os direitos reservados.</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
