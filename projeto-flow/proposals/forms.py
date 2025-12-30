@@ -4,6 +4,7 @@ from .models import (
     )
 from django import forms
 
+
 class ProposalForm(forms.ModelForm):
     class Meta:
         model = Proposal
