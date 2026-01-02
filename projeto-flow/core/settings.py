@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'base',
     'institution',
     'proposals',
-    'pesquisador'
+    'pesquisador',
+    'submission',
+    'evaluations',
 
 ]
 
@@ -138,8 +140,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Media files
 
-MEDIA_URL = '/subimissions/'
-MEDIA_ROOT = BASE_DIR / 'subimissions'
+MEDIA_URL = '/submissions/'
+MEDIA_ROOT = BASE_DIR / 'submissions'
 
 # Jazzmin settings
 

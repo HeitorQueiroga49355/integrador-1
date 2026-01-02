@@ -7,8 +7,8 @@ class Submission(Base):
     Modelo para representar uma submissão de proposta.
     Relação Many-to-One: cada Researcher pode ter múltiplas Submissions.
     """
-    proposal = models.ForeignKey('proposals.Proposal', on_delete=models.CASCADE, related_name='submissions')
-    researcher = models.ForeignKey('pesquisador.Researcher', on_delete=models.CASCADE, related_name='submissions')
+    proposal = models.ForeignKey('proposals.Proposal', on_delete=models.CASCADE, related_name='submissions_list')
+    researcher = models.ForeignKey('pesquisador.Researcher', on_delete=models.CASCADE, related_name='submissions_researcher')
     title = models.CharField(max_length=255, verbose_name='Título da Submissão')
     abstract = models.TextField(verbose_name='Resumo')
     keywords = models.CharField(max_length=255, verbose_name='Palavras-chave')
@@ -32,7 +32,7 @@ class RectifySubmission(Base):
     Modelo para representar uma retificação de submissão.
     Relação Many-to-One: cada Submission pode ter múltiplas RectifySubmissions.
     """
-    submission = models.ForeignKey('Submission', on_delete=models.CASCADE, related_name='rectifications')
+    submission = models.ForeignKey('Submission', on_delete=models.CASCADE, related_name='rectifications_list')
     title = models.CharField(max_length=255, verbose_name='Título da Retificação')
     abstract = models.TextField(verbose_name='Resumo')
     keywords = models.CharField(max_length=255, verbose_name='Palavras-chave')

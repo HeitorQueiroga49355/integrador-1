@@ -59,6 +59,7 @@ class Profile(Base):
         RESEARCHER = "researcher", _("Pesquisador")
         MANAGER = "manager", _("Gerente")
         USER = "user", _("Usuário Comum")
+        EVALUATOR = "evaluator", _("Avaliador")
 
     role = models.CharField(
         max_length=15,

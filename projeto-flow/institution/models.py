@@ -1,5 +1,6 @@
 from django.db import models
 from base.models import Base
+from django.conf import settings
 
 
 class Institution(Base):
@@ -14,11 +15,11 @@ class Institution(Base):
     street = models.CharField(max_length=100, blank=True, null=True)
     street_number = models.CharField(max_length=10, blank=True, null=True)
     manager = models.ForeignKey(
-        'employee.Employee',
-        on_delete=models.SET_NULL,
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='managed_institutions',
         blank=True,
-        null=True,
-        related_name='manager'
+        null=True
     )
 
     def __str__(self):
