@@ -1,0 +1,541 @@
+{% extends 'base/navbar.html' %}
+{% block submissions %}active{% endblock %}
+{% block content %}
+<style>
+    body {
+        background-color: #e8f0fe;
+    }
+    
+    .submissions-container {
+        background-color: white;
+        border-radius: 8px;
+        margin-top: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .submissions-title {
+        color: #1e40af;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    
+    .table-container {
+        background-color: #1e40af;
+        border-radius: 8px;           
+        overflow: hidden;
+    }
+    
+    .table {
+        margin-bottom: 0;
+    }
+    
+    .table thead th {
+        background-color: #1e40af;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        padding: 15px;
+        vertical-align: middle;
+    }
+    
+    .table tbody {
+        background-color: white;
+    }
+    
+    .table tbody td {
+        padding: 18px 15px;
+        vertical-align: middle;
+        font-size: 13px;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+    
+    .badge-status {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+        min-width: 80px;
+        text-align: center;
+    }
+    
+    .badge-analise {
+        background-color: #3b82f6;
+        color: white;
+    }
+    
+    .badge-recusado {
+        background-color: #dc2626;
+        color: white;
+    }
+    
+    .badge-aceito {
+        background-color: #22c55e;
+        color: white;
+    }
+    
+    .btn-detalhes {
+        background-color: #1e40af;
+        color: white;
+        border: none;
+        padding: 6px 20px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .btn-detalhes:hover {
+        background-color: #1e3a8a;
+        color: white;
+    }
+    
+    .text-truncate-custom {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="container-fluid">
+    <h2 class="submissions-title">Submissões</h2>
+    <div class="submissions-container">
+        
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Edital</th>
+                            <th>Pesquisador</th>
+                            <th>Avaliador</th>
+                            <th>Descrição</th>
+                            <th>Datas</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EDITAL Nº 14/2025...</td>
+                            <td>Rangelo Silva</td>
+                            <td>Ilan Arlet</td>
+                            <td>
+                                <div class="text-truncate-custom">
+                                    Lorem ipsum is simply dummy text of the printing...
+                                </div>
+                            </td>
+                            <td>01/02/2025 até 02/12/2025</td>
+                            <td>
+                                <div class="gap-2 d-flex align-items-center">
+                                    <span class="">Análise</span>
+                                    <img src="../../static/icons/espera.svg" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-detalhes" data-bs-toggle="modal" data-bs-target="#detailSubmissionModal">detalhes</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>EDITAL Nº 14/2025...</td>
+                            <td>Rangelo Silva</td>
+                            <td>Ilan Arlet</td>
+                            <td>
+                                <div class="text-truncate-custom">
+                                    Lorem ipsum is simply dummy text of the printing...
+                                </div>
+                            </td>
+                            <td>01/02/2025 até 02/12/2025</td>
+                            <td>
+                                <div class="gap-2 d-flex align-items-center">
+                                    <span class="">Análise</span>
+                                    <img src="../../static/icons/espera.svg" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-detalhes">detalhes</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>EDITAL Nº 14/2025...</td>
+                            <td>Rangelo Silva</td>
+                            <td>Ilan Arlet</td>
+                            <td>
+                                <div class="text-truncate-custom">
+                                    Lorem ipsum is simply dummy text of the printing...
+                                </div>
+                            </td>
+                            <td>01/02/2025 até 02/12/2025</td>
+                            <td>
+                                <div class="gap-2 d-flex align-items-center">
+                                    <span class="">Recusado</span>
+                                    <img src="../../static/icons/reprovado.svg" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-detalhes">detalhes</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>EDITAL Nº 14/2025...</td>
+                            <td>Rangelo Silva</td>
+                            <td>Ilan Arlet</td>
+                            <td>
+                                <div class="text-truncate-custom">
+                                    Lorem ipsum is simply dummy text of the printing...
+                                </div>
+                            </td>
+                            <td>01/02/2025 até 02/12/2025</td>
+                            <td>
+                                <div class="gap-2 d-flex align-items-center">
+                                    <span class="">Aceito</span>
+                                    <img src="../../static/icons/aprovado.svg" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-detalhes">detalhes</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>EDITAL Nº 14/2025...</td>
+                            <td>Rangelo Silva</td>
+                            <td>Ilan Arlet</td>
+                            <td>
+                                <div class="text-truncate-custom">
+                                    Lorem ipsum is simply dummy text of the printing...
+                                </div>
+                            </td>
+                            <td>01/02/2025 até 02/12/2025</td>
+                            <td>
+                                <div class="gap-2 d-flex align-items-center">
+                                    <span class="">Análise</span>
+                                    <img src="../../static/icons/espera.svg" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-detalhes">detalhes</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Modal -->
+<style>
+.modal-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 24px;
+}
+
+.modal-title {
+  color: #1e40af;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.info-section {
+  margin-bottom: 24px;
+}
+
+.info-section h6 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.info-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.info-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+.check-icon::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+.description-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.comment-section {
+  margin-top: 24px;
+}
+
+.comment-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.comment-box {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.comment-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.add-comment-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.form-control {
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.modal-footer {
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.btn-success {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+.btn-success:hover {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+</style>
+
+<div class="modal fade" id="detailSubmissionModal" tabindex="-1" aria-labelledby="detailSubmissionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="detailSubmissionModalLabel">Heitor Queiroga Duarte</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Informações do Pesquisador -->
+        <div class="info-section">
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Campus:</div>
+              <div class="info-value">PF</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Setor:</div>
+              <div class="info-value">A&I</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Título:</div>
+              <div class="info-value"></div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Carga horária do coordenador:</div>
+              <div class="info-value"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dados do Projeto -->
+        <h6 class="section-title">Dados do projeto</h6>
+        <div class="info-section">
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Início da Execução:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Término da Execução:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Carga horária total de envolvimento do projeto:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet consectetur adipiscing elit</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Eixo Temático:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Projeto Interdisciplinar?
+                <span class="check-icon"></span>
+              </div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Disciplinas:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Cursos:</div>
+              <div class="info-value">Lorem ipsum dolor sit amet</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Possui relação institucional com Pesquisa/Extensão?
+                <span class="check-icon"></span>
+              </div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-item">
+              <div class="info-label">Há parceiros externos?
+                <span class="check-icon"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Descrição do Projeto -->
+        <h6 class="section-title">Descrição do projeto</h6>
+        <div class="description-text">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus non convallis. Tempus leo eu aenean sed diam una tempor. Pulvinar vivamus fringilla lacus hac metus bibendum egestas. Iaculis massa nisl molestie lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </div>
+        <div class="description-text">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus non convallis. Tempus leo eu aenean sed diam una tempor. Pulvinar vivamus fringilla lacus hac metus bibendum egestas. Iaculis massa nisl molestie lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </div>
+
+        <!-- Comentários -->
+        <div class="comment-section">
+          <h6 class="comment-title">Comentários</h6>
+          <div class="comment-box">
+            <div class="comment-text">
+              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus non convallis. Tempus leo eu aenean sed diam una tempor. Pulvinar vivamus fringilla lacus hac metus bibendum egestas. Iaculis massa nisl molestie lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </div>
+          </div>
+          <div class="comment-box">
+            <div class="comment-text">
+              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus non convallis. Tempus leo eu aenean sed diam una tempor. Pulvinar vivamus fringilla lacus hac metus bibendum egestas. Iaculis massa nisl molestie lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </div>
+          </div>
+        </div>
+
+        <!-- Adicionar Comentário -->
+        <div class="comment-section">
+          <h6 class="add-comment-title">Adicionar comentário</h6>
+          <form>
+            <textarea class="form-control" rows="4" placeholder="Adicionar comentário..."></textarea>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reprovar</button>
+        <button type="button" class="btn btn-success">Aprovar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
