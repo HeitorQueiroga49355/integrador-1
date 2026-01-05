@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'pesquisador',
     'submission',
     'evaluations',
+    'address',
 
 ]
 

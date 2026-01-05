@@ -23,49 +23,26 @@ class Profile(Base):
         blank=True,
         null=True
     )
-    state = models.CharField(
-        max_length=2,
+    address = models.ForeignKey(
+        'address.Address',
+        on_delete=models.CASCADE,
+        related_name='profiles',
         blank=True,
         null=True
-        )
-    city = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True
-    )
-    neighborhood = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True
-    )
-    street = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True
-    )
-    street_number = models.CharField(
-        max_length=10,
-        blank=True,
-        null=True
-    )
-    zip_code = models.CharField(
-        max_length=10,
-        blank=True,
-        null=True
-    )
-    
-    
+    )    
+
+
     class Role(models.TextChoices):
         RESEARCHER = "researcher", _("Pesquisador")
         MANAGER = "manager", _("Gerente")
         USER = "user", _("Usuário Comum")
         EVALUATOR = "evaluator", _("Avaliador")
-
+    
     role = models.CharField(
         max_length=15,
         choices=Role.choices,
         default=Role.USER,
-        verbose_name=_("Papel"),
+        verbose_name=_("Cargo"),
         db_index=True,
     )
 

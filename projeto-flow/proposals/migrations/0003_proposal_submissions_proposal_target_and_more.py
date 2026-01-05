@@ -40,12 +40,12 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, max_length=255, null=True, verbose_name='Título'),
         ),
         migrations.AddField(
-            model_name='rectifyproposal',
+            model_name='version',
             name='institution',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rectify_institution_proposals', to='institution.institution'),
         ),
         migrations.AddField(
-            model_name='rectifyproposal',
+            model_name='version',
             name='research',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rectify_researcher_proposals', to='pesquisador.researcher'),
         ),

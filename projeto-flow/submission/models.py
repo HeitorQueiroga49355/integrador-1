@@ -26,8 +26,7 @@ class Submission(Base):
         return self.title
 
 
-
-class RectifySubmission(Base):
+class Version(Base):
     """
     Modelo para representar uma retificação de submissão.
     Relação Many-to-One: cada Submission pode ter múltiplas RectifySubmissions.
@@ -43,8 +42,6 @@ class RectifySubmission(Base):
     expected_results = models.TextField(verbose_name='Resultados Esperados')
     status = models.CharField(max_length=50, verbose_name='Status da Retificação')
     rectify_file = models.FileField(upload_to='submissions/rectifications/', null=True, blank=True, verbose_name='Arquivo da Retificação')
-    
-    #Criar signal para atualizar a versão da submissão ao criar uma retificação
 
     def __str__(self):
         return self.title

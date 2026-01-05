@@ -1,6 +1,6 @@
 from .models import (
     Proposal,
-    RectifyProposal
+    Version
     )
 from django import forms
 
@@ -11,7 +11,7 @@ class ProposalForm(forms.ModelForm):
         fields = "__all__"
         
 
-class RectifyProposalForm(forms.ModelForm):
+class VersionProposalForm(forms.ModelForm):
     class Meta:
-        model = RectifyProposal
+        model = Version
         fields = "__all__"
