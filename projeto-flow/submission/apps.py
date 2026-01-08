@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class ProposalsConfig(AppConfig):
+class SubmissionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'proposals'
+    name = 'submission'
     
     def ready(self):
-        import proposals.signals  # noqa: F401
+        import submission.signals  # noqa: F401

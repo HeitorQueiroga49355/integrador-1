@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import (
     ProposalForm,
-    RectifyProposalForm
+    VersionProposalForm
     )
 
 
@@ -19,12 +19,12 @@ def proposals(request):
 
 def details(request):
     if request.method == 'POST':
-        form = RectifyProposalForm(request.POST, request.FILES)
+        form = VersionProposalForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return render(request, 'proposals/details.html', {'form': RectifyProposalForm(), 'success': True})
+            return render(request, 'proposals/details.html', {'form': VersionProposalForm(), 'success': True})
     else:
-        form = RectifyProposalForm()
+        form = VersionProposalForm()
     
     return render(request, 'proposals/details.html', {'form': form})
 
