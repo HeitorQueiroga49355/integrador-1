@@ -51,31 +51,46 @@
                 <thead>
                     <tr>
                         <th style="width: 10%;">Ano</th>
-                        <th style="width: 40%;">Descrição</th>
+                        <th style="width: 40%;">Titulo  - Descrição</th>
                         <th style="width: 25%;">Inscrições</th>
                         <th style="width: 12%;" class="text-center">Status</th>
                         <th style="width: 13%;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for edital in editais_abertos %}
-                    <tr>
-                        <td>{{ edital.ano }}</td>
-                        <td>{{ edital.descricao }}</td>
-                        <td>{{ edital.data_inicio_inscricao|date:"d/m/Y" }} até {{ edital.data_fim_inscricao|date:"d/m/Y" }}</td>
-                        <td class="text-center">
-                            <span class="btn-status btn-aberto">aberto</span>
-                        </td>
-                        <td class="text-center">
-                            <a href="#" class="btn-detalhes">detalhes</a> <!--{% url 'detalhes_edital' edital.pk %}-->
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">Nenhum edital aberto no momento</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                  {% for edital in editais_abertos %}
+                  <tr>
+                      <td>{{ edital.opening_date|date:"Y" }}</td>
+                      
+                      <td>
+                        <div class="d-flex align-items-center gap-2"">
+                          <strong>{{ edital.title }}</strong><br>
+                          <small class="text-muted">{{ edital.description|truncatewords:10 }}</small>
+                        </div>
+                      </td>
+                      
+                      <td>{{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}</td>
+                      
+                      <td class="text-center">
+                          <span class="badge bg-success">Aberto</span>
+                      </td>
+                      
+                      <td class="text-center">
+                           {% if edital.proposal_file %}
+                              <a href="{{ edital.proposal_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                  <i class="bi bi-download"></i> Arquivo
+                              </a>
+                          {% else %}
+                              -
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                      <td colspan="5" class="text-center text-muted">Nenhum edital aberto no momento.</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
             </table>
         </div>
 
@@ -99,24 +114,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for edital in editais_fechados %}
-                    <tr>
-                        <td>{{ edital.ano }}</td>
-                        <td>{{ edital.descricao }}</td>
-                        <td>{{ edital.data_inicio_inscricao|date:"d/m/Y" }} até {{ edital.data_fim_inscricao|date:"d/m/Y" }}</td>
-                        <td class="text-center">
-                            <span class="btn-status btn-fechado">fechado</span>
-                        </td>
-                        <td class="text-center">
-                            <a href="{% url 'detalhes_edital' edital.pk %}" class="btn-detalhes">detalhes</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">Nenhum edital fechado</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                  {% for edital in editais_fechados %}
+                  <tr>
+                      <td>{{ edital.opening_date|date:"Y" }}</td>
+                      <td>
+                          <strong>{{ edital.title }}</strong>
+                      </td>
+                      <td>{{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}</td>
+                      <td class="text-center">
+                          <span class="badge bg-danger">Fechado</span>
+                      </td>
+                      <td class="text-center">
+                          {% if edital.proposal_file %}
+                              <a href="{{ edital.proposal_file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                  <i class="bi bi-file-earmark"></i> Ver Arquivo
+                              </a>
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                      <td colspan="5" class="text-center text-muted">Nenhum histórico de editais fechados.</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
             </table>
         </div>
     </div>
@@ -149,31 +170,53 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" enctype="multipart/form-data" action="{% url 'proposals' %}">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          
-          {% for field in form %}
-            <div class="mb-3">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.help_text %}
-                <div class="form-text">{{ field.help_text }}</div>
+          <div class="modal-body">
+              
+              {% if form.errors %}
+                  <div class="alert alert-danger">
+                      Por favor, corrija os erros abaixo.
+                  </div>
               {% endif %}
-              {% if field.errors %}
-                <div class="text-danger">
-                  {% for error in field.errors %}
-                    <small>{{ error }}</small>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-          {% endfor %}
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-success">Lançar Edital</button>
+      
+              <div class="mb-3">
+                  <label class="form-label fw-bold">Título do Edital</label>
+                  {{ form.title }}
+              </div>
+      
+              <div class="row">
+                  <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold">Abertura</label>
+                      {{ form.opening_date }}
+                  </div>
+                  <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold">Fechamento</label>
+                      {{ form.closing_date }}
+                  </div>
+              </div>
+      
+              <div class="mb-3">
+                  <label class="form-label fw-bold">Objetivos (Target)</label>
+                  {{ form.target }}
+              </div>
+      
+              <div class="mb-3">
+                  <label class="form-label fw-bold">Descrição / Regras</label>
+                  {{ form.description }}
+              </div>
+      
+              <div class="mb-3">
+                  <label class="form-label fw-bold">Arquivo PDF</label>
+                  {{ form.proposal_file }}
+              </div>
+      
           </div>
-        </form>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success">Publicar Edital</button>
+          </div>
+      </form>
       </div>
     </div>
   </div>
