@@ -1,6 +1,4 @@
 from django.db import models
-from base.models import Base
-from institution.models import Institution
 
 
 class Researcher(models.Model):
@@ -17,7 +15,7 @@ class Researcher(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
-
+        
 class Project(Base):
     # Dados Gerais
     researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, related_name='project_researcher')
@@ -38,4 +36,4 @@ class Project(Base):
     project_file = models.FileField(upload_to='projects/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):
-        return self.title
+        return self.title    
