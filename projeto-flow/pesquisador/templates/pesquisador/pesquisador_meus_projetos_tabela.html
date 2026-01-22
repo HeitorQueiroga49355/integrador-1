@@ -18,42 +18,26 @@
           </tr>
         </thead>
         <tbody>   
-          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">  
-            <td>Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/aprovado.svg" alt="">
-                <p>Aprovado</p>
-              </div>
-            </td>          
+        {% for project in object_list %}      
+          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">
+              <td >{{ project.title }}</td>
+              <td> </td>
+              <td>{{ project.start_date }}</td>
+              <td>{{ project.end_date }}</td>
+              <td>
+                <div class="status">
+                  <img src="../../static/icons/espera.svg" alt="">
+                  <p>Em avaliação</p>
+                </div>
+              </td>
           </tr>
-          <tr class="titulo_projeto">
-            <td >Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/espera.svg" alt="">
-                <p>Em avaliação</p>
-              </div>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 20px;">
+              <p>Nenhum projeto encontrado.</p>
             </td>
           </tr>
-          <tr class="titulo_projeto">
-            <td>Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/reprovado.svg" alt="">
-                <p>Reprovado</p>
-              </div>
-            </td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </section>
