@@ -1,5 +1,5 @@
 from django import forms
-from .models import Evaluation
+from .models import Evaluation, Reviewer
 
 class EvaluationForm(forms.ModelForm):
     class Meta:
@@ -23,4 +23,16 @@ class EvaluationForm(forms.ModelForm):
             'strength_points': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Destaque os pontos positivos...'}),
             'weak_points': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Aponte as fragilidades...'}),
             'recommendations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Sugestões para melhoria...'}),
+        }
+
+class ReviewerForm(forms.ModelForm):
+    class Meta:
+        model = Reviewer
+        fields = ['name', 'email', 'cpf', 'expertise']
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome completo do avaliador'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'exemplo@email.com'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
+            'expertise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Inteligência Artificial, Direito Civil...'}),
         }

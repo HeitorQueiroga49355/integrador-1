@@ -10,8 +10,6 @@ from institution.models import Institution
 from .models import Proposal
 from datetime import datetime
 
-# Create your views here.
-
 
 def proposals(request):
     if request.method == 'POST':
@@ -71,3 +69,23 @@ def reviewers(request):
         # dados do banco futuramente
     }
     return render(request, 'proposals/reviewers.html', context)
+
+def proposal_edit(request, proposal_id):
+    proposal = get_object_or_404(Proposal, id=proposal_id)
+
+    if request.method == 'POST':
+        form = ProposalForm(request.POST, request.FILES, instance=proposal)
+        if form.is_valid():
+            form.save()
+            return redirect('proposals:proposals')
+    else:
+        return redirect('proposals:proposals')
+
+    
+def proposal_delete(request, proposal_id):
+    proposal = get_object_or_404(Proposal, id=proposal_id)
+    if request.method == 'POST':
+        proposal.delete()
+        
+
+    return redirect('proposals:proposals')
