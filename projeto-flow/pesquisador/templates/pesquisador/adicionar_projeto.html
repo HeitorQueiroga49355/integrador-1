@@ -1,82 +1,121 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<main class="main_pesquisador_conteudo">
-    <h3>Adicionar Projeto</h3>
+    <main class="main_pesquisador_conteudo">
+        <h3>Adicionar Projeto</h3>
 
-    <div class="titulo_com_btn"> 
-        <h3>EDITAL N° 14/2025-PROEN/IFRN</h3> 
-        <button class="btn-cinza">Ver arquivo</button> 
-    </div>
+        <div class="titulo_com_btn">
+            <h3>EDITAL N° 14/2025-PROEN/IFRN</h3>
+            <button class="btn-cinza">Ver arquivo</button>
+        </div>
 
-    <section class="detalhes_projeto">
-        <form id="form_pesquisador" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            
+        <h3>Dados Gerais</h3>
+
+        <section class="detalhes_projeto">
+            <form id= "form_pesquisador" action="" enctype="multipart/form-data" novalidate>
+                <div class="form_grid">
+
+                    <div>
+                        <label class="label_form_pesquisador" for="Campus">Campus:</label>
+                        <select name="campus" id="campus" aria-label class="label_form_pesquisador"="Campus">
+                            <option value="">Selecione o campus</option>
+                            <option value="campus1">Campus Natal</option>
+                            <option value="campus2">Campus Currais Novos</option>
+                            <option value="campus3">Campus Pau dos Ferros</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label_form_pesquisador" for="curso">Curso:</label >
+                            <select id="curso" name="curso" aria-label="Curso">
+                                <option value="">Selecione o curso</option>
+                                <option>Curso ADS</option>
+                                <option>Curso Dados</option>
+                            </select>
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="titulo">Título do projeto:</label>
+                        <input class="input_pesquisador completo" id="titulo" name="titulo" type="text" placeholder="Digite o título do projeto">
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="carga-coord">Carga Horária Semanal do Coordenador:</label>
+                        <input class="input_pesquisador completo" id="carga-coord" name="carga-coord" type="text" placeholder="Ex: 10 horas/semana">
+                    </div>
+                </div>
+        </section>
+
+        <h3>Dados do Projeto</h3>
+        <section class="detalhes_projeto">
             <div class="form_grid">
+
                 <div>
-                    <label class="label_form_pesquisador">Campus:</label>
-                    {% comment %} {{ form_projeto.Institution }} {% endcomment %}
+                    <label class="label_form_pesquisador" for="inicio">Início da Execução</label>
+                    <input class="input_pesquisador" id="inicio" name="inicio" type="date">
+                </div>
+
+                <div>
+                    <label class="label_form_pesquisador" for="termino">Término da Execução</label>
+                    <input class="input_pesquisador" id="termino" name="termino" type="date">
                 </div>
 
                 <div class="completo">
-                    <label class="label_form_pesquisador">Título do projeto:</label>
-                    {{ form_projeto.title }}
+                    <label class="label_form_pesquisador " for="carga-total">Carga horária total para desenvolvimento do projeto</label>
+                    <input class="input_pesquisador completo" id="carga-total" name="carga-total" type="text" placeholder="Horas totais previstas">
                 </div>
 
                 <div class="completo">
-                    <label class="label_form_pesquisador">Carga Horária Semanal:</label>
-                    {{ form_projeto.weekly_workload }}
+                    <label class="label_form_pesquisador" for="eixo">Eixo Temático</label>
+                    <input class="input_pesquisador completo" id="eixo" name="eixo" type="text" placeholder="Descreva o eixo temático">
                 </div>
-            </div>
 
-            <h3>Dados do Projeto</h3>
-            <div class="form_grid">
-                <div>
-                    <label class="label_form_pesquisador">Início da Execução</label>
-                    {{ form_projeto.start_date }}
-                </div>
-                <div>
-                    <label class="label_form_pesquisador">Término da Execução</label>
-                    {{ form_projeto.end_date }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador">Carga horária total</label>
-                    {{ form_projeto.total_workload }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador">Eixo Temático</label>
-                    {{ form_projeto.thematic_axis }}
-                </div>
                 <div class="completo">
                     <div class="checkbox-row">
                         <label class="label_form_pesquisador">Projeto Interdisciplinar?</label>
-                        {{ form_projeto.interdisciplinary_project }} Sim
+                        <label class="label_form_pesquisador"><input class="input_pesquisador" type="checkbox" name="interdisciplinar"> Sim</label>
                     </div>
                 </div>
+
                 <div class="completo">
-                    <label class="label_form_pesquisador">Disciplinas</label>
-                    {{ form_projeto.disciplinas }}
+                    <label class="label_form_pesquisador" for="disciplinas">Disciplinas</label>
+                    <input class="input_pesquisador completo" id="disciplinas" name="disciplinas" type="text" placeholder="Liste as disciplinas envolvidas">
                 </div>
+
                 <div class="completo">
-                    <label class="label_form_pesquisador">Cursos</label>
-                    {{ form_projeto.courses }}
+                    <label class="label_form_pesquisador" for="cursos">Cursos</label>
+                    <input class="input_pesquisador completo" id="cursos" name="cursos" type="text" placeholder="Liste os cursos relacionados">
+                </div>
+
+            </div>
+        </section>
+
+        <h3>Adiçao do Projeto</h3>
+
+        <section class="detalhes_projeto">
+            
+            <div class="">
+                <label class="label_form_pesquisador" class="completo" for="file-upload"></label>
+
+                <div class="upload" id="dropzone" role="region" aria-label class="label_form_pesquisador"="Área de envio de arquivo">
+                    <p>Selecione ou arraste seu arquivo aqui</p>
+                    <input class="input_pesquisador" id="file-upload" type="file" aria-hidden="true">
                 </div>
             </div>
 
-            <h3>Adição do Projeto</h3>
-            <div class="upload">
-                <p>Selecione seu arquivo de projeto</p>
-                {{ form_projeto.project_file }}
-            </div>
+            <div class="">
+                <div class="info_btn_editais">
+                    <label class="label_form_pesquisador" for="aceito">
+                        <input class="input_pesquisador" class="paragrafo_info_editais" id="aceito" name="aceito" type="checkbox">
+                        Aceito o Termo de Compromisso
+                    </label>
 
-            <div class="info_btn_editais">
-                <label class="label_form_pesquisador">
-                    <input type="checkbox" required> Aceito o Termo de Compromisso
-                </label>
-                <button class="btn-verde" type="submit">Adicionar Projeto</button>
+                    <button class="btn-verde" id="submitBtn" type="button">Adicionar Projeto</button>
+
+                </div>
+                               
             </div>
-        </form>
-    </section>
-</main>
-{% endblock %}
+            </form>
+        </section>
+    </main>
+{% endblock content %}
