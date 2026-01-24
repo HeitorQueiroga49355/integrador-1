@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'submission',
     'evaluations',
     'address',
+    
+    # Third-party apps
+    'django_extensions',
 
 ]
 
