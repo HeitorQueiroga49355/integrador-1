@@ -29,6 +29,12 @@ def pesquisador_projetos_detalhes(request):
 # def pesquisador_adicionar_projeto(request):
 #   return render(request, 'pesquisador/adicionar_projeto.html')
 
+class ProjectCreateView(CreateView):
+  model = Project
+  form_class = CreateProjectForm
+  template_name = 'pesquisador/adicionar_projeto.html'
+  success_url = reverse_lazy('pesquisador-projetos')
+
 def pesquisador_editar_projeto(request):
   return render(request, 'pesquisador/editar_projeto.html')
 

@@ -14,25 +14,6 @@
         <section class="detalhes_projeto">
             <form method="POST" id= "form_pesquisador" action="" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
-                
-                {% comment %} {% if form.non_field_errors %}
-                    <div class="alert alert-error">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
-                
-                {% if form.errors %}
-                    <div class="alert alert-error">
-                        <ul>
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <li>{{ field.label }}: {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %} {% endcomment %}
-                
                 <div class="form_grid">
                     <div>
                         <label class="label_form_pesquisador" for="Campus">Campus:</label>
