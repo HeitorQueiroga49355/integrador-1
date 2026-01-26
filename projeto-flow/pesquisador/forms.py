@@ -7,20 +7,21 @@ class CreateProjectForm(forms.ModelForm):
         model = Project
         fields = '__all__'
         
-        # Excluímos 'researcher' para não aparecer no formulário
+        # Exclui 'researcher' para não aparecer no formulário quando estiver logado na sua conta
 
-        # exclude = ['researcher']
+        exclude = ['researcher']
 
-        # widgets = {
-        #     'Institution': forms.Select(),
-        #     'title': forms.TextInput(attrs={'placeholder': 'Digite o título do projeto'}),
-        #     'weekly_workload': forms.NumberInput(attrs={'placeholder': 'Ex: 10'}),
-        #     'start_date': forms.DateInput(attrs={'type': 'date'}),
-        #     'end_date': forms.DateInput(attrs={'type': 'date'}),
-        #     'total_workload': forms.NumberInput(attrs={'placeholder': 'Horas totais previstas'}),
-        #     'thematic_axis': forms.TextInput(attrs={'placeholder': 'Descreva o eixo temático'}),
-        #     'interdisciplinary_project': forms.CheckboxInput(),
-        #     'disciplinas': forms.TextInput(attrs={'placeholder': 'Liste as disciplinas'}),
-        #     'courses': forms.TextInput(attrs={'placeholder': 'Liste os cursos'}),
-        #     'project_file': forms.FileInput(attrs={'id': 'file-upload'}),
-        # }
+        widgets = {
+            'Institution': forms.Select(attrs={'class': 'input_pesquisador'}),
+            'title': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Digite o título do projeto', 'id': 'titulo'}),
+            'course': forms.Select(attrs={'class': 'input_pesquisador'}),
+            'weekly_workload': forms.NumberInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Ex: 10 horas/semana', 'id': 'carga-coord'}),
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'total_workload': forms.NumberInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Horas totais previstas'}),
+            'thematic_axis': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Descreva o eixo temático'}),
+            'interdisciplinary_project': forms.CheckboxInput(attrs={'class': 'input_pesquisador','name': 'interdisciplinary_project'}),
+            'disciplines': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Liste as disciplinas'}),
+            'courses': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Liste os cursos'}),
+            'project_file': forms.FileInput(attrs={'class': 'input_pesquisador', 'id': 'file-upload', 'type': 'file', 'aria-hidden': 'true'}),
+        }

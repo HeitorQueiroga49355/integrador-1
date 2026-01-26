@@ -9,19 +9,131 @@
             <button class="btn-cinza">Ver arquivo</button>
         </div>
 
-        <form action="" method="POST">
-            {% csrf_token %}
+        <h3>Dados Gerais</h3>
 
-            {{ form.as_p }}
+        <section class="detalhes_projeto">
+            <form method="POST" id= "form_pesquisador" action="" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                
+                {% comment %} {% if form.non_field_errors %}
+                    <div class="alert alert-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-error">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %} {% endcomment %}
+                
+                <div class="form_grid">
+                    <div>
+                        <label class="label_form_pesquisador" for="Campus">Campus:</label>
+                        {{ form.Institution }}
+                    </div>
+
+                    <div>
+                        <label class="label_form_pesquisador" for="curso">Curso:</label >
+                        {{ form.course }}
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="titulo">Título do projeto:</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="">
+                        <label class="label_form_pesquisador" for="carga-coord">Carga Horária Semanal:</label>
+                        {{ form.weekly_workload }}
+                    </div>
+                </div>
+        </section>
+
+        <h3>Dados do Projeto</h3>
+        <section class="detalhes_projeto">
+            <div class="form_grid">
+
+                <div>
+                    <label class="label_form_pesquisador" for="inicio">Início da Execução</label>
+                    {% comment %} <input class="input_pesquisador" id="inicio" name="inicio" type="date"> {% endcomment %}
+                    {{ form.start_date }}
+                </div>
+
+                <div>
+                    <label class="label_form_pesquisador" for="termino">Término da Execução</label>
+                    {% comment %} <input class="input_pesquisador" id="termino" name="termino" type="date"> {% endcomment %}
+                    {{ form.end_date }}
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador " for="carga-total">Carga horária total para desenvolvimento do projeto</label>
+                    {% comment %} <input class="input_pesquisador completo" id="carga-total" name="carga-total" type="text" placeholder="Horas totais previstas"> {% endcomment %}
+                    {{ form.total_workload }}
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="eixo">Eixo Temático</label>
+                    {% comment %} <input class="input_pesquisador completo" id="eixo" name="eixo" type="text" placeholder="Descreva o eixo temático"> {% endcomment %}
+                    {{ form.thematic_axis }}
+                </div>
+
+                <div class="completo">
+                    <div class="checkbox-row">
+                        <label class="label_form_pesquisador">Projeto Interdisciplinar?</label>
+                        {% comment %} <label class="label_form_pesquisador"><input class="input_pesquisador" type="checkbox" name="interdisciplinar"> Sim</label> {% endcomment %}
+                        {{ form.interdisciplinary_project }}
+                    </div>
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="disciplinas">Disciplinas</label>
+                    {% comment %} <input class="input_pesquisador completo" id="disciplinas" name="disciplinas" type="text" placeholder="Liste as disciplinas envolvidas"> {% endcomment %}
+                    {{ form.disciplines }}
+                </div>
+
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="cursos">Cursos</label>
+                    {% comment %} <input class="input_pesquisador completo" id="cursos" name="cursos" type="text" placeholder="Liste os cursos relacionados"> {% endcomment %}
+                    {{ form.courses }}
+                </div>
+
+            </div>
+        </section>
+
+        <h3>Adiçao do Projeto</h3>
+
+        <section class="detalhes_projeto">
             
-            <h3>Dados Geais</h3>
-            
-            <h3>Dados do Projeto</h3>
-            
-            <h3>Adiçao do Projeto</h3>
-        
-            
-            <button type="submit">Cadastrar</button>
-        </form>
+            <div class="">
+                <label class="label_form_pesquisador" class="completo" for="file-upload"></label>
+
+                <div class="upload" id="dropzone" role="region" aria-label class="label_form_pesquisador"="Área de envio de arquivo">
+                    <p>Selecione ou arraste seu arquivo aqui</p>
+                    {% comment %} <input class="input_pesquisador" id="file-upload" type="file" aria-hidden="true"> {% endcomment %}
+                    {{ form.project_file }}
+                </div>
+            </div>
+
+            <div class="">
+                <div class="info_btn_editais">
+                    <label class="label_form_pesquisador" for="aceito">
+                        <input class="input_pesquisador" class="paragrafo_info_editais" id="aceito" name="aceito" type="checkbox">
+                        Aceito o Termo de Compromisso
+                    </label>
+
+                    <button class="btn-verde" id="submitBtn" type="submit">Adicionar Projeto</button>
+
+                </div>
+                               
+            </div>
+            </form>
+        </section>
     </main>
 {% endblock content %}

@@ -1,3 +1,4 @@
+from random import choice
 from tabnanny import verbose
 from django.db import models
 from django.conf import settings
@@ -22,9 +23,17 @@ class Researcher(models.Model):
 
 class Project(Base):
     # Dados Gerais
+    COURSES = (
+        ('Matematica', 'Matemática'),
+        ('Fisica', 'Física'),
+        ('Quimica', 'Química'),
+        ('Biologia', 'Biologia'),
+        ('Engenharia', 'Engenharia'),
+    )
+    
     researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, related_name='project_researcher', verbose_name='Pesquisador')
     Institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='projeto_campus')
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='projeto_course')
+    course = models.CharField(choices=COURSES, max_length=50, default='Matematica', verbose_name='Curso')
     title = models.CharField(max_length=255, verbose_name='Titulo')
     weekly_workload = models.IntegerField(verbose_name='Carga Horaria')
     # Dados do Projeto

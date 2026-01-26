@@ -29,12 +29,6 @@ def pesquisador_projetos_detalhes(request):
 # def pesquisador_adicionar_projeto(request):
 #   return render(request, 'pesquisador/adicionar_projeto.html')
 
-class ProjectCreateView(CreateView):
-  model = Project
-  form_class = CreateProjectForm
-  template_name = 'pesquisador/adicionar_projeto.html'
-  success_url = reverse_lazy('pesquisador-projetos')
-
 def pesquisador_editar_projeto(request):
   return render(request, 'pesquisador/editar_projeto.html')
 
@@ -46,13 +40,12 @@ class ProjectCreateView(CreateView):
 
   def form_valid(self, form):
     # Busca o perfil de pesquisador do usuário logado e associa ao projeto
-    researcher = Researcher.objects.get(user=self.request.user)
-    form.instance.researcher = researcher
-    return super().form_valid(form)
-
-  def get_context_data(self, **kwargs):
-    # renomear o form no contexto
-    context = super().get_context_data(**kwargs)
-    context['form_projeto'] = context['form']
-    return context
+    try:
+      researcher = Researcher.objects.get(user=self.request.user)
+      form.instance.researcher = researcher
+      return super().form_valid(form)
+    except Researcher.DoesNotExist:
+      # Se o usuário não tiver perfil de pesquisador, adiciona erro ao formulário
+      form.add_error(None, 'Você precisa ter um perfil de pesquisador para criar projetos.')
+      return self.form_invalid(form)
     
