@@ -31,6 +31,7 @@ class Project(Base):
         ('Engenharia', 'Engenharia'),
     )
     
+    proposal = models.ForeignKey('proposals.Proposal', on_delete=models.CASCADE, related_name='projects', verbose_name='Edital', null=True)
     researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, related_name='project_researcher', verbose_name='Pesquisador')
     Institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='projeto_campus')
     course = models.CharField(choices=COURSES, max_length=50, default='Matematica', verbose_name='Curso')

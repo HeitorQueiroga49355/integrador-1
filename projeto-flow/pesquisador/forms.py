@@ -7,9 +7,9 @@ class CreateProjectForm(forms.ModelForm):
         model = Project
         fields = '__all__'
         
-        # Exclui 'researcher' para não aparecer no formulário quando estiver logado na sua conta
+        # Exclui 'researcher' e 'proposal' para não aparecerem no formulário
 
-        exclude = ['researcher']
+        exclude = ['researcher', 'proposal']
 
         widgets = {
             'Institution': forms.Select(attrs={'class': 'input_pesquisador'}),

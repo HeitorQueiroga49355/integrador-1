@@ -21,7 +21,7 @@
         {% for project in object_list %}      
           <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">
               <td >{{ project.title }}</td>
-              <td> </td>
+              <td>{{ project.proposal.title }}</td>
               <td>{{ project.start_date }}</td>
               <td>{{ project.end_date }}</td>
               <td>
