@@ -23,5 +23,5 @@ class CreateProjectForm(forms.ModelForm):
             'interdisciplinary_project': forms.CheckboxInput(attrs={'class': 'input_pesquisador','name': 'interdisciplinary_project'}),
             'disciplines': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Liste as disciplinas'}),
             'courses': forms.TextInput(attrs={'class': 'input_pesquisador completo', 'placeholder': 'Liste os cursos'}),
-            'project_file': forms.FileInput(attrs={'class': 'input_pesquisador', 'id': 'file-upload', 'type': 'file', 'aria-hidden': 'true'}),
+            'project_file': forms.FileInput(attrs={'class=':'input_pesquisador', 'id':"file-upload", 'type':'file', 'aria-hidden':"true",'id': 'file-upload'}),
         }
