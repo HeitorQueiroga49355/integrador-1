@@ -1,16 +1,21 @@
+from multiprocessing import context
+from pyexpat import model
 from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, ListView
 from pesquisador.models import Project, Researcher
 from pesquisador.forms import CreateProjectForm
+from proposals.models import Proposal
 from django.urls import reverse_lazy
 
 # Create your views here.
 # def pesquisador_editais(request):
 #   return render(request, 'pesquisador/editais.html')
 
-class PesquisadorEditaisView(TemplateView):
+class PesquisadorEditaisView(ListView):
+  model = Proposal
   template_name = 'pesquisador/editais.html'
-    
+  context_object_name = 'proposals'
+
 def base(request):
   return render(request, './base/base.html')
 
