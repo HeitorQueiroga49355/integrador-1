@@ -1,7 +1,7 @@
 from pyexpat import model
 from tempfile import template
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from proposals.models import Proposal
 from submission.models import Submission
 from .forms import CreateSubmissionForm
@@ -34,9 +34,10 @@ class SubmissionListView(ListView):
     # Temporariamente, para fins de teste, exibe todas as submissões.
     return Submission.objects.all()
 
-def pesquisador_projetos_detalhes(request, pk):
-  submission = get_object_or_404(Submission, pk=pk)
-  return render(request, 'pesquisador/pesquisador_meus_projetos_detalhes.html', {'submission': submission})
+class SubmissionDetailView(DetailView):
+  model = Submission
+  template_name = 'pesquisador/pesquisador_meus_projetos_detalhes.html'
+  context_object_name = 'submission'
 
 class SubmissionCreateView(CreateView):
   model = Submission
