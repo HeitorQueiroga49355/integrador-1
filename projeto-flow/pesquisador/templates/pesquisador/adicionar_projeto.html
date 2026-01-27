@@ -15,34 +15,17 @@
             <form id= "form_pesquisador" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form_grid">
-
-                    <div>
-                        <label class="label_form_pesquisador" for="Campus">Campus:</label>
-                        <select name="campus" id="campus" aria-label class="label_form_pesquisador"="Campus">
-                            <option value="">Selecione o campus</option>
-                            <option value="campus1">Campus Natal</option>
-                            <option value="campus2">Campus Currais Novos</option>
-                            <option value="campus3">Campus Pau dos Ferros</option>
-                        </select>
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                        {{ form.title }}
                     </div>
-
-                    <div>
-                        <label class="label_form_pesquisador" for="curso">Curso:</label >
-                            <select id="curso" name="curso" aria-label="Curso">
-                                <option value="">Selecione o curso</option>
-                                <option>Curso ADS</option>
-                                <option>Curso Dados</option>
-                            </select>
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.keywords.id_for_label }}">{{ form.keywords.label }}</label>
+                        {{ form.keywords }}
                     </div>
-
-                    <div class="">
-                        <label class="label_form_pesquisador" for="titulo">Título do projeto:</label>
-                        <input class="input_pesquisador completo" id="titulo" name="titulo" type="text" placeholder="Digite o título do projeto">
-                    </div>
-
-                    <div class="">
-                        <label class="label_form_pesquisador" for="carga-coord">Carga Horária Semanal do Coordenador:</label>
-                        <input class="input_pesquisador completo" id="carga-coord" name="carga-coord" type="text" placeholder="Ex: 10 horas/semana">
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.abstract.id_for_label }}">{{ form.abstract.label }}</label>
+                        {{ form.abstract }}
                     </div>
                 </div>
         </section>
@@ -50,71 +33,41 @@
         <h3>Dados do Projeto</h3>
         <section class="detalhes_projeto">
             <div class="form_grid">
-
-                <div>
-                    <label class="label_form_pesquisador" for="inicio">Início da Execução</label>
-                    <input class="input_pesquisador" id="inicio" name="inicio" type="date">
-                </div>
-
-                <div>
-                    <label class="label_form_pesquisador" for="termino">Término da Execução</label>
-                    <input class="input_pesquisador" id="termino" name="termino" type="date">
-                </div>
-
                 <div class="completo">
-                    <label class="label_form_pesquisador " for="carga-total">Carga horária total para desenvolvimento do projeto</label>
-                    <input class="input_pesquisador completo" id="carga-total" name="carga-total" type="text" placeholder="Horas totais previstas">
+                    <label class="label_form_pesquisador" for="{{ form.justification.id_for_label }}">{{ form.justification.label }}</label>
+                    {{ form.justification }}
                 </div>
-
                 <div class="completo">
-                    <label class="label_form_pesquisador" for="eixo">Eixo Temático</label>
-                    <input class="input_pesquisador completo" id="eixo" name="eixo" type="text" placeholder="Descreva o eixo temático">
+                    <label class="label_form_pesquisador" for="{{ form.methodology.id_for_label }}">{{ form.methodology.label }}</label>
+                    {{ form.methodology }}
                 </div>
-
                 <div class="completo">
-                    <div class="checkbox-row">
-                        <label class="label_form_pesquisador">Projeto Interdisciplinar?</label>
-                        <label class="label_form_pesquisador"><input class="input_pesquisador" type="checkbox" name="interdisciplinar"> Sim</label>
-                    </div>
+                    <label class="label_form_pesquisador" for="{{ form.project_timeline.id_for_label }}">{{ form.project_timeline.label }}</label>
+                    {{ form.project_timeline }}
                 </div>
-
                 <div class="completo">
-                    <label class="label_form_pesquisador" for="disciplinas">Disciplinas</label>
-                    <input class="input_pesquisador completo" id="disciplinas" name="disciplinas" type="text" placeholder="Liste as disciplinas envolvidas">
+                    <label class="label_form_pesquisador" for="{{ form.project_budget.id_for_label }}">{{ form.project_budget.label }}</label>
+                    {{ form.project_budget }}
                 </div>
-
                 <div class="completo">
-                    <label class="label_form_pesquisador" for="cursos">Cursos</label>
-                    <input class="input_pesquisador completo" id="cursos" name="cursos" type="text" placeholder="Liste os cursos relacionados">
+                    <label class="label_form_pesquisador" for="{{ form.expected_results.id_for_label }}">{{ form.expected_results.label }}</label>
+                    {{ form.expected_results }}
                 </div>
-
             </div>
         </section>
 
         <h3>Adiçao do Projeto</h3>
 
         <section class="detalhes_projeto">
-            
             <div class="">
-                <label class="label_form_pesquisador" class="completo" for="file-upload"></label>
-
-                <div class="upload" id="dropzone" role="region" aria-label class="label_form_pesquisador"="Área de envio de arquivo">
-                    <p>Selecione ou arraste seu arquivo aqui</p>
-                    <input class="input_pesquisador" id="file-upload" type="file" aria-hidden="true">
-                </div>
+                <label class="label_form_pesquisador" for="{{ form.submission_file.id_for_label }}">{{ form.submission_file.label }}</label>
+                {{ form.submission_file }}
             </div>
 
             <div class="">
                 <div class="info_btn_editais">
-                    <label class="label_form_pesquisador" for="aceito">
-                        <input class="input_pesquisador" class="paragrafo_info_editais" id="aceito" name="aceito" type="checkbox">
-                        Aceito o Termo de Compromisso
-                    </label>
-
                     <button class="btn-verde" id="submitBtn" type="submit">Adicionar Projeto</button>
-
                 </div>
-                               
             </div>
             </form>
         </section>
