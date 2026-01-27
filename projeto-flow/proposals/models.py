@@ -18,6 +18,8 @@ class Version(Base):
     title = models.CharField(max_length=255, verbose_name='Título')
     description = models.TextField(verbose_name='Descrição')
     target = models.TextField(verbose_name='Objetivo')
+    opening_date = models.DateField(verbose_name='Data de Abertura')
+    closing_date = models.DateField(verbose_name='Data de Fechamento')
     file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):
