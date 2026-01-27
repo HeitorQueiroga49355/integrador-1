@@ -5,14 +5,15 @@
         <h3>Adicionar Projeto</h3>
 
         <div class="titulo_com_btn">
-            <h3>EDITAL N° 14/2025-PROEN/IFRN</h3>
+            <h3>{{ proposal.title }}</h3>
             <button class="btn-cinza">Ver arquivo</button>
         </div>
 
         <h3>Dados Gerais</h3>
 
         <section class="detalhes_projeto">
-            <form id= "form_pesquisador" action="" enctype="multipart/form-data" novalidate>
+            <form id= "form_pesquisador" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="form_grid">
 
                     <div>
@@ -110,7 +111,7 @@
                         Aceito o Termo de Compromisso
                     </label>
 
-                    <button class="btn-verde" id="submitBtn" type="button">Adicionar Projeto</button>
+                    <button class="btn-verde" id="submitBtn" type="submit">Adicionar Projeto</button>
 
                 </div>
                                

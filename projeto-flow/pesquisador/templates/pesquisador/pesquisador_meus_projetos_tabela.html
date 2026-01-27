@@ -17,22 +17,23 @@
             <th>Status</th>
           </tr>
         </thead>
-        {% for submission in object_list %}
-        <tbody>   
-          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">  
+        <tbody>
+        {% for submission in submissions %}
+          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' submission.pk %}'" style="cursor: pointer;">
             <td>{{ submission.title }}</td>
             <td>{{ submission.proposal.title }}</td>
             <td>{{ submission.proposal.opening_date }}</td>
             <td>{{ submission.proposal.closing_date }}</td>
             <td>
-              <div class="status">
-                <img src="../../static/icons/aprovado.svg" alt="">
-                <p>Aprovado</p>
-              </div>
-            </td>          
+              <p>{{ submission.status|default:"Em avaliação" }}</p>
+            </td>
           </tr>
-        </tbody>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center;">Nenhum projeto encontrado.</td>
+          </tr>
         {% endfor %}
+        </tbody>
       </table>
     </section>
     {% endblock content_pesquisador %}
