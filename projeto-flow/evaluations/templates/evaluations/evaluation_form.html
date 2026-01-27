@@ -1,0 +1,144 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .card-header-custom {
+        background-color: var(--azul-principal) !important;
+        color: var(--branco) !important;
+    }
+    
+    .btn-custom-primary {
+        background-color: var(--azul-principal);
+        color: var(--branco);
+        border: none;
+    }
+    
+    .btn-custom-primary:hover {
+        background-color: var(--azul-escuro);
+        color: var(--branco);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--azul-escuro);
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header card-header-custom">
+                    <h5 class="mb-0"><i class="bi bi-file-text me-2"></i>Dados do Projeto</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-primary fw-bold">{{ submission.title }}</h5>
+                    <p class="text-muted small mb-2">
+                        <i class="bi bi-person-circle"></i> {{ submission.researcher.user.first_name }}
+                    </p>
+                    <p class="text-muted small">
+                        <i class="bi bi-bookmark"></i> Edital: {{ submission.proposal.title }}
+                    </p>
+
+                    <hr>
+                    
+                    <h6 class="fw-bold text-secondary">Resumo</h6>
+                    <p class="text-justify small text-muted" style="white-space: pre-line;">
+                        {{ submission.abstract }}
+                    </p>
+
+                    <hr>
+
+                    <h6 class="fw-bold text-secondary">Arquivo Original</h6>
+                    {% if submission.submission_file %}
+                        <a href="{{ submission.submission_file.url }}" target="_blank" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="bi bi-cloud-download"></i> Baixar PDF
+                        </a>
+                    {% else %}
+                        <div class="alert alert-light text-center small border">
+                            Sem anexo.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header card-header-custom">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Ficha de Avaliação</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger small">
+                                Verifique os campos destacados abaixo.
+                            </div>
+                        {% endif %}
+
+                        <h6 class="border-bottom pb-2 mb-3 text-secondary">Critérios Quantitativos</h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label small">Relevância Científica</label>
+                                {{ form.note_scientific_relevance }}
+                                <div class="form-text small text-end">0 a 10</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Viabilidade</label>
+                                {{ form.note_feasibility_methodological }}
+                                <div class="form-text small text-end">0 a 10</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Resultados Esperados</label>
+                                {{ form.note_expected_results }}
+                                <div class="form-text small text-end">0 a 10</div>
+                            </div>
+                        </div>
+
+                        <h6 class="border-bottom pb-2 mt-4 mb-3 text-secondary">Parecer Qualitativo</h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Relatório do Projeto</label>
+                            {{ form.project_report }}
+                            {% if form.project_report.errors %} <div class="text-danger small">{{ form.project_report.errors }}</div> {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-success"><i class="bi bi-plus-circle"></i> Pontos Fortes</label>
+                                {{ form.strength_points }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-danger"><i class="bi bi-dash-circle"></i> Pontos Fracos</label>
+                                {{ form.weak_points }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Recomendações ao Pesquisador</label>
+                            {{ form.recommendations }}
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'proposals:submissions' %}" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-custom-primary px-4">
+                                Finalizar Avaliação
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

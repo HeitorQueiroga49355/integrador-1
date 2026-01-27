@@ -104,21 +104,21 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container">
         <!-- Logo à esquerda -->
-        <a class="navbar-brand" href="{% url 'proposals' %}">
+        <a class="navbar-brand" href="{% url 'proposals:proposals' %}">
             <img src="{% static 'images/logo-with-name-side.png' %}" alt="Logo" height="40">
         </a>
 
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-                <a href="{% url 'proposals' %}"
+                <a href="{% url 'proposals:proposals' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
                     Editais
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'submissions' %}"
+                <a href="{% url 'proposals:submissions' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'submissions' %}active{% endif %}">
                     Submissões
                 </a>
