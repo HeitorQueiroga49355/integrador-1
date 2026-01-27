@@ -17,12 +17,13 @@
             <th>Status</th>
           </tr>
         </thead>
+        {% for submission in object_list %}
         <tbody>   
           <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">  
-            <td>Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
+            <td>{{ submission.title }}</td>
+            <td>{{ submission.proposal.title }}</td>
+            <td>{{ submission.proposal.opening_date }}</td>
+            <td>{{ submission.proposal.closing_date }}</td>
             <td>
               <div class="status">
                 <img src="../../static/icons/aprovado.svg" alt="">
@@ -30,31 +31,8 @@
               </div>
             </td>          
           </tr>
-          <tr class="titulo_projeto">
-            <td >Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/espera.svg" alt="">
-                <p>Em avaliação</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="titulo_projeto">
-            <td>Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/reprovado.svg" alt="">
-                <p>Reprovado</p>
-              </div>
-            </td>
-          </tr>
         </tbody>
+        {% endfor %}
       </table>
     </section>
     {% endblock content_pesquisador %}
