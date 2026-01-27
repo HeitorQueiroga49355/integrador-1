@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from .forms import (
     ProposalForm,
     VersionProposalForm
@@ -42,12 +43,14 @@ def details(request):
     
 #     return render(request, 'proposals/details.html', {'form': form})
 
+@login_required(login_url='login')
 def submissions(request):
     context = {
         # dados do banco futuramente
     }
     return render(request, 'proposals/submissions.html', context)
 
+@login_required(login_url='login')
 def reviewers(request):
     context = {
         # dados do banco futuramente

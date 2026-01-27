@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-ao6g59j&)ma&x_m8=pzwwv@j%$#jwwh@2*by6qa^-vhu3lv5ke
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 
 
 # Application definition
@@ -130,6 +130,11 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'user.User'
+
+# Authentication settings
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'pesquisador-editais'
+LOGOUT_REDIRECT_URL = 'login'
 
 
 # Static files (CSS, JavaScript, Images)
