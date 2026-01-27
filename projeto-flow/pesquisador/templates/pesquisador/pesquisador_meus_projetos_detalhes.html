@@ -4,25 +4,37 @@
 {% block content_pesquisador %}
     <h3><a href="{% url 'pesquisador-projetos' %}">Meus Projetos</a> / Detalhes</h3>
     <section class="detalhes_projeto">
-      <div class="sobre_projeto sub_title_project">
-        <h4>Nº 14/2025-PROEN/IFRN</h4>
-        <p>Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.</p>
+      <div class="sub_title_project">
+        <h4>Sobre o Projeto: {{ submission.title }}</h4>
+        <p><strong>Edital:</strong> {{ submission.proposal.title }}</p>
+        <p><strong>Palavras-chave:</strong> {{ submission.keywords }}</p>
       </div>
-      <div class="comentarios_projeto  sub_title_project">
-        <h4>Comentários</h4>
-        <p>Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of  type and scrambled it to make a type specimen book. It has survived not  only five centuries, but also the leap into electronic typesetting,  remaining essentially unchanged. It was popularised in the 1960s with  the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker  including versions of Lorem Ipsum.</p>
+
+      <div class="sub_title_project">
+        <h4>Resumo</h4>
+        <p>{{ submission.abstract }}</p>
       </div>
-      <div class="situacao_projeto sub_title_project">
+
+      <div class="sub_title_project">
+        <h4>Comentários da Avaliação</h4>
+        {% if submission.evaluation_score %}
+          <p><strong>Pontos Fortes:</strong> {{ submission.evaluation_score.strength_points|default:"Não informado." }}</p>
+          <p><strong>Pontos Fracos:</strong> {{ submission.evaluation_score.weak_points|default:"Não informado." }}</p>
+          <p><strong>Recomendações:</strong> {{ submission.evaluation_score.recommendations|default:"Não informado." }}</p>
+        {% else %}
+          <p>A avaliação para este projeto ainda não está disponível.</p>
+        {% endif %}
+      </div>
+
+      <div class="sub_title_project">
         <h4>Situação</h4>
         <div class="status_btn_editar">
           <div class="status_projeto">
-            <p>Em avaliação</p>
+            <p>{{ submission.status|default:"Em avaliação" }}</p>
             <img src="{% static 'icons/espera.svg' %}" alt=""/>
-           
           </div>
           <button class="btn_editar_projeto" onclick="window.location.href='{% url 'pesquisador-projetos-detalhes-editar' %}'">Editar projeto</button>
         </div>
       </div>
-
     </section>
 {% endblock content_pesquisador %}
