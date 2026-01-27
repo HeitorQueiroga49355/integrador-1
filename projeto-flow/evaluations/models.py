@@ -4,12 +4,9 @@ from institution.models import Institution
 
 
 class Evaluation(Base):
-    """
-    Modelo para representar uma avaliação de submissão.
-    Relação One-to-One: cada Submission tem uma Evaluation.
-    """
-    institution = models.ForeignKey('institution.Institution', on_delete=models.CASCADE, related_name='institution_evaluations')
     submission = models.ForeignKey('submission.Submission', on_delete=models.CASCADE, related_name='submission_evaluations')
+    institution = models.ForeignKey('institution.Institution', on_delete=models.CASCADE, related_name='institution_evaluations')
+    proposal = models.ForeignKey('proposals.Proposal', on_delete=models.CASCADE, related_name='proposal_evaluations')
     note_scientific_relevance = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Nota de Relevância Científica')
     note_feasibility_methodological = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Nota de Viabilidade Metodológica')
     note_expected_results = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Nota de Resultados Esperados')
@@ -31,6 +28,6 @@ class Reviewer(Base):
     email = models.EmailField(verbose_name="E-mail", unique=True)
     cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
     expertise = models.CharField(max_length=200, verbose_name="Área de Atuação")
-    
+
     def __str__(self):
         return self.name
