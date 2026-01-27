@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView
 from proposals.models import Proposal
 from submission.models import Submission
 from .forms import CreateSubmissionForm
+from .models import Researcher
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -49,9 +50,24 @@ class SubmissionCreateView(CreateView):
       return context
 
   def form_valid(self, form):
-      form.instance.proposal = get_object_or_404(Proposal, pk=self.kwargs['proposal_id'])
-      form.instance.researcher = self.request.user.researcher_profile
-      return super().form_valid(form)
+    # Associa o edital (Proposal) ao projeto, buscando pelo ID na URL.
+    proposal = get_object_or_404(Proposal, id=self.kwargs['proposal_id'])
+    form.instance.proposal = proposal
+
+    # Busca o perfil de pesquisador para associar ao projeto.
+    try:
+        # Tenta buscar o perfil de pesquisador do usuário logado.
+        researcher = self.request.user.researcher_profile
+    except (AttributeError, Researcher.user.RelatedObjectDoesNotExist):
+        # SOLUÇÃO TEMPORÁRIA PARA TESTES:
+        # Se o usuário não tiver um perfil de pesquisador (ex: admin ou não logado),
+        # o código pega o primeiro pesquisador do banco de dados como autor.
+        # Certifique-se de que existe pelo menos um pesquisador cadastrado no seu sistema.
+        researcher = Researcher.objects.first()
+        if not researcher:
+            raise Exception("Nenhum pesquisador encontrado no banco de dados. Crie um no painel de admin para poder testar.")
+    form.instance.researcher = researcher
+    return super().form_valid(form)
 
 def pesquisador_editar_projeto(request):
   return render(request, 'pesquisador/editar_projeto.html')
