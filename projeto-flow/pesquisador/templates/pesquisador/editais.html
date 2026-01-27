@@ -15,7 +15,9 @@
                     <span class="paragrafo_info_editais">{{ proposal.opening_date}} a {{ proposal.closing_date }}</span>
                     <div class="botoes_editais">
                         <button class="btn-verde" onclick="window.location.href='{% url 'pesquisador-adicionar-projeto' proposal.id %}'">Adicionar Projeto</button>
-                        <button class="btn-cinza">Ver Arquivo</button>
+                        {% if proposal.proposal_file %}
+                            <a href="{{ proposal.proposal_file.url }}" target="_blank" class="btn-cinza">Ver arquivo</a>
+                        {% endif %}
                     </div>
                 </div>
             

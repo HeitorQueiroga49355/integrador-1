@@ -203,11 +203,16 @@ h3 {
 
 .btn-cinza {
     background-color: var(--cinza-botoes);
-    padding: 0.2rem 1rem;
-    border: none;
     color: var(--branco);
     border-radius: .5rem;
     height: 3rem;
+    border: none;
+    padding: 0 1rem; /* Padding lateral apenas */
+
+    display: inline-flex;  
+    align-items: center;  
+    justify-content: center;
+    text-decoration: none;
 }
 
 .btn-cinza:hover {

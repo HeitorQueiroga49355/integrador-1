@@ -6,7 +6,9 @@
 
         <div class="titulo_com_btn">
             <h3>{{ proposal.title }}</h3>
-            <button class="btn-cinza">Ver arquivo</button>
+            {% if proposal.proposal_file %}
+                <a href="{{ proposal.proposal_file.url }}" target="_blank" class="btn-cinza">Ver arquivo</a>
+            {% endif %}
         </div>
 
         <h3>Dados Gerais</h3>
