@@ -1,0 +1,22 @@
+services:
+  integrador-1:
+    build: .
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - integrador_db
+
+  integrador_db:
+    image: postgres:17
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=integrador-1
+
+volumes:
+  postgres_data:

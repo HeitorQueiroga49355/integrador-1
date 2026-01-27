@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'evaluations',
     'address',
 
+    # Third-party apps
+    'django_extensions',
+
 ]
 
 MIDDLEWARE = [
