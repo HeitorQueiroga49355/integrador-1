@@ -33,7 +33,7 @@
             <p>{{ submission.status|default:"Em avaliação" }}</p>
             <img src="{% static 'icons/espera.svg' %}" alt=""/>
           </div>
-          <button class="btn_editar_projeto" onclick="window.location.href='{% url 'pesquisador-projetos-detalhes-editar' %}'">Editar projeto</button>
+          <button class="btn_editar_projeto" onclick="window.location.href='{% url 'pesquisador-projetos-detalhes-editar' submission.pk %}'">Editar projeto</button>
         </div>
       </div>
     </section>

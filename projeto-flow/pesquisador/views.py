@@ -1,12 +1,12 @@
 from pyexpat import model
 from tempfile import template
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from proposals.models import Proposal
 from submission.models import Submission
 from .forms import CreateSubmissionForm
 from .models import Researcher
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 # Create your views here.
 # def pesquisador_editais(request):
@@ -69,5 +69,16 @@ class SubmissionCreateView(CreateView):
     form.instance.researcher = researcher
     return super().form_valid(form)
 
-def pesquisador_editar_projeto(request):
-  return render(request, 'pesquisador/editar_projeto.html')
+class SubmissionUpdateView(UpdateView):
+  model = Submission
+  form_class = CreateSubmissionForm
+  template_name = 'pesquisador/editar_projeto.html'
+
+  def get_success_url(self):
+    # Redireciona para a página de detalhes do projeto que acabou de ser editado
+    return reverse('pesquisador-projetos-detalhes', kwargs={'pk': self.object.pk})
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['proposal'] = self.object.proposal
+    return context
