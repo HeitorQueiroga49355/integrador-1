@@ -3,15 +3,16 @@
 {% block content %}
     <main class="main_pesquisador_conteudo">
         <h3>Editais em aberto</h3>
+        {% for proposal in object_list %}
         <section class="detalhes_projeto">
             <div class="sobre_projeto sub_title_project">
-                <h4 class="subtitulo_editais">EDITAL Nº 14/2025-PROEN/IFRN</h4>
-                <p class="paragrafo_info_editais">A Pró-Reitora de Ensino do Instituto Federal de Educação, Ciência e  Tecnologia do Rio Grande do Norte (IFRN), usando das  atribuições que  lhe confere a Portaria nº 1025/2023-RE/IFRN, faz saber aos interessados a abertura do Edital de Fluxo  Contínuo de Projetos  Contínuo de Projetos de Ensino, com registro prévio, de Ensino, com registro prévio, para  execução no ano de 2025.</p>
+                <h4 class="subtitulo_editais">{{ proposal.title }}</h4>
+                <p class="paragrafo_info_editais">{{ proposal.description }}</p>
                 
                     <h4 class="subtitulo_editais">Inscrições:</h4>
                 
                 <div class="info_btn_editais">
-                    <span class="paragrafo_info_editais">11/03/2025 17:00:00 a 23/11/2025 00:00:00</span>
+                    <span class="paragrafo_info_editais">{{ proposal.opening_date}} a {{ proposal.closing_date }}</span>
                     <div class="botoes_editais">
                         <button class="btn-verde" onclick="window.location.href='{% url 'pesquisador-adicionar-projeto' %}'">Adicionar Projeto</button>
                         <button class="btn-cinza">Ver Arquivo</button>
@@ -20,5 +21,6 @@
             
             </div> 
         </section>
+        {% endfor %}
     </main>
 {% endblock content %}

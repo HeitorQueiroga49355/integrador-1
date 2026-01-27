@@ -116,6 +116,7 @@ h3 {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    margin: 2rem 0;
 }
 
 .sub_title_project h4 {
