@@ -1,0 +1,20 @@
+.site-footer{
+  padding: 0.75rem 0;
+  background: #253D90;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+
+}
+
+.footer_text{
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  height: 1.4rem;
+  opacity: 0.9;
+}
+
+.footerSpace {
+    height: 3rem;
+}

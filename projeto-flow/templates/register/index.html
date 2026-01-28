@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="/static/css/register.css">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
 </head>
 <body>
 <div class="side">
-    <img class="side-img" alt="person delivering document to other" src="/static/images/register-side-img.jpg">
+    <img class="side-img" alt="person delivering document to other" src="{% static 'images/register-side-img.jpg' %}">
     <div class="side-overlay"></div>
     <div class="side-title">Submeta seus projetos</div>
 </div>
@@ -18,44 +19,90 @@
             <h2 class="title-text">Registre-se</h2>
             <span class="title-subtitle">Crie sua conta agora</span>
         </div>
-        <form class="loginForm">
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form class="loginForm" method="post">
+            {% csrf_token %}
+
             <div class="twoElementsPerLine">
-                <label class="loginForm-label" for="nameInput">
+                <label class="loginForm-label" for="{{ form.first_name.id_for_label }}">
                     <span class="loginForm-label__inputTitle">Nome</span>
-                    <input placeholder="Insira seu nome" class="loginForm-label__input" id="nameInput" type="email"/>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <span class="error">{{ form.first_name.errors.0 }}</span>
+                    {% endif %}
                 </label>
 
-                <label class="loginForm-label" for="sobrenomeInput">
+                <label class="loginForm-label" for="{{ form.last_name.id_for_label }}">
                     <span class="loginForm-label__inputTitle">Sobrenome</span>
-                    <input placeholder="Insira seu sobrenome" class="loginForm-label__input" id="sobrenomeInput"
-                           type="password"/>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <span class="error">{{ form.last_name.errors.0 }}</span>
+                    {% endif %}
                 </label>
-                <label class="loginForm-label" for="cpfInput">
-                    <span class="loginForm-label__inputTitle">CPF (apenas números) </span>
-                    <input placeholder="Insira seu CPF" pattern="[0-9]{11}" type="number"
-                           class="loginForm-label__input" id="cpfInput"/>
+
+                <label class="loginForm-label" for="{{ form.cpf.id_for_label }}">
+                    <span class="loginForm-label__inputTitle">CPF (apenas números)</span>
+                    {{ form.cpf }}
+                    {% if form.cpf.errors %}
+                        <span class="error">{{ form.cpf.errors.0 }}</span>
+                    {% endif %}
                 </label>
-                <label class="loginForm-label" for="cpfInput">
-                    <span class="loginForm-label__inputTitle">Data de nascimento </span>
-                    <input placeholder="Insira seu CPF" type="date"
-                           class="loginForm-label__input" id="cpfInput"/>
+
+                <label class="loginForm-label" for="{{ form.phone.id_for_label }}">
+                    <span class="loginForm-label__inputTitle">Telefone</span>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <span class="error">{{ form.phone.errors.0 }}</span>
+                    {% endif %}
                 </label>
             </div>
 
-            <label class="loginForm-label" for="cpfInput">
-                <span class="loginForm-label__inputTitle">Data de nascimento </span>
-                <select class="loginForm-label__input" id="cpfInput">
-                    <option>Escolha a instituição</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                </select>
+            <label class="loginForm-label" for="{{ form.email.id_for_label }}">
+                <span class="loginForm-label__inputTitle">E-mail</span>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <span class="error">{{ form.email.errors.0 }}</span>
+                {% endif %}
             </label>
 
-            <button type="submit" class="loginForm-signButton">Sign In</button>
+            <label class="loginForm-label" for="{{ form.role.id_for_label }}">
+                <span class="loginForm-label__inputTitle">Tipo de Usuário</span>
+                {{ form.role }}
+                {% if form.role.errors %}
+                    <span class="error">{{ form.role.errors.0 }}</span>
+                {% endif %}
+            </label>
+
+            <label class="loginForm-label" for="{{ form.password1.id_for_label }}">
+                <span class="loginForm-label__inputTitle">Senha</span>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <span class="error">{{ form.password1.errors.0 }}</span>
+                {% endif %}
+            </label>
+
+            <label class="loginForm-label" for="{{ form.password2.id_for_label }}">
+                <span class="loginForm-label__inputTitle">Confirmar Senha</span>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <span class="error">{{ form.password2.errors.0 }}</span>
+                {% endif %}
+            </label>
+
+            <button type="submit" class="loginForm-signButton">Cadastrar</button>
         </form>
         <div class="callRegister">
-            Já criou sua conta? <a href="/login/" class="textButton"> Entrar </a>
+            Já criou sua conta? <a href="{% url 'login' %}" class="textButton"> Entrar </a>
         </div>
     </div>
 </main>
