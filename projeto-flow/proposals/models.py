@@ -9,10 +9,6 @@ class Proposal(Base):
     target = models.TextField(verbose_name='Objetivo', blank=True, null=True)
     opening_date = models.DateField(verbose_name='Data de Abertura', blank=True, null=True)
     closing_date = models.DateField(verbose_name='Data de Fechamento', blank=True, null=True)
-    researcher = models.ForeignKey('pesquisador.Researcher', on_delete=models.CASCADE, related_name='researcher_proposals')
-    # researcher = models.ForeignKey('pesquisador.Researcher', on_delete=models.CASCADE, related_name='researcher_proposals', null=True, blank=True):
-    submissions = models.ForeignKey('submission.Submission', on_delete=models.CASCADE, related_name='proposals', null=True, blank=True)
-    
     proposal_file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):

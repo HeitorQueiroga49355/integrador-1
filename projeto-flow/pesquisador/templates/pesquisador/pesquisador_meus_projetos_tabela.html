@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -17,15 +18,29 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody>
-        {% for submission in submissions %}
-          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' submission.pk %}'" style="cursor: pointer;">
-            <td>{{ submission.title }}</td>
-            <td>{{ submission.proposal.title }}</td>
-            <td>{{ submission.proposal.opening_date }}</td>
-            <td>{{ submission.proposal.closing_date }}</td>
+        <tbody>   
+          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' %}'">  
+            <td>Projeto Flow</td>
+            <td>Nº 14/2025-PROEN/IFRN</td>
+            <td>11/03/2025</td>
+            <td>23/11/2025</td>
             <td>
-              <p>{{ submission.status|default:"Em avaliação" }}</p>
+              <div class="status">
+                <img src="../../static/icons/aprovado.svg" alt="">
+                <p>Aprovado</p>
+              </div>
+            </td>          
+          </tr>
+          <tr class="titulo_projeto">
+            <td >Projeto Flow</td>
+            <td>Nº 14/2025-PROEN/IFRN</td>
+            <td>11/03/2025</td>
+            <td>23/11/2025</td>
+            <td>
+              <div class="status">
+                <img src="../../static/icons/espera.svg" alt="">
+                <p>Em avaliação</p>
+              </div>
             </td>
           </tr>
         {% empty %}
