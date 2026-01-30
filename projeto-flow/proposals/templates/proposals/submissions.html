@@ -28,6 +28,7 @@
     
     .table {
         margin-bottom: 0;
+        
     }
     
     .table thead th {
@@ -36,8 +37,8 @@
         font-size: 14px;
         font-weight: 500;
         border: none;
-        padding: 15px;
         vertical-align: middle;
+        padding: 18px 15px;
     }
     
     .table tbody {
@@ -109,125 +110,71 @@
 </style>
 
 <div class="container-fluid">
+  <div class="d-flex align-items-center justify-content-between mb-3">
     <h2 class="submissions-title">Submissões</h2>
+
+    <form method="get" action="{% url 'proposals:submissions' %}" class="d-flex gap-2 align-items-center">
+      <input type="text" name="q" class="form-control" placeholder="Buscar submissão" value="{{ request.GET.q }}">
+      
+      <button type="submit" class="btn btn-outline-primary">
+          <i class="bi bi-search"></i>
+      </button>
+      
+      {% if request.GET.q %}
+          <a href="{% url 'proposals:submissions' %}" class="btn btn-outline-secondary" title="Limpar">
+              <i class="bi bi-x-lg"></i>
+          </a>
+      {% endif %}
+    </form>
+  </div>
     <div class="submissions-container">
         
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Edital</th>
-                            <th>Pesquisador</th>
-                            <th>Avaliador</th>
-                            <th>Descrição</th>
-                            <th>Datas</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>EDITAL Nº 14/2025...</td>
-                            <td>Rangelo Silva</td>
-                            <td>Ilan Arlet</td>
-                            <td>
-                                <div class="text-truncate-custom">
-                                    Lorem ipsum is simply dummy text of the printing...
-                                </div>
-                            </td>
-                            <td>01/02/2025 até 02/12/2025</td>
-                            <td>
-                                <div class="gap-2 d-flex align-items-center">
-                                    <span class="">Análise</span>
-                                    <img src="../../static/icons/espera.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-detalhes" data-bs-toggle="modal" data-bs-target="#detailSubmissionModal">detalhes</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>EDITAL Nº 14/2025...</td>
-                            <td>Rangelo Silva</td>
-                            <td>Ilan Arlet</td>
-                            <td>
-                                <div class="text-truncate-custom">
-                                    Lorem ipsum is simply dummy text of the printing...
-                                </div>
-                            </td>
-                            <td>01/02/2025 até 02/12/2025</td>
-                            <td>
-                                <div class="gap-2 d-flex align-items-center">
-                                    <span class="">Análise</span>
-                                    <img src="../../static/icons/espera.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-detalhes">detalhes</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>EDITAL Nº 14/2025...</td>
-                            <td>Rangelo Silva</td>
-                            <td>Ilan Arlet</td>
-                            <td>
-                                <div class="text-truncate-custom">
-                                    Lorem ipsum is simply dummy text of the printing...
-                                </div>
-                            </td>
-                            <td>01/02/2025 até 02/12/2025</td>
-                            <td>
-                                <div class="gap-2 d-flex align-items-center">
-                                    <span class="">Recusado</span>
-                                    <img src="../../static/icons/reprovado.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-detalhes">detalhes</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>EDITAL Nº 14/2025...</td>
-                            <td>Rangelo Silva</td>
-                            <td>Ilan Arlet</td>
-                            <td>
-                                <div class="text-truncate-custom">
-                                    Lorem ipsum is simply dummy text of the printing...
-                                </div>
-                            </td>
-                            <td>01/02/2025 até 02/12/2025</td>
-                            <td>
-                                <div class="gap-2 d-flex align-items-center">
-                                    <span class="">Aceito</span>
-                                    <img src="../../static/icons/aprovado.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-detalhes">detalhes</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>EDITAL Nº 14/2025...</td>
-                            <td>Rangelo Silva</td>
-                            <td>Ilan Arlet</td>
-                            <td>
-                                <div class="text-truncate-custom">
-                                    Lorem ipsum is simply dummy text of the printing...
-                                </div>
-                            </td>
-                            <td>01/02/2025 até 02/12/2025</td>
-                            <td>
-                                <div class="gap-2 d-flex align-items-center">
-                                    <span class="">Análise</span>
-                                    <img src="../../static/icons/espera.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-detalhes">detalhes</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                  <thead>
+                    <tr>
+                        <th>Título do Projeto</th>
+                        <th>Pesquisador</th>
+                        <th>Edital Vinculado</th>
+                        <th>Data Envio</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sub in submissions %}
+                    <tr>
+                        <td>{{ sub.title }}</td>
+                        <td>{{ sub.researcher.user.first_name }}</td> <td>{{ sub.proposal.title }}</td>
+                        <td>{{ sub.created_at|date:"d/m/Y" }}</td>
+                        
+                        <td>
+                            {% if sub.evaluations.exists %}
+                                <span class="badge bg-success">Avaliado</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pendente</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td>
+                          <div class="d-flex gap-2 ">
+                            <a href="{% url 'evaluations:evaluation_create' sub.id %}" class="btn btn-primary btn-sm">
+                                Avaliar
+                            </a>
+                    
+                            <a href="{% url 'proposals:details' sub.id %}" class="btn btn-detalhes">
+                                Detalhes
+                            </a>
+                          </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhuma submissão recebida ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
                 </table>
             </div>
         </div>
