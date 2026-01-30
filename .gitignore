@@ -19,3 +19,5 @@ dist/
 *.out
 *.gz
 *.log
+.idea/
+projeto-flow/submissions/

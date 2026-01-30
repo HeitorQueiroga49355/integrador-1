@@ -1,0 +1,77 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <main class="main_pesquisador_conteudo">
+        <h3>Adicionar Projeto</h3>
+
+        <div class="titulo_com_btn">
+            <h3>{{ proposal.title }}</h3>
+            {% if proposal.proposal_file %}
+                <a href="{{ proposal.proposal_file.url }}" target="_blank" class="btn-cinza">Ver arquivo</a>
+            {% endif %}
+        </div>
+
+        <h3>Dados Gerais</h3>
+
+        <section class="detalhes_projeto">
+            <form id= "form_pesquisador" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_grid">
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.keywords.id_for_label }}">{{ form.keywords.label }}</label>
+                        {{ form.keywords }}
+                    </div>
+                    <div class="completo">
+                        <label class="label_form_pesquisador" for="{{ form.abstract.id_for_label }}">{{ form.abstract.label }}</label>
+                        {{ form.abstract }}
+                    </div>
+                </div>
+        </section>
+
+        <h3>Dados do Projeto</h3>
+        <section class="detalhes_projeto">
+            <div class="form_grid">
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="{{ form.justification.id_for_label }}">{{ form.justification.label }}</label>
+                    {{ form.justification }}
+                </div>
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="{{ form.methodology.id_for_label }}">{{ form.methodology.label }}</label>
+                    {{ form.methodology }}
+                </div>
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="{{ form.project_timeline.id_for_label }}">{{ form.project_timeline.label }}</label>
+                    {{ form.project_timeline }}
+                </div>
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="{{ form.project_budget.id_for_label }}">{{ form.project_budget.label }}</label>
+                    {{ form.project_budget }}
+                </div>
+                <div class="completo">
+                    <label class="label_form_pesquisador" for="{{ form.expected_results.id_for_label }}">{{ form.expected_results.label }}</label>
+                    {{ form.expected_results }}
+                </div>
+            </div>
+        </section>
+
+        <h3>Adiçao do Projeto</h3>
+
+        <section class="detalhes_projeto">
+            <div class="">
+                <label class="label_form_pesquisador" for="{{ form.submission_file.id_for_label }}">{{ form.submission_file.label }}</label>
+                {{ form.submission_file }}
+            </div>
+
+            <div class="">
+                <div class="info_btn_editais">
+                    <button class="btn-verde" id="submitBtn" type="submit">Adicionar Projeto</button>
+                </div>
+            </div>
+            </form>
+        </section>
+    </main>
+{% endblock content %}

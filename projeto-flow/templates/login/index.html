@@ -13,15 +13,15 @@
             <h2 class="title-text">Login</h2>
             <span class="title-subtitle">Entre com sua conta.</span>
         </div>
-        <form class="loginForm">
+        <form class="loginForm" action="{% url 'pesquisador-editais' %}" method="get">
             <label class="loginForm-label" for="emailInput">
                 <span class="loginForm-label__inputTitle">E-mail</span>
-                <input class="loginForm-label__input" id="emailInput" type="email"/>
+                <input placeholder="Insira seu e-mail" class="loginForm-label__input" id="emailInput" type="email"/>
             </label>
 
             <label class="loginForm-label" for="senhaInput">
                 <span class="loginForm-label__inputTitle">Senha</span>
-                <input class="loginForm-label__input" id="senhaInput" type="password"/>
+                <input placeholder="Insira sua senha" class="loginForm-label__input" id="senhaInput" type="password"/>
             </label>
             <div class="loginForm-bottomButtons">
                 <label for="rememberMeInput" class="loginForm-bottomButtons__rememberLabel">
@@ -29,18 +29,21 @@
                            class="loginForm-bottomButtons__rememberLabel__checkbox"/>
                     <span class="loginForm-bottomButtons__rememberLabel__text">Lembre-me</span>
                 </label>
-                <button class="textButton">Esqueceu a senha?</button>
+                <a class="textButton" href="/forgot-password">Esqueceu a senha?</a>
             </div>
+            
             <button type="submit" class="loginForm-signButton">Sign In</button>
+            
         </form>
-        <div>
-            Ainda não tem uma conta? <a class="textButton"> Registrar-se </a>
+        <div class="callRegister">
+            Ainda não tem uma conta? <a href="/register" class="textButton"> Registrar-se </a>
         </div>
     </div>
 </main>
 <div class="side">
-    <img class="side-img" alt="person delivering document to other" src="../../static/img/login-side-image.png">
-    <div>Submeta seus projetos</div>
+    <img class="side-img" alt="person delivering document to other" src="/static/images/img_back_login.png">
+    <div class="side-overlay"></div>
+    <div class="side-title">Submeta seus projetos</div>
 </div>
 </body>
 </html>

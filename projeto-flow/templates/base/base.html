@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <link rel="stylesheet" href="/static/css/pesquisador.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<nav class="navPesquisador">
+    <h1><a> <img alt="Logo do projeto flow" class="navPesquisador-logo" src="/static/images/logo-with-name-side.png"></a>
+    </h1>
+    <ul class="navPesquisador-list">
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'pesquisador-editais' %}--active{% endif %}">
+            <a class="navPesquisador-list__item__link" href="{% url 'pesquisador-editais' %}">Editais</a></li>
+        <li class="navPesquisador-list__item {% if request.resolver_match.url_name == 'pesquisador-projetos' or request.resolver_match.url_name == 'pesquisador-projetos-detalhes' %}--active{% endif %}">
+            <a class="navPesquisador-list__item__link" href="{% url 'pesquisador-projetos' %}">Meus Projetos</a></li>
+    </ul>
+    <div class="navPesquisador-profileButton">
+        <img src="/static/images/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img"></img>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</nav>
+
+{% block content %}
+
+{% endblock content %}
+<div class="footerSpace"></div>
+<footer class="site-footer" aria-label="Rodapé da página">
+    <p class="footer_text">© 2025 ProjetoFlow. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>

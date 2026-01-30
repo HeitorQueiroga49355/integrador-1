@@ -1,0 +1,125 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="top-bar"><div></div></div>
+
+    <style>
+        .table-container {
+            background-color: var(--azul-principal); /* Variável global */
+            border-radius: 8px;           
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table { margin-bottom: 0; background-color: white; }
+        
+        .table thead th {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 500;
+            border: none;
+            padding: 15px;
+        }
+        .modal-header { background-color: var(--azul-principal); color: white; }
+    </style>
+
+    <div class="section-header d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-people-fill text-primary"></i>
+            <h5 class="m-0">Banco de Avaliadores</h5>
+        </div>
+        
+        <button type="button" class="btn btn-primary" style="background-color: var(--azul-principal);" data-bs-toggle="modal" data-bs-target="#addReviewerModal">
+            <i class="bi bi-plus-lg"></i> Adicionar Avaliador
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Nome</th>
+                    <th style="width: 25%;">E-mail</th>
+                    <th style="width: 20%;">Área de Atuação</th>
+                    <th style="width: 15%;">CPF</th>
+                    <th style="width: 10%;" class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reviewer in reviewers %}
+                <tr>
+                    <td class="fw-bold">{{ reviewer.name }}</td>
+                    <td>{{ reviewer.email }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ reviewer.expertise }}</span></td>
+                    <td>{{ reviewer.cpf }}</td>
+                    <td class="text-center">
+                      <form action="{% url 'evaluations:reviewer_delete' reviewer.id %}" method="post" onsubmit="return confirm('Tem certeza que deseja remover {{ reviewer.name }}?');" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Remover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        Nenhum avaliador cadastrado. Clique em "Adicionar Avaliador".
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="addReviewerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Avaliador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger small">Verifique os erros no formulário.</div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome Completo</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">E-mail</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">CPF</label>
+                            {{ form.cpf }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Área (Expertise)</label>
+                            {{ form.expertise }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: var(--azul-principal);">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

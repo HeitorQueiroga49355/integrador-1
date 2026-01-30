@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../static/css/style.css">
-</head>
-<body>
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
   <main class="main_pesquisador_conteudo">
+
+    {% block content_pesquisador %}
     <h3>Meus Projetos</h3>
     <section class="conteudo_tabela">
       <table class="table_meus_projetos">
@@ -21,45 +19,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
+        {% for submission in submissions %}
+          <tr class="titulo_projeto" onclick="window.location='{% url 'pesquisador-projetos-detalhes' submission.pk %}'" style="cursor: pointer;">
+            <td>{{ submission.title }}</td>
+            <td>{{ submission.proposal.title }}</td>
+            <td>{{ submission.proposal.opening_date }}</td>
+            <td>{{ submission.proposal.closing_date }}</td>
             <td>
-              <div class="status">
-                <img src="../../static/icons/aprovado.svg" alt="">
-                <p>Aprovado</p>
-              </div>
+              <p>{{ submission.status|default:"Em avaliação" }}</p>
             </td>
           </tr>
+        {% empty %}
           <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/espera.svg" alt="">
-                <p>Em avaliação</p>
-              </div>
-            </td>
+            <td colspan="5" style="text-align: center;">Nenhum projeto encontrado.</td>
           </tr>
-          <tr>
-            <td class="titulo_projeto">Projeto Flow</td>
-            <td>Nº 14/2025-PROEN/IFRN</td>
-            <td>11/03/2025</td>
-            <td>23/11/2025</td>
-            <td>
-              <div class="status">
-                <img src="../../static/icons/reprovado.svg" alt="">
-                <p>Reprovado</p>
-              </div>
-            </td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </section>
+    {% endblock content_pesquisador %}
   </main>
-</body>
-</html>
+{% endblock content %}

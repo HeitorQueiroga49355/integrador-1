@@ -3,22 +3,24 @@ from base.models import Base
 
 
 class Proposal(Base):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    departament = models.CharField(max_length=100)
-    proprsal_file = models.FileField(upload_to='institutions/', null=True, blank=True)
+    institution = models.ForeignKey('institution.Institution', on_delete=models.CASCADE, related_name='institution_proposals', null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name='Título', blank=True, null=True)
+    description = models.TextField(verbose_name='Descrição', blank=True, null=True)
+    target = models.TextField(verbose_name='Objetivo', blank=True, null=True)
+    opening_date = models.DateField(verbose_name='Data de Abertura', blank=True, null=True)
+    closing_date = models.DateField(verbose_name='Data de Fechamento', blank=True, null=True)
+    proposal_file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):
         return self.title
     
-class RectifyProposal(Base):
-    id = models.AutoField(primary_key=True)
-    proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name='rectifications')
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    departament = models.CharField(max_length=100)
-    rectify_file = models.FileField(upload_to='institutions/', null=True, blank=True)
+class Version(Base):
+    title = models.CharField(max_length=255, verbose_name='Título')
+    description = models.TextField(verbose_name='Descrição')
+    target = models.TextField(verbose_name='Objetivo')
+    opening_date = models.DateField(verbose_name='Data de Abertura')
+    closing_date = models.DateField(verbose_name='Data de Fechamento')
+    file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):
         return self.title

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+<body>
+<div class="side">
+    <img class="side-img" alt="person delivering document to other" src="/static/images/register-side-img.jpg">
+    <div class="side-overlay"></div>
+    <div class="side-title">Submeta seus projetos</div>
+</div>
+<main>
+    <div class="mainContentWrapper">
+        <div class="title">
+            <h2 class="title-text">Registre-se</h2>
+            <span class="title-subtitle">Crie sua conta agora</span>
+        </div>
+        <form class="loginForm">
+            <div class="twoElementsPerLine">
+                <label class="loginForm-label" for="nameInput">
+                    <span class="loginForm-label__inputTitle">Nome</span>
+                    <input placeholder="Insira seu nome" class="loginForm-label__input" id="nameInput" type="email"/>
+                </label>
+
+                <label class="loginForm-label" for="sobrenomeInput">
+                    <span class="loginForm-label__inputTitle">Sobrenome</span>
+                    <input placeholder="Insira seu sobrenome" class="loginForm-label__input" id="sobrenomeInput"
+                           type="password"/>
+                </label>
+                <label class="loginForm-label" for="cpfInput">
+                    <span class="loginForm-label__inputTitle">CPF (apenas números) </span>
+                    <input placeholder="Insira seu CPF" pattern="[0-9]{11}" type="number"
+                           class="loginForm-label__input" id="cpfInput"/>
+                </label>
+                <label class="loginForm-label" for="cpfInput">
+                    <span class="loginForm-label__inputTitle">Data de nascimento </span>
+                    <input placeholder="Insira seu CPF" type="date"
+                           class="loginForm-label__input" id="cpfInput"/>
+                </label>
+            </div>
+
+            <label class="loginForm-label" for="cpfInput">
+                <span class="loginForm-label__inputTitle">Data de nascimento </span>
+                <select class="loginForm-label__input" id="cpfInput">
+                    <option>Escolha a instituição</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+            </label>
+
+            <button type="submit" class="loginForm-signButton">Sign In</button>
+        </form>
+        <div class="callRegister">
+            Já criou sua conta? <a href="/login/" class="textButton"> Entrar </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
