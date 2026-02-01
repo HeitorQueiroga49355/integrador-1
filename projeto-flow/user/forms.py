@@ -100,19 +100,6 @@ class RegisterForm(UserCreationForm):
         }),
         label='Confirmar Senha'
     )
-    role = forms.ChoiceField(
-        choices=[
-            ('researcher', 'Pesquisador'),
-            ('manager', 'Gerente'),
-            ('evaluator', 'Avaliador'),
-        ],
-        required=True,
-        widget=forms.Select(attrs={
-            'class': 'loginForm-label__input',
-            'id': 'roleInput'
-        }),
-        label='Tipo de Usuário'
-    )
 
     class Meta:
         model = User
@@ -139,9 +126,10 @@ class RegisterForm(UserCreationForm):
 
         if commit:
             user.save()
-            # Create profile
-            Profile.objects.create(
+            # Get or create profile with default role as researcher
+            # This prevents duplicate profile creation from signal
+            Profile.objects.get_or_create(
                 user=user,
-                role=self.cleaned_data['role']
+                defaults={'role': Profile.Role.RESEARCHER}
             )
         return user

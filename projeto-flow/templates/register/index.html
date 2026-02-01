@@ -75,13 +75,6 @@
                 {% endif %}
             </label>
 
-            <label class="loginForm-label" for="{{ form.role.id_for_label }}">
-                <span class="loginForm-label__inputTitle">Tipo de Usuário</span>
-                {{ form.role }}
-                {% if form.role.errors %}
-                    <span class="error">{{ form.role.errors.0 }}</span>
-                {% endif %}
-            </label>
 
             <label class="loginForm-label" for="{{ form.password1.id_for_label }}">
                 <span class="loginForm-label__inputTitle">Senha</span>

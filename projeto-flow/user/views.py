@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, FormView
+from django.shortcuts import redirect
+from django.views.generic import FormView
 from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as AuthLogoutView
 from django.contrib.auth import login
 from django.urls import reverse_lazy
@@ -45,7 +45,8 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        # Explicitly specify the backend for login
+        login(self.request, user, backend='user.backends.EmailBackend')
         messages.success(self.request, 'Cadastro realizado com sucesso!')
         return super().form_valid(form)
 
