@@ -1,0 +1,237 @@
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
+<style>
+  .card-header-custom {
+    background-color: var(--azul-principal) !important;
+    color: var(--branco) !important;
+  }
+
+  .btn-custom-primary {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border: none;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+  }
+
+  .stats-mini-card {
+    border-left: 4px solid #1e40af;
+    transition: all 0.2s;
+  }
+
+  .stats-mini-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: var(--azul-escuro);
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'proposals:proposals' %}">Editais</a>
+          </li>
+          <li class="breadcrumb-item active">Distribuir Avaliações</li>
+        </ol>
+      </nav>
+      <h2 class="text-dark fw-bold">
+        <i class="bi bi-distribute-vertical me-2"></i>Distribuir Avaliações
+      </h2>
+      <h5 class="text-muted">{{ proposal.title }}</h5>
+    </div>
+  </div>
+
+  <!-- Estatísticas Atuais -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Situação Atual</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stats-mini-card">
+            <div class="card-body">
+              <h6 class="text-muted small mb-1">Total de Submissões</h6>
+              <h3 class="mb-0 fw-bold text-primary">
+                {{ stats.total_submissions }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stats-mini-card">
+            <div class="card-body">
+              <h6 class="text-muted small mb-1">Com Avaliadores</h6>
+              <h3 class="mb-0 fw-bold text-success">
+                {{ stats.submissions_with_reviewers }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stats-mini-card">
+            <div class="card-body">
+              <h6 class="text-muted small mb-1">Total de Atribuições</h6>
+              <h3 class="mb-0 fw-bold text-info">
+                {{ stats.total_assignments }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stats-mini-card">
+            <div class="card-body">
+              <h6 class="text-muted small mb-1">Avaliações Pendentes</h6>
+              <h3 class="mb-0 fw-bold text-warning">
+                {{ stats.pending_evaluations }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if stats.total_assignments > 0 %}
+  <div class="alert alert-info border-0 shadow-sm">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>Atenção:</strong> Este edital já possui distribuições. Ao distribuir
+    novamente, apenas submissões sem avaliadores suficientes receberão novas
+    atribuições.
+  </div>
+  {% endif %}
+
+  <!-- Formulário de Distribuição -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-sliders me-2"></i>Configurar Distribuição
+      </h5>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="reviewers_per_submission" class="form-label">
+              <i class="bi bi-people me-1"></i> Avaliadores por Submissão
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              id="reviewers_per_submission"
+              name="reviewers_per_submission"
+              value="2"
+              min="1"
+              max="5"
+              required
+            />
+            <small class="form-text text-muted">
+              Quantos avaliadores irão avaliar cada submissão (recomendado: 2-3)
+            </small>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="submissions_per_reviewer" class="form-label">
+              <i class="bi bi-clipboard-data me-1"></i> Limite de Submissões por
+              Avaliador
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              id="submissions_per_reviewer"
+              name="submissions_per_reviewer"
+              value="3"
+              min="1"
+              max="10"
+              required
+            />
+            <small class="form-text text-muted">
+              Número máximo de submissões que um avaliador pode receber
+            </small>
+          </div>
+        </div>
+
+        <div class="alert alert-warning border-0 shadow-sm">
+          <h6 class="alert-heading">
+            <i class="bi bi-exclamation-triangle me-2"></i>Importante
+          </h6>
+          <ul class="mb-0 small">
+            <li>Os avaliadores serão notificados por email automaticamente</li>
+            <li>
+              A distribuição será feita de forma aleatória entre os avaliadores
+              disponíveis
+            </li>
+            <li>Certifique-se de que há avaliadores suficientes cadastrados</li>
+          </ul>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a
+            href="{% url 'evaluations:distribution_status' proposal.id %}"
+            class="btn btn-outline-secondary"
+          >
+            <i class="bi bi-arrow-left me-1"></i> Voltar
+          </a>
+          <button type="submit" class="btn btn-custom-primary px-4">
+            <i class="bi bi-send me-1"></i> Realizar Distribuição
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Carga de Trabalho dos Avaliadores -->
+  {% if stats.reviewers_workload %}
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-person-workspace me-2"></i>Carga de Trabalho dos
+        Avaliadores
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Avaliador</th>
+              <th class="text-center">Total Atribuído</th>
+              <th class="text-center">Pendentes</th>
+              <th class="text-center">Concluídas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for name, workload in stats.reviewers_workload.items %}
+            <tr>
+              <td><strong>{{ name }}</strong></td>
+              <td class="text-center">
+                <span class="badge bg-primary"
+                  >{{ workload.total_assignments }}</span
+                >
+              </td>
+              <td class="text-center">
+                <span class="badge bg-warning">{{ workload.pending }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-success">{{ workload.completed }}</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

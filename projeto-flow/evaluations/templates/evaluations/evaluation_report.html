@@ -1,0 +1,326 @@
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
+<style>
+  .card-header-custom {
+    background-color: var(--azul-principal) !important;
+    color: var(--branco) !important;
+  }
+
+  .btn-custom-primary {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border: none;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+  }
+
+  .ranking-position {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .ranking-gold {
+    background: linear-gradient(135deg, #ffd700, #ffa500);
+    color: white;
+  }
+
+  .ranking-silver {
+    background: linear-gradient(135deg, #c0c0c0, #808080);
+    color: white;
+  }
+
+  .ranking-bronze {
+    background: linear-gradient(135deg, #cd7f32, #8b4513);
+    color: white;
+  }
+
+  .ranking-other {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    .card {
+      border: 1px solid #ddd !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center no-print">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'proposals:proposals' %}">Editais</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a
+                  href="{% url 'evaluations:distribution_status' proposal.id %}"
+                  >Status</a
+                >
+              </li>
+              <li class="breadcrumb-item active">Relatório</li>
+            </ol>
+          </nav>
+          <h2 class="text-dark fw-bold">
+            <i class="bi bi-file-earmark-bar-graph me-2"></i>Relatório de
+            Avaliações
+          </h2>
+          <h5 class="text-muted">{{ proposal.title }}</h5>
+        </div>
+        <div class="d-flex gap-2">
+          <button onclick="window.print()" class="btn btn-outline-secondary">
+            <i class="bi bi-printer me-1"></i> Imprimir
+          </button>
+          <a
+            href="{% url 'evaluations:distribution_status' proposal.id %}"
+            class="btn btn-custom-primary"
+          >
+            <i class="bi bi-arrow-left me-1"></i> Voltar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumo Geral -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-bar-chart-line me-2"></i>Resumo Geral
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row text-center">
+        <div class="col-md-4">
+          <div class="p-3">
+            <h6 class="text-muted mb-2">Total de Submissões Avaliadas</h6>
+            <h2 class="mb-0 fw-bold text-primary">{{ report_data|length }}</h2>
+          </div>
+        </div>
+        <div class="col-md-4 border-start">
+          <div class="p-3">
+            <h6 class="text-muted mb-2">Melhor Pontuação</h6>
+            <h2 class="mb-0 fw-bold text-success">
+              {% if report_data %} {{ report_data.0.avg_score|floatformat:2 }}
+              {% else %} - {% endif %}
+            </h2>
+          </div>
+        </div>
+        <div class="col-md-4 border-start">
+          <div class="p-3">
+            <h6 class="text-muted mb-2">Data do Relatório</h6>
+            <h5 class="mb-0 fw-bold">{% now "d/m/Y H:i" %}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ranking de Submissões -->
+  {% if report_data %}
+  <div class="card shadow-sm border-0">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-trophy me-2"></i>Ranking de Submissões por Pontuação
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 80px" class="text-center">Posição</th>
+              <th>Título da Submissão</th>
+              <th>Pesquisador</th>
+              <th class="text-center">Nº Avaliações</th>
+              <th class="text-center">Média</th>
+              <th class="text-center no-print">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in report_data %}
+            <tr>
+              <td class="text-center">
+                <div
+                  class="ranking-position {% if forloop.counter == 1 %}ranking-gold {% elif forloop.counter == 2 %}ranking-silver {% elif forloop.counter == 3 %}ranking-bronze {% else %}ranking-other {% endif %}"
+                >
+                  {{ forloop.counter }}º
+                </div>
+              </td>
+              <td>
+                <strong>{{ item.submission.title }}</strong>
+              </td>
+              <td>{{ item.submission.researcher.user.get_full_name }}</td>
+              <td class="text-center">
+                <span class="badge bg-info">{{ item.evaluation_count }}</span>
+              </td>
+              <td class="text-center">
+                <h5 class="mb-0 fw-bold text-success">
+                  {{ item.avg_score|floatformat:2 }}
+                </h5>
+              </td>
+              <td class="text-center no-print">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#details{{ forloop.counter }}"
+                >
+                  <i class="bi bi-eye me-1"></i> Detalhes
+                </button>
+              </td>
+            </tr>
+            <!-- Linha de detalhes colapsável -->
+            <tr class="collapse" id="details{{ forloop.counter }}">
+              <td colspan="6" class="bg-light">
+                <div class="p-3">
+                  <h6 class="fw-bold mb-3">
+                    <i class="bi bi-clipboard-data me-2"></i>Avaliações
+                    Individuais
+                  </h6>
+                  {% for evaluation in item.evaluations %}
+                  <div class="card mb-3 shadow-sm border">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <p class="mb-1">
+                            <strong
+                              ><i class="bi bi-person-badge me-1"></i
+                              >Avaliador:</strong
+                            >
+                          </p>
+                          <p class="text-primary">
+                            {{ evaluation.reviewer.name }}
+                          </p>
+                        </div>
+                        <div class="col-md-9">
+                          <div class="row text-center mb-3">
+                            <div class="col-md-3">
+                              <small class="text-muted d-block"
+                                >Relevância Científica</small
+                              >
+                              <h5 class="mb-0 fw-bold text-primary">
+                                {{ evaluation.note_scientific_relevance }}
+                              </h5>
+                            </div>
+                            <div class="col-md-3">
+                              <small class="text-muted d-block"
+                                >Viabilidade</small
+                              >
+                              <h5 class="mb-0 fw-bold text-info">
+                                {{ evaluation.note_feasibility_methodological }}
+                              </h5>
+                            </div>
+                            <div class="col-md-3">
+                              <small class="text-muted d-block"
+                                >Resultados</small
+                              >
+                              <h5 class="mb-0 fw-bold text-warning">
+                                {{ evaluation.note_expected_results }}
+                              </h5>
+                            </div>
+                            <div class="col-md-3">
+                              <small class="text-muted d-block">Total</small>
+                              <h4 class="mb-0 fw-bold text-success">
+                                {{ evaluation.score }}
+                              </h4>
+                            </div>
+                          </div>
+                          {% if evaluation.project_report %}
+                          <div class="mt-2">
+                            <p class="mb-1">
+                              <strong
+                                ><i class="bi bi-file-text me-1"></i
+                                >Relatório:</strong
+                              >
+                            </p>
+                            <p
+                              class="text-muted small"
+                              style="white-space: pre-line"
+                            >
+                              {{ evaluation.project_report|truncatewords:80 }}
+                            </p>
+                          </div>
+                          {% endif %}
+                          <div class="row mt-2">
+                            {% if evaluation.strength_points %}
+                            <div class="col-md-6">
+                              <p class="mb-1">
+                                <strong class="text-success">
+                                  <i class="bi bi-plus-circle me-1"></i>Pontos
+                                  Fortes:
+                                </strong>
+                              </p>
+                              <p class="text-muted small">
+                                {{ evaluation.strength_points|truncatewords:30
+                                }}
+                              </p>
+                            </div>
+                            {% endif %} {% if evaluation.weak_points %}
+                            <div class="col-md-6">
+                              <p class="mb-1">
+                                <strong class="text-danger">
+                                  <i class="bi bi-dash-circle me-1"></i>Pontos
+                                  Fracos:
+                                </strong>
+                              </p>
+                              <p class="text-muted small">
+                                {{ evaluation.weak_points|truncatewords:30 }}
+                              </p>
+                            </div>
+                            {% endif %}
+                          </div>
+                          {% if evaluation.recommendations %}
+                          <div class="mt-2">
+                            <p class="mb-1">
+                              <strong
+                                ><i class="bi bi-lightbulb me-1"></i
+                                >Recomendações:</strong
+                              >
+                            </p>
+                            <p class="text-muted small">
+                              {{ evaluation.recommendations|truncatewords:30 }}
+                            </p>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning border-0 shadow-sm text-center">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    <strong>Ainda não há avaliações concluídas para este edital.</strong>
+    <p class="mb-0 mt-2 small">
+      Aguarde os avaliadores concluírem as avaliações para gerar o relatório.
+    </p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

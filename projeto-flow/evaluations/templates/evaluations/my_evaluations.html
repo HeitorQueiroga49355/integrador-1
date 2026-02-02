@@ -1,0 +1,360 @@
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
+<style>
+  .card-header-custom {
+    background-color: var(--azul-principal) !important;
+    color: var(--branco) !important;
+  }
+
+  .btn-custom-primary {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border: none;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+  }
+
+  .stats-card {
+    border-left: 4px solid;
+    transition: transform 0.2s;
+  }
+
+  .stats-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stats-card.total {
+    border-left-color: #1e40af;
+  }
+
+  .stats-card.pending {
+    border-left-color: #f59e0b;
+  }
+
+  .stats-card.progress {
+    border-left-color: #3b82f6;
+  }
+
+  .stats-card.completed {
+    border-left-color: #10b981;
+  }
+
+  .nav-tabs .nav-link {
+    color: #6b7280;
+    border: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: #1e40af;
+    background: none;
+    border-bottom: 3px solid #1e40af;
+  }
+
+  .badge-custom {
+    padding: 0.35em 0.65em;
+    font-size: 0.75rem;
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="text-dark fw-bold">
+        <i class="bi bi-clipboard-check me-2"></i>Minhas Avaliações
+      </h2>
+      <p class="text-muted">
+        Gerencie suas avaliações pendentes, em andamento e concluídas
+      </p>
+    </div>
+  </div>
+
+  <!-- Estatísticas -->
+  <div class="row mb-4 g-3">
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm border-0 stats-card total h-100">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-1 small">Total</h6>
+              <h2 class="mb-0 fw-bold">{{ total }}</h2>
+            </div>
+            <div class="text-primary" style="font-size: 2rem">
+              <i class="bi bi-list-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm border-0 stats-card pending h-100">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-1 small">Pendentes</h6>
+              <h2 class="mb-0 fw-bold text-warning">{{ pending|length }}</h2>
+            </div>
+            <div class="text-warning" style="font-size: 2rem">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm border-0 stats-card progress h-100">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-1 small">Em Andamento</h6>
+              <h2 class="mb-0 fw-bold text-info">{{ in_progress|length }}</h2>
+            </div>
+            <div class="text-info" style="font-size: 2rem">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm border-0 stats-card completed h-100">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-1 small">Concluídas</h6>
+              <h2 class="mb-0 fw-bold text-success">{{ completed|length }}</h2>
+            </div>
+            <div class="text-success" style="font-size: 2rem">
+              <i class="bi bi-check-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs de Avaliações -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-folder2-open me-2"></i>Lista de Avaliações
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      <ul class="nav nav-tabs px-3 pt-3" id="evaluationTabs" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="pending-tab"
+            data-bs-toggle="tab"
+            href="#pending"
+            role="tab"
+          >
+            <i class="bi bi-hourglass-split me-1"></i> Pendentes
+            <span class="badge bg-warning ms-1 badge-custom"
+              >{{ pending|length }}</span
+            >
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            id="progress-tab"
+            data-bs-toggle="tab"
+            href="#progress"
+            role="tab"
+          >
+            <i class="bi bi-pencil-square me-1"></i> Em Andamento
+            <span class="badge bg-info ms-1 badge-custom"
+              >{{ in_progress|length }}</span
+            >
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            id="completed-tab"
+            data-bs-toggle="tab"
+            href="#completed"
+            role="tab"
+          >
+            <i class="bi bi-check-circle me-1"></i> Concluídas
+            <span class="badge bg-success ms-1 badge-custom"
+              >{{ completed|length }}</span
+            >
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content p-3" id="evaluationTabsContent">
+        <!-- Pendentes -->
+        <div class="tab-pane fade show active" id="pending" role="tabpanel">
+          {% if pending %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="bi bi-megaphone"></i> Edital</th>
+                  <th><i class="bi bi-file-text"></i> Submissão</th>
+                  <th><i class="bi bi-person"></i> Pesquisador</th>
+                  <th><i class="bi bi-calendar"></i> Atribuída em</th>
+                  <th class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in pending %}
+                <tr>
+                  <td>
+                    <small class="text-muted"
+                      >{{ item.proposal.title|truncatewords:8 }}</small
+                    >
+                  </td>
+                  <td>
+                    <strong
+                      >{{ item.submission.title|truncatewords:10 }}</strong
+                    >
+                  </td>
+                  <td>{{ item.submission.researcher.user.get_full_name }}</td>
+                  <td>
+                    <small
+                      >{{ item.assignment.assigned_date|date:"d/m/Y H:i"
+                      }}</small
+                    >
+                  </td>
+                  <td class="text-center">
+                    <a
+                      href="{% url 'evaluations:evaluation_create' item.submission.id %}"
+                      class="btn btn-sm btn-custom-primary"
+                    >
+                      <i class="bi bi-pencil-square"></i> Iniciar Avaliação
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="alert alert-light border text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            Você não possui avaliações pendentes no momento.
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Em Andamento -->
+        <div class="tab-pane fade" id="progress" role="tabpanel">
+          {% if in_progress %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="bi bi-megaphone"></i> Edital</th>
+                  <th><i class="bi bi-file-text"></i> Submissão</th>
+                  <th><i class="bi bi-person"></i> Pesquisador</th>
+                  <th><i class="bi bi-calendar"></i> Atribuída em</th>
+                  <th class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in in_progress %}
+                <tr>
+                  <td>
+                    <small class="text-muted"
+                      >{{ item.proposal.title|truncatewords:8 }}</small
+                    >
+                  </td>
+                  <td>
+                    <strong
+                      >{{ item.submission.title|truncatewords:10 }}</strong
+                    >
+                  </td>
+                  <td>{{ item.submission.researcher.user.get_full_name }}</td>
+                  <td>
+                    <small
+                      >{{ item.assignment.assigned_date|date:"d/m/Y H:i"
+                      }}</small
+                    >
+                  </td>
+                  <td class="text-center">
+                    <a
+                      href="{% url 'evaluations:evaluation_create' item.submission.id %}"
+                      class="btn btn-sm btn-warning text-white"
+                    >
+                      <i class="bi bi-arrow-repeat"></i> Continuar Avaliação
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="alert alert-light border text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            Você não possui avaliações em andamento.
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Concluídas -->
+        <div class="tab-pane fade" id="completed" role="tabpanel">
+          {% if completed %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="bi bi-megaphone"></i> Edital</th>
+                  <th><i class="bi bi-file-text"></i> Submissão</th>
+                  <th><i class="bi bi-person"></i> Pesquisador</th>
+                  <th><i class="bi bi-calendar"></i> Concluída em</th>
+                  <th class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in completed %}
+                <tr>
+                  <td>
+                    <small class="text-muted"
+                      >{{ item.proposal.title|truncatewords:8 }}</small
+                    >
+                  </td>
+                  <td>
+                    <strong
+                      >{{ item.submission.title|truncatewords:10 }}</strong
+                    >
+                  </td>
+                  <td>{{ item.submission.researcher.user.get_full_name }}</td>
+                  <td>
+                    <small
+                      >{{ item.assignment.assigned_date|date:"d/m/Y H:i"
+                      }}</small
+                    >
+                  </td>
+                  <td class="text-center">
+                    <a
+                      href="{% url 'evaluations:evaluation_create' item.submission.id %}"
+                      class="btn btn-sm btn-outline-success"
+                    >
+                      <i class="bi bi-eye"></i> Ver Avaliação
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="alert alert-light border text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            Você ainda não concluiu nenhuma avaliação.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

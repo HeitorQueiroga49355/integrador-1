@@ -8,3 +8,4 @@ psycopg2-binary==2.9.11
 pydot==4.0.1
 pyparsing==3.3.2
 sqlparse==0.5.3
+python-decouple
