@@ -75,7 +75,7 @@
                 {% empty %}
                 <tr>
                     <td colspan="5" class="text-center text-muted py-4">
-                        Nenhum avaliador cadastrado. Clique em "Adicionar Avaliador".
+                        Nenhum avaliador cadastrado. Adicione um avaliador manualmente ou convide por e-mail.
                     </td>
                 </tr>
                 {% endfor %}
@@ -92,7 +92,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             
-            <form method="post">
+            <form action="{% url 'evaluations:add_reviewer_manual' %}" method="post">
                 {% csrf_token %}
                 <div class="modal-body">
                     {% if form.errors %}
@@ -107,6 +107,11 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">E-mail</label>
                         {{ form.email }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Senha de Acesso</label>
+                        <input type="text" name="password" class="form-control" required>
                     </div>
 
                     <div class="row">

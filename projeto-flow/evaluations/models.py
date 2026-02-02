@@ -4,6 +4,7 @@ from institution.models import Institution
 import uuid 
 from django.utils import timezone
 
+from django.conf import settings
 
 
 
@@ -27,11 +28,23 @@ class Reviewer(Base):
     """
     Modelo para representar um avaliador.
     """
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, verbose_name="Instituição Vinculada")
-    name = models.CharField(max_length=200, verbose_name="Nome Completo")
-    email = models.EmailField(verbose_name="E-mail", unique=True)
-    cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
-    expertise = models.CharField(max_length=200, verbose_name="Área de Atuação")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='reviewer_profile',
+        
+        # pra não dar erro
+        null=True,   
+        blank=True
+    )
+    
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    cpf = models.CharField(max_length=14, unique=True)
+    expertise = models.CharField(max_length=255)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

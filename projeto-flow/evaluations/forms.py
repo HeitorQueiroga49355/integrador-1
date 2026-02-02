@@ -37,8 +37,6 @@ class ReviewerForm(forms.ModelForm):
             'expertise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Inteligência Artificial, Direito Civil...'}),
         }
 
-
-# Convidar um avaliador por email
 class InviteForm(forms.ModelForm):
     class Meta:
         model = ReviewerInvite
@@ -47,13 +45,33 @@ class InviteForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'exemplo@email.com'})
         }
 
-# Formulário para o avaliador preencher (sem precisar estar logado)
 class ExternalReviewerForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Crie uma Senha",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '******'}),
+        required=True
+    )
+    confirm_password = forms.CharField(
+        label="Confirme a Senha",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '******'}),
+        required=True
+    )
+
     class Meta:
         model = Reviewer
-        fields = ['name', 'cpf', 'expertise'] # O email vai vir do convite
+        fields = ['name', 'cpf', 'expertise'] 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
             'expertise': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            self.add_error('confirm_password', "As senhas não conferem.")
+        
+        return cleaned_data
