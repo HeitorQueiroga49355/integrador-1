@@ -1,6 +1,10 @@
 from django.db import models
 from base.models import Base
 from institution.models import Institution
+import uuid 
+from django.utils import timezone
+
+
 
 
 class Evaluation(Base):
@@ -17,7 +21,7 @@ class Evaluation(Base):
     recommendations = models.TextField(verbose_name='Recomendações')
     
     def __str__(self):
-        return f"Avaliação {self.id} - Pontuação: {self.score}"
+        return f"Avaliação {self.pk} - Pontuação: {self.score}"
 
 class Reviewer(Base):
     """
@@ -31,3 +35,12 @@ class Reviewer(Base):
 
     def __str__(self):
         return self.name
+    
+class ReviewerInvite(models.Model):
+    email = models.EmailField(verbose_name="E-mail do Convidado", unique=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True) # Token único para o convite
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email

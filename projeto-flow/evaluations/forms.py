@@ -1,5 +1,5 @@
 from django import forms
-from .models import Evaluation, Reviewer
+from .models import Evaluation, Reviewer, ReviewerInvite
 
 class EvaluationForm(forms.ModelForm):
     class Meta:
@@ -35,4 +35,25 @@ class ReviewerForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'exemplo@email.com'}),
             'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
             'expertise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Inteligência Artificial, Direito Civil...'}),
+        }
+
+
+# Convidar um avaliador por email
+class InviteForm(forms.ModelForm):
+    class Meta:
+        model = ReviewerInvite
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'exemplo@email.com'})
+        }
+
+# Formulário para o avaliador preencher (sem precisar estar logado)
+class ExternalReviewerForm(forms.ModelForm):
+    class Meta:
+        model = Reviewer
+        fields = ['name', 'cpf', 'expertise'] # O email vai vir do convite
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'expertise': forms.TextInput(attrs={'class': 'form-control'}),
         }

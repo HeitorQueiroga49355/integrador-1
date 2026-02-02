@@ -27,15 +27,22 @@
         .modal-header { background-color: var(--azul-principal); color: white; }
     </style>
 
+    <!-- Adicionar e Convidar Avaliadores -->
     <div class="section-header d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-people-fill text-primary"></i>
+            <i class="bi bi-people-fill text-primary" style="color: var(--azul-principal) !important;"></i>
             <h5 class="m-0">Banco de Avaliadores</h5>
         </div>
         
-        <button type="button" class="btn btn-primary" style="background-color: var(--azul-principal);" data-bs-toggle="modal" data-bs-target="#addReviewerModal">
-            <i class="bi bi-plus-lg"></i> Adicionar Avaliador
-        </button>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inviteModal">
+                <i class="bi bi-envelope-paper"></i> Convidar por E-mail
+            </button>
+            
+            <button type="button" class="btn btn-primary" style="background-color: var(--azul-principal); border: none;" data-bs-toggle="modal" data-bs-target="#addReviewerModal">
+                <i class="bi bi-plus-lg"></i> Adicionar Manualmente
+            </button>
+        </div>
     </div>
 
     <div class="table-container">
@@ -122,4 +129,30 @@
     </div>
 </div>
 
+<!-- modal de convidar avaliador -->
+<div class="modal fade" id="inviteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Convidar Avaliador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form action="{% url 'evaluations:send_invite' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted">Um e-mail será enviado com um link para o avaliador preencher o cadastro.</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">E-mail do Convidado</label>
+                        <input type="email" name="email" class="form-control" placeholder="nome@instituicao.com" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar Convite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
