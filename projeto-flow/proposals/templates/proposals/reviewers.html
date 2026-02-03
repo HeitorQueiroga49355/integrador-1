@@ -66,9 +66,23 @@
                     <td class="text-center">
                       <form action="{% url 'evaluations:reviewer_delete' reviewer.id %}" method="post" onsubmit="return confirm('Tem certeza que deseja remover {{ reviewer.name }}?');" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Remover">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                        
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="{% url 'evaluations:promote_to_manager' reviewer.id %}" 
+                            class="btn btn-link text-warning p-0" 
+                            data-bs-toggle="tooltip" 
+                            title="Promover a Manager"
+                            onclick="return confirm('Tem certeza que deseja promover {{ reviewer.user.first_name }} a Manager? Ele terá acesso total ao sistema.')">
+                                <i class="bi bi-person-up" style="font-size: 1.2rem;"></i>
+                            </a>
+
+                            <a href="{% url 'evaluations:reviewer_delete' reviewer.id %}" 
+                            class="btn btn-link text-danger p-0" 
+                            title="Excluir Avaliador"
+                            onclick="return confirm('Tem certeza que deseja remover o avaliador {{ reviewer.user.first_name }}?')">
+                                <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
+                            </a>
+                        </div>
                     </form>
                     </td>
                 </tr>

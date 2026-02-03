@@ -10,4 +10,6 @@ urlpatterns = [
     path('avaliadores/convidar/', views.send_invite, name='send_invite'),
     path('convite/<uuid:token>/', views.accept_invite, name='accept_invite'),
     path('avaliadores/adicionar-manual/', views.add_reviewer_manual, name='add_reviewer_manual'),
+    path('avaliadores/promover/<int:reviewer_id>/', views.promote_to_manager, name='promote_to_manager'),
+
 ]

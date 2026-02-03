@@ -49,7 +49,7 @@ def evaluation_create(request, submission_id):
 
     return render(request, 'evaluations/evaluation_form.html', {
         'form': form,
-        'submission': submission, # Passamos a submissão para o template
+        'submission': submission, 
         'existing_evaluation': evaluation
     })
 
@@ -257,4 +257,33 @@ def add_reviewer_manual(request):
             print(f"ERRO: {e}")
             messages.error(request, f'Erro ao processar: {e}')
 
+    return redirect('evaluations:reviewers_list')
+
+# --- Função de promover avaliador a gestor ---
+def promote_to_manager(request, reviewer_id):
+    # Busca o avaliador
+    reviewer = get_object_or_404(Reviewer, id=reviewer_id)
+    
+    try:
+        user = reviewer.user # Guardamos a referência do usuário antes de deletar o reviewer
+        
+        if not user:
+            messages.error(request, 'Este avaliador não possui um usuário associado.')
+            return redirect('evaluations:reviewers_list')
+        
+        with transaction.atomic():
+            # Atualiza o perfil para Manager
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.role = Profile.Role.MANAGER 
+            profile.save()
+            
+            # Deleta o registro de Avaliador
+            # Isso fará com que ele suma da lista automaticamente
+            reviewer.delete()
+            
+        messages.success(request, f'Sucesso! {user.first_name} foi promovido a Manager e removido da lista de avaliadores.')
+            
+    except Exception as e:
+        messages.error(request, f'Erro ao promover usuário: {e}')
+    
     return redirect('evaluations:reviewers_list')
