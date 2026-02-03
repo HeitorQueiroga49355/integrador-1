@@ -1,6 +1,11 @@
 from django.db import models
 from base.models import Base
 from institution.models import Institution
+import uuid
+from django.utils import timezone
+
+from django.conf import settings
+
 
 class Reviewer(Base):
     """
@@ -11,7 +16,7 @@ class Reviewer(Base):
     email = models.EmailField(verbose_name="E-mail", unique=True)
     cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
     expertise = models.CharField(max_length=200, verbose_name="Área de Atuação")
-    
+
     # Novo campo para vincular avaliador ao usuário (se necessário)
     user = models.OneToOneField(
         'user.User',
@@ -21,13 +26,21 @@ class Reviewer(Base):
         related_name='reviewer_profile',
         verbose_name="Usuário do Sistema"
     )
-    
-    def __str__(self):
-        return self.name
-    
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = "Avaliador"
         verbose_name_plural = "Avaliadores"
+
+class ReviewerInvite(models.Model):
+    email = models.EmailField(verbose_name="E-mail do Convidado", unique=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True) # Token único para o convite
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
 
 
 class SubmissionAssignment(Base):
@@ -68,12 +81,12 @@ class SubmissionAssignment(Base):
         blank=True,
         verbose_name="Data da Notificação"
     )
-    
+
     class Meta:
         verbose_name = "Atribuição de Avaliação"
         verbose_name_plural = "Atribuições de Avaliações"
         unique_together = ['submission', 'reviewer']  # Evita duplicatas
-    
+
     def __str__(self):
         return f"{self.reviewer.name} -> {self.submission.title}"
 
@@ -114,7 +127,7 @@ class Evaluation(Base):
         related_name='proposal_evaluations',
         verbose_name="Edital"
     )
-    
+
     # Notas
     note_scientific_relevance = models.DecimalField(
         max_digits=5,
@@ -144,7 +157,7 @@ class Evaluation(Base):
         null=True,
         blank=True
     )
-    
+
     # Pareceres
     project_report = models.TextField(
         verbose_name='Relatório do Projeto',
@@ -166,7 +179,7 @@ class Evaluation(Base):
         blank=True,
         null=True
     )
-    
+
     # Status da avaliação
     STATUS_CHOICES = [
         ('pending', 'Pendente'),
@@ -179,21 +192,21 @@ class Evaluation(Base):
         default='pending',
         verbose_name='Status da Avaliação'
     )
-    
+
     completed_date = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name="Data de Conclusão"
     )
-    
+
     class Meta:
         verbose_name = "Avaliação"
         verbose_name_plural = "Avaliações"
         unique_together = ['submission', 'reviewer']
-    
+
     def __str__(self):
         return f"Avaliação de {self.reviewer.name} - {self.submission.title}"
-    
+
     def save(self, *args, **kwargs):
         # Calcula o score automaticamente
         if all([
@@ -206,12 +219,12 @@ class Evaluation(Base):
                 self.note_feasibility_methodological +
                 self.note_expected_results
             )
-            
+
             # Se todas as notas estão preenchidas, marca como concluída
             if self.project_report and self.status == 'pending':
                 self.status = 'completed'
                 if not self.completed_date:
                     from django.utils import timezone
                     self.completed_date = timezone.now()
-        
+
         super().save(*args, **kwargs)
