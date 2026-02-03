@@ -261,6 +261,13 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "address.Address": "fa-solid fa-map-location-dot",
+        "institution.Institution": "fa-solid fa-building-columns",
+        "pesquisador.Pesquisador": "fa-solid fa-book-open-reader",
+        "proposals.Proposal": "fa-solid fa-file-contract",
+        "submission.Submission": "fa-solid fa-file-upload",
+        "evaluations.Evaluation": "fa-solid fa-clipboard-check",
+        "user.Profile": "fa-solid fa-id-badge",
     },
     # Icons that are used when one is not manually specified
     #"default_icon_parents": "fas fa-chevron-circle-right",
