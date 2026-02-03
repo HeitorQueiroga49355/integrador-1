@@ -149,10 +149,20 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media files
+# Media files - configuração geral
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-MEDIA_URL = '/submissions/'
-MEDIA_ROOT = BASE_DIR / 'submissions'
+# OU se preferir manter submissions para PDFs e adicionar perfil separadamente:
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Configurações específicas de upload
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+
+# Extensões permitidas para imagens
+ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp']
 
 # Jazzmin settings
 
@@ -268,6 +278,7 @@ JAZZMIN_SETTINGS = {
         "submission.Submission": "fa-solid fa-file-upload",
         "evaluations.Evaluation": "fa-solid fa-clipboard-check",
         "user.Profile": "fa-solid fa-id-badge",
+        "user.User": "fa-solid fa-user-pen",
     },
     # Icons that are used when one is not manually specified
     #"default_icon_parents": "fas fa-chevron-circle-right",
