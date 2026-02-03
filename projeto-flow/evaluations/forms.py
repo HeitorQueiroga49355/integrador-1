@@ -1,5 +1,5 @@
 from django import forms
-from .models import Evaluation, Reviewer
+from .models import Evaluation, Reviewer, ReviewerInvite
 
 class EvaluationForm(forms.ModelForm):
     class Meta:
@@ -36,3 +36,42 @@ class ReviewerForm(forms.ModelForm):
             'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
             'expertise': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Inteligência Artificial, Direito Civil...'}),
         }
+
+class InviteForm(forms.ModelForm):
+    class Meta:
+        model = ReviewerInvite
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'exemplo@email.com'})
+        }
+
+class ExternalReviewerForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Crie uma Senha",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '******'}),
+        required=True
+    )
+    confirm_password = forms.CharField(
+        label="Confirme a Senha",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '******'}),
+        required=True
+    )
+
+    class Meta:
+        model = Reviewer
+        fields = ['name', 'cpf', 'expertise'] 
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
+            'expertise': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            self.add_error('confirm_password', "As senhas não conferem.")
+        
+        return cleaned_data

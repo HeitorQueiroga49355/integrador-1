@@ -1,6 +1,11 @@
 from django.db import models
 from base.models import Base
 from institution.models import Institution
+import uuid 
+from django.utils import timezone
+
+from django.conf import settings
+
 
 
 class Evaluation(Base):
@@ -17,17 +22,38 @@ class Evaluation(Base):
     recommendations = models.TextField(verbose_name='Recomendações')
     
     def __str__(self):
-        return f"Avaliação {self.id} - Pontuação: {self.score}"
+        return f"Avaliação {self.pk} - Pontuação: {self.score}"
 
 class Reviewer(Base):
     """
     Modelo para representar um avaliador.
     """
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, verbose_name="Instituição Vinculada")
-    name = models.CharField(max_length=200, verbose_name="Nome Completo")
-    email = models.EmailField(verbose_name="E-mail", unique=True)
-    cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
-    expertise = models.CharField(max_length=200, verbose_name="Área de Atuação")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='reviewer_profile',
+        
+        # pra não dar erro
+        null=True,   
+        blank=True
+    )
+    
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    cpf = models.CharField(max_length=14, unique=True)
+    expertise = models.CharField(max_length=255)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+    
+class ReviewerInvite(models.Model):
+    email = models.EmailField(verbose_name="E-mail do Convidado", unique=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True) # Token único para o convite
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
