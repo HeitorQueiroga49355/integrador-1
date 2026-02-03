@@ -165,7 +165,19 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp']
 
 # Jazzmin settings
-
+def get_user_avatar_url(user):
+    """
+    Função para o Jazzmin buscar o avatar do usuário.
+    Retorna a URL da foto do perfil ou None.
+    """
+    try:
+        # Acessa o perfil relacionado e retorna a URL da imagem
+        if hasattr(user, 'profile') and user.profile.profile_picture:
+            return user.profile.profile_picture.url
+    except:
+        # Em caso de qualquer erro (ex: perfil não existe), retorna None
+        pass
+    return None
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "ProjetoFlow",
@@ -204,7 +216,7 @@ JAZZMIN_SETTINGS = {
     #"search_model": ["auth.User", "auth.Group"],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
-    #"user_avatar": None,
+    "user_avatar": get_user_avatar_url,
 
     ############
     # Top Menu #
