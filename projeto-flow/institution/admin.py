@@ -1,5 +1,7 @@
 from django.contrib import admin
 from institution.models import Institution
+from address.models import Address
+
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
@@ -20,6 +22,18 @@ class InstitutionAdmin(admin.ModelAdmin):
         'address__state',
     )
     list_filter = ('address__state',)
+    
+    fieldsets = (
+        ('Informações Básicas', {
+            'fields': ('name', 'cnpj', 'phone', 'email')
+        }),
+        ('Endereço', {
+            'fields': ('address',)
+        }),
+        ('Responsável', {
+            'fields': ('manager',)
+        }),
+    )
 
     @admin.display(description='City')
     def get_city(self, obj):

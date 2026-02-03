@@ -4,6 +4,8 @@ services:
     restart: always
     ports:
       - 8000:8000
+    volumes:
+      - .:/integrado-1
     depends_on:
       - integrador_db
 

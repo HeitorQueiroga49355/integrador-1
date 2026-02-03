@@ -1,0 +1,288 @@
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
+<style>
+  .card-header-custom {
+    background-color: var(--azul-principal) !important;
+    color: var(--branco) !important;
+  }
+
+  .btn-custom-primary {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border: none;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+  }
+
+  .stats-mini-card {
+    border-left: 4px solid #1e40af;
+    transition: all 0.2s;
+  }
+
+  .stats-mini-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: #e8f0fe;
+    color: #1e40af;
+  }
+
+  .progress {
+    height: 24px;
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'proposals:proposals' %}">Editais</a>
+              </li>
+              <li class="breadcrumb-item active">Status da Distribuição</li>
+            </ol>
+          </nav>
+          <h2 class="text-dark fw-bold">
+            <i class="bi bi-pie-chart me-2"></i>Status da Distribuição
+          </h2>
+          <h5 class="text-muted">{{ proposal.title }}</h5>
+        </div>
+        <div class="d-flex gap-2">
+          <a
+            href="{% url 'evaluations:distribute_submissions' proposal.id %}"
+            class="btn btn-custom-primary"
+          >
+            <i class="bi bi-distribute-vertical me-1"></i> (Re)Distribuir
+          </a>
+          <a
+            href="{% url 'evaluations:evaluation_report' proposal.id %}"
+            class="btn btn-success"
+          >
+            <i class="bi bi-file-earmark-bar-graph me-1"></i> Relatório
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estatísticas Gerais -->
+  <div class="row mb-4 g-3">
+    <div class="col-md-2">
+      <div class="card shadow-sm border-0 stats-mini-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted small mb-1">Submissões</h6>
+          <h3 class="mb-0 fw-bold">{{ stats.total_submissions }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card shadow-sm border-0 stats-mini-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted small mb-1">Com Avaliadores</h6>
+          <h3 class="mb-0 fw-bold text-success">
+            {{ stats.submissions_with_reviewers }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card shadow-sm border-0 stats-mini-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted small mb-1">Atribuições</h6>
+          <h3 class="mb-0 fw-bold">{{ stats.total_assignments }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 stats-mini-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted small mb-1">Aval. Pendentes</h6>
+          <h3 class="mb-0 fw-bold text-warning">
+            {{ stats.pending_evaluations }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 stats-mini-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted small mb-1">Aval. Concluídas</h6>
+          <h3 class="mb-0 fw-bold text-success">
+            {{ stats.completed_evaluations }}
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Submissões e suas Atribuições -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-list-ul me-2"></i>Submissões e Avaliadores
+      </h5>
+    </div>
+    <div class="card-body">
+      {% if submissions_data %}
+      <div class="accordion" id="submissionsAccordion">
+        {% for item in submissions_data %}
+        <div class="accordion-item border shadow-sm mb-2">
+          <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+            <button
+              class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse{{ forloop.counter }}"
+            >
+              <div class="d-flex justify-content-between w-100 pe-3">
+                <div>
+                  <strong>{{ item.submission.title }}</strong>
+                  <br />
+                  <small class="text-muted">
+                    <i class="bi bi-person-circle me-1"></i>
+                    {{ item.submission.researcher.user.get_full_name }}
+                  </small>
+                </div>
+                <span class="badge bg-primary align-self-center">
+                  {{ item.reviewer_count }} avaliador(es)
+                </span>
+              </div>
+            </button>
+          </h2>
+          <div
+            id="collapse{{ forloop.counter }}"
+            class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+            data-bs-parent="#submissionsAccordion"
+          >
+            <div class="accordion-body">
+              {% if item.reviewers %}
+              <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Avaliador</th>
+                      <th>Email</th>
+                      <th>Área de Atuação</th>
+                      <th>Atribuída em</th>
+                      <th>Status</th>
+                      <th class="text-center">Pontuação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for rev in item.reviewers %}
+                    <tr>
+                      <td>{{ rev.reviewer.name }}</td>
+                      <td><small>{{ rev.reviewer.email }}</small></td>
+                      <td><small>{{ rev.reviewer.expertise }}</small></td>
+                      <td>
+                        <small>{{ rev.assigned_date|date:"d/m/Y H:i" }}</small>
+                      </td>
+                      <td>
+                        {% if rev.status == 'pending' %}
+                        <span class="badge bg-warning">Pendente</span>
+                        {% elif rev.status == 'in_progress' %}
+                        <span class="badge bg-info">Em Andamento</span>
+                        {% elif rev.status == 'completed' %}
+                        <span class="badge bg-success">Concluída</span>
+                        {% endif %}
+                      </td>
+                      <td class="text-center">
+                        {% if rev.score %}
+                        <strong class="text-primary">{{ rev.score }}</strong>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="alert alert-warning border-0 mb-0">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Nenhum avaliador atribuído a esta submissão ainda.
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-light border text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        Nenhuma submissão encontrada para este edital.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Carga de Trabalho dos Avaliadores -->
+  {% if stats.reviewers_workload %}
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="card-header card-header-custom">
+      <h5 class="mb-0">
+        <i class="bi bi-person-workspace me-2"></i>Carga de Trabalho dos
+        Avaliadores
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Avaliador</th>
+              <th class="text-center">Total</th>
+              <th class="text-center">Pendentes</th>
+              <th class="text-center">Concluídas</th>
+              <th style="width: 300px">Progresso</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for name, workload in stats.reviewers_workload.items %}
+            <tr>
+              <td><strong>{{ name }}</strong></td>
+              <td class="text-center">
+                <span class="badge bg-primary"
+                  >{{ workload.total_assignments }}</span
+                >
+              </td>
+              <td class="text-center">
+                <span class="badge bg-warning">{{ workload.pending }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-success">{{ workload.completed }}</span>
+              </td>
+              <td>
+                {% widthratio workload.completed workload.total_assignments 100
+                as percentage %}
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-success"
+                    role="progressbar"
+                    style="width: {{ percentage }}%"
+                    aria-valuenow="{{ percentage }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {{ percentage }}%
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -20,7 +20,7 @@ class Version(Base):
     target = models.TextField(verbose_name='Objetivo')
     opening_date = models.DateField(verbose_name='Data de Abertura')
     closing_date = models.DateField(verbose_name='Data de Fechamento')
-    file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
+    file = models.FileField(upload_to='proposals/retifications/', null=True, blank=True, verbose_name='Arquivo')
 
     def __str__(self):
         return self.title

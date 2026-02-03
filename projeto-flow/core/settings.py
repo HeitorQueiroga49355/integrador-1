@@ -149,10 +149,20 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media files
+# Media files - configuração geral
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-MEDIA_URL = '/submissions/'
-MEDIA_ROOT = BASE_DIR / 'submissions'
+# OU se preferir manter submissions para PDFs e adicionar perfil separadamente:
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Configurações específicas de upload
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+
+# Extensões permitidas para imagens
+ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp']
 
 # Configuração de Envio de E-mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -164,7 +174,19 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Jazzmin settings
-
+def get_user_avatar_url(user):
+    """
+    Função para o Jazzmin buscar o avatar do usuário.
+    Retorna a URL da foto do perfil ou None.
+    """
+    try:
+        # Acessa o perfil relacionado e retorna a URL da imagem
+        if hasattr(user, 'profile') and user.profile.profile_picture:
+            return user.profile.profile_picture.url
+    except:
+        # Em caso de qualquer erro (ex: perfil não existe), retorna None
+        pass
+    return None
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "ProjetoFlow",
@@ -203,7 +225,7 @@ JAZZMIN_SETTINGS = {
     #"search_model": ["auth.User", "auth.Group"],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
-    #"user_avatar": None,
+    "user_avatar": get_user_avatar_url,
 
     ############
     # Top Menu #
@@ -270,6 +292,14 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "address.Address": "fa-solid fa-map-location-dot",
+        "institution.Institution": "fa-solid fa-building-columns",
+        "pesquisador.Pesquisador": "fa-solid fa-book-open-reader",
+        "proposals.Proposal": "fa-solid fa-file-contract",
+        "submission.Submission": "fa-solid fa-file-upload",
+        "evaluations.Evaluation": "fa-solid fa-clipboard-check",
+        "user.Profile": "fa-solid fa-id-badge",
+        "user.User": "fa-solid fa-user-pen",
     },
     # Icons that are used when one is not manually specified
     #"default_icon_parents": "fas fa-chevron-circle-right",
