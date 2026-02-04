@@ -6,7 +6,7 @@ def get_default_page_alias_by_user(user):
         return 'login'
     page_alias = 'pesquisador-editais'
     if user.profile.role == Profile.Role.MANAGER:
-        page_alias = 'proposals'
+        page_alias = 'proposals:proposals'
     elif user.profile.role == Profile.Role.EVALUATOR:
-        page_alias = 'my_evaluations'
+        page_alias = 'evaluations:my_evaluations'
     return page_alias
