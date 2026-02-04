@@ -10,6 +10,7 @@ class Proposal(Base):
     opening_date = models.DateField(verbose_name='Data de Abertura', blank=True, null=True)
     closing_date = models.DateField(verbose_name='Data de Fechamento', blank=True, null=True)
     proposal_file = models.FileField(upload_to='proposals/', null=True, blank=True, verbose_name='Arquivo')
+    number_of_places = models.PositiveIntegerField(verbose_name='Número de Vagas', default=1)
 
     def __str__(self):
         return self.title
