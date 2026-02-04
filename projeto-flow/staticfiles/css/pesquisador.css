@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+    --azul-principal: #1E3E91;
+    --azul-escuro: #3b538e;
+    --azul-claro: #E3EDF9;
+    --branco: #ffffff;
+    --borda-radius: 0.5rem;
+    --background-table: #ffffff;
+    --verde-botoes: #3F861E;
+    --cinza-botoes: #858684;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Afacad", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background-color: var(--azul-claro);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main_pesquisador_conteudo {
+    flex: 1; 
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
+h3 {
+    display: flex;
+    justify-content: left;
+    margin: 2rem 0 2rem 0;
+}
+
+/* Tabela */
+
+.conteudo_tabela {
+    background-color: var(--branco);
+    border-radius: var(--borda-radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.table_meus_projetos {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    background-color: var(--branco);
+}
+
+.table_meus_projetos thead {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+}
+
+.table_meus_projetos th,
+.table_meus_projetos td {
+    padding: 1rem;
+    font-size: 0.95rem;
+}
+
+.table_meus_projetos th:first-child {
+    border-top-left-radius: var(--borda-radius);
+}
+
+.table_meus_projetos th:last-child {
+    border-top-right-radius: var(--borda-radius);
+}
+
+.titulo_projeto:hover {
+    background-color: var(--azul-claro);
+}
+
+/* .table_meus_projetos tbody tr {
+  border-top: 1px solid #eee;
+}
+
+.table_meus_projetos tbody tr:hover {
+  background-color: #f8f9fd;
+} */
+
+/* status */
+.status {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.status img {
+    width: 1rem;
+    height: 1rem;
+    object-fit: contain;
+}
+
+/* Detalhes Projeto */
+
+.detalhes_projeto {
+    background-color: var(--branco);
+    border-radius: .5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sub_title_project h4 {
+    margin-bottom: .5rem;
+}
+
+.sub_title_project p {
+    text-align: justify;
+}
+
+.status_btn_editar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status_projeto {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status_projeto img {
+    width: 1rem;
+    height: 1rem;
+    object-fit: contain;
+
+}
+
+.btn_editar_projeto {
+    background-color: var(--azul-principal);
+    padding: 0.5rem 1rem;
+    border: none;
+    color: var(--branco);
+    border-radius: .5rem;
+    font-weight: 500;
+
+}
+
+.btn_editar_projeto:hover {
+    background: var(--azul-escuro);
+    cursor: pointer;
+}
+
+/* Editais */
+.subtitulo_editais {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+
+.paragrafo_info_editais {
+    text-align: justify;
+    margin-top: 1rem;
+    line-height: 1.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.info_btn_editais {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.botoes_editais {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-verde {
+    background-color: var(--verde-botoes);
+    padding: 0.2rem 1rem;
+    border: none;
+    color: var(--branco);
+    border-radius: .5rem;
+    height: 3rem;
+
+}
+
+.btn-verde:hover {
+    background-color: #356716;
+    cursor: pointer;
+}
+
+.btn-cinza {
+    background-color: var(--cinza-botoes);
+    padding: 0.2rem 1rem;
+    border: none;
+    color: var(--branco);
+    border-radius: .5rem;
+    height: 3rem;
+}
+
+.btn-cinza:hover {
+    background-color: #707477;
+    cursor: pointer;
+}
+
+/* Adicionar Projeto */
+.titulo_com_btn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--branco);
+  border-radius: .5rem;
+  padding: 0 1rem;
+}
+
+.form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:1rem 1rem;
+      align-items:center;
+}
+
+
+.label_form_pesquisador{
+  display:block;
+  font-size:1rem;
+  color:#23363a;
+  margin-bottom:0.2rem;
+  font-weight:1rem;
+}
+
+.completo{
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border-width: 0.1rem;
+}
+
+.input_pesquisador input[type="text"], input[type="date"], select, textarea{
+  width:100%;
+  min-width: 0; 
+  padding:0.625rem 0.75rem; 
+  border-radius:0.5rem;
+  border:0;
+  background:var(--input-bg);
+  color:#21333a;
+  font-size:0.875rem; 
+  display:block;
+  box-sizing:border-box;
+  max-width: 100%;
+
+}
+
+
+.upload {
+  margin-top:1rem;
+  background:linear-gradient(180deg,#fff,#fbfcfd);
+  border-radius:0.5rem;
+  border:1px dashed var(--line);
+  padding: 2rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+  color:#23323a;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+}
+
+
+/* responsividade */
+@media (max-width: 1024px) {
+    .table_meus_projetos th,
+    .table_meus_projetos td {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .status {
+        gap: 0.4rem;
+    }
+
+    .status img {
+        width: 0.9rem;
+        height: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main_pesquisador_conteudo {
+        padding: 0 1rem;
+    }
+
+    .table_meus_projetos th,
+    .table_meus_projetos td {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .status {
+        gap: 0.35rem;
+        font-size: 0.8rem;
+    }
+
+    .status img {
+        width: 0.8rem;
+        height: 0.8rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        margin: 1.5rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .table_meus_projetos th,
+    .table_meus_projetos td {
+        padding: 0.45rem;
+        font-size: 0.75rem;
+    }
+
+    .status {
+        gap: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .status img {
+        width: 0.7rem;
+        height: 0.7rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    .conteudo_tabela {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+}
