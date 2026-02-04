@@ -136,7 +136,7 @@ AUTH_USER_MODEL = 'user.User'
 
 # Authentication settings
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'pesquisador-editais'
+LOGIN_REDIRECT_URL = '/user/dashboard/'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Use email as username for authentication

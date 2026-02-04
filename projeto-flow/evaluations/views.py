@@ -27,74 +27,103 @@ from django.core.mail import get_connection
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.decorators import login_required
 
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+
 
 # ============= VIEWS DE AVALIAÇÃO =============
 
+
+@login_required
 def evaluation_create(request, submission_id):
-    """
-    View para criar/editar avaliação de uma submissão.
-    O avaliador só pode avaliar submissões atribuídas a ele.
-    """
-    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
-                                                                              Profile.Role.MANAGER]:
-        return redirect(get_default_page_alias_by_user(request.user))
+    # 1. Verificação de Segurança
+    if not hasattr(request.user, 'profile'):
+        return redirect('login')
+        
+    if request.user.profile.role not in [Profile.Role.EVALUATOR, Profile.Role.MANAGER]:
+        messages.error(request, "Você não tem permissão para avaliar.")
+        return redirect('proposals:proposals')
+
     submission = get_object_or_404(Submission, id=submission_id)
 
-    # Busca o avaliador baseado no usuário logado
-    # TODO: Ajustar quando tiver autenticação real
+    # 2. Obter ou Criar o Reviewer (Garante que Managers tenham um Reviewer vinculado)
     try:
-        reviewer = Reviewer.objects.filter(
-            institution=Institution.objects.first()
-        ).first()
+        reviewer = Reviewer.objects.get(user=request.user)
     except Reviewer.DoesNotExist:
-        messages.error(request, "Você não está cadastrado como avaliador.")
-        return redirect('proposals:submissions')
+        if request.user.profile.role == Profile.Role.MANAGER:
+            # Cria um reviewer temporário para o Manager poder avaliar
+            reviewer = Reviewer.objects.create(
+                user=request.user,
+                name=request.user.get_full_name() or request.user.username,
+                email=request.user.email,
+                expertise="Gestão",
+                institution=Institution.objects.first() 
+            )
+        else:
+            messages.error(request, "Perfil de avaliador não encontrado.")
+            return redirect('proposals:submissions')
 
-    # Verifica se este avaliador tem atribuição para esta submissão
-    try:
-        assignment = SubmissionAssignment.objects.get(
+    # 3. Obter ou Criar a Atribuição (Assignment)
+    if request.user.profile.role == Profile.Role.MANAGER:
+        # Se for Manager, cria a atribuição na hora se não existir
+        assignment, created = SubmissionAssignment.objects.get_or_create(
             submission=submission,
             reviewer=reviewer
         )
-    except SubmissionAssignment.DoesNotExist:
-        messages.error(request, "Você não está autorizado a avaliar esta submissão.")
-        return redirect('proposals:submissions')
-
-    # Busca ou cria a avaliação
-    evaluation = Evaluation.objects.filter(
-        assignment=assignment,
-        submission=submission,
-        reviewer=reviewer
-    ).first()
-
-    if request.method == 'POST':
-        form = EvaluationForm(request.POST, instance=evaluation)
-        if form.is_valid():
-            ev = form.save(commit=False)
-            ev.assignment = assignment
-            ev.submission = submission
-            ev.reviewer = reviewer
-            ev.institution = submission.proposal.institution
-            ev.proposal = submission.proposal
-
-            # Se está salvando com dados completos, muda status
-            if ev.project_report and ev.note_scientific_relevance:
-                ev.status = 'completed'
-            else:
-                ev.status = 'in_progress'
-
-            ev.save()
-
-            messages.success(request, "Avaliação salva com sucesso!")
-            return redirect('evaluations:my_evaluations')
     else:
-        form = EvaluationForm(instance=evaluation)
+        # Se for Avaliador, a atribuição JÁ tem que existir
+        try:
+            assignment = SubmissionAssignment.objects.get(
+                submission=submission, 
+                reviewer=reviewer
+            )
+        except SubmissionAssignment.DoesNotExist:
+            messages.error(request, "Esta submissão não foi atribuída a você.")
+            return redirect('evaluations:my_evaluations')
+
+    # 4. Processamento do Formulário
+    if request.method == 'POST':
+        form = EvaluationForm(request.POST)
+        if form.is_valid():
+            evaluation = form.save(commit=False)
+            
+            # --- INJEÇÃO DE DEPENDÊNCIAS (Aqui resolvemos os erros de valor Nulo) ---
+            evaluation.assignment = assignment          # Vincula à atribuição
+            evaluation.submission = submission          # Vincula à submissão
+            evaluation.reviewer = reviewer              # Vincula ao avaliador
+            
+            # Pega a Instituição e o Edital através da Submissão para garantir consistência
+            evaluation.proposal = submission.proposal   # CORREÇÃO DO ERRO ATUAL
+            evaluation.institution = submission.proposal.institution # CORREÇÃO DO ERRO ANTERIOR
+            
+            # Lógica de Status (Completed vs In Progress)
+            # Se quiser verificar se todos os campos foram preenchidos, adapte a lógica abaixo:
+            evaluation.status = 'completed' 
+            evaluation.completed_date = timezone.now()
+
+            try:
+                evaluation.save()
+                
+                # Atualiza o status da submissão para indicar que está sendo avaliada
+                submission.status = 'under_evaluation'
+                submission.save()
+
+                messages.success(request, 'Avaliação realizada com sucesso!')
+
+                # Redirecionamento inteligente
+                if request.user.profile.role == Profile.Role.MANAGER:
+                    return redirect('proposals:submissions')
+                return redirect('evaluations:my_evaluations')
+
+            except Exception as e:
+                # Se ainda der erro de banco, mostra na tela para debug
+                messages.error(request, f"Erro ao salvar no banco: {e}")
+    else:
+        form = EvaluationForm()
 
     return render(request, 'evaluations/evaluation_form.html', {
         'form': form,
-        'submission': submission,
-        'assignment': assignment,
-        'existing_evaluation': evaluation
+        'submission': submission
     })
 
 
@@ -159,10 +188,8 @@ def my_evaluations(request):
 # ============= VIEWS DE GERENCIAMENTO DE AVALIADORES =============
 
 def reviewers_list(request):
-    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
-                                                                              Profile.Role.MANAGER]:
-        return redirect(get_default_page_alias_by_user(request.user))
-    # SALVAR NOVO AVALIADOR
+
+     # SALVAR NOVO AVALIADOR
     if request.method == 'POST':
         form = ReviewerForm(request.POST)
         if form.is_valid():
@@ -175,13 +202,12 @@ def reviewers_list(request):
 
     # LISTAR AVALIADORES
     reviewers = Reviewer.objects.all().order_by('-created_at')
-
+    
     context = {
         'reviewers': reviewers,
         'form': form
     }
     return render(request, 'proposals/reviewers.html', context)
-
 
 def reviewer_delete(request, reviewer_id):
     """
@@ -207,7 +233,8 @@ def reviewer_delete(request, reviewer_id):
         else:
             name = reviewer.name
             reviewer.delete()
-            messages.success(request, f"Avaliador {name} removido com sucesso!")
+            Profile.objects.filter(user=reviewer.user, role=Profile.Role.EVALUATOR).delete()
+            messages.success(request, f"Avaliador {name} removido com sucesso.")
 
     return redirect('evaluations:reviewers_list')
 
@@ -347,8 +374,7 @@ def evaluation_report(request, proposal_id):
     """
     Gera relatório de avaliações de um edital.
     """
-    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
-                                                                              Profile.Role.MANAGER]:
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,Profile.Role.MANAGER]:
         return redirect(get_default_page_alias_by_user(request.user))
     proposal = get_object_or_404(Proposal, id=proposal_id)
 
@@ -522,7 +548,7 @@ def add_reviewer_manual(request):
 
                 # Garante que o Profile é de avaliador (ou atualiza se já existir)
                 profile, _ = Profile.objects.get_or_create(user=user)
-                profile.role = 'avaliador'  # Profile.Role.EVALUATOR
+                profile.role =  Profile.Role.EVALUATOR
                 profile.save()
 
                 # Cria o vínculo de Reviewer
@@ -587,9 +613,6 @@ def promote_to_manager(request, reviewer_id):
             profile.role = Profile.Role.MANAGER
             profile.save()
 
-            # Deleta o registro de Avaliador
-            # Isso fará com que ele suma da lista automaticamente
-            reviewer.delete()
 
         messages.success(request,
                          f'Sucesso! {user.first_name} foi promovido a Manager e removido da lista de avaliadores.')

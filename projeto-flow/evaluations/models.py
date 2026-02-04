@@ -6,6 +6,12 @@ from django.utils import timezone
 
 from django.conf import settings
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from user.models import Profile
+
+
+
 
 class Reviewer(Base):
     """
@@ -228,3 +234,15 @@ class Evaluation(Base):
                     self.completed_date = timezone.now()
 
         super().save(*args, **kwargs)
+
+@receiver(post_save, sender=Profile)
+def create_reviewer_for_staff(sender, instance, **kwargs):
+    # Se o perfil for Manager ou Evaluator e ainda não tiver um objeto Reviewer
+    if instance.role in [Profile.Role.MANAGER, Profile.Role.EVALUATOR]:
+        Reviewer.objects.get_or_create(
+            user=instance.user,
+            defaults={
+                'expertise': 'Gestão Interna' if instance.role == Profile.Role.MANAGER else 'Avaliador Externo',
+                'institution': Institution.objects.first() # Define uma padrão
+            }
+        )

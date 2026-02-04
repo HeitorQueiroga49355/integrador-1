@@ -4,8 +4,14 @@ from . import views
 app_name = 'proposals'
 
 urlpatterns = [
+<<<<<<< Updated upstream
     path('', views.proposals, name='proposals'),
     path('detalhes/<int:submission_id>/', views.details, name='details'),
+=======
+    
+    path('proposals/', views.proposals, name='proposals'),
+    path('detalhes/<int:submission_id>/', views.details, name='details'),    #path('details/<int:proposal_id>/', views.details, name='details'),
+>>>>>>> Stashed changes
     path('submissions/', views.submissions, name='submissions'),
     path('reviewers/', views.reviewers, name='reviewers'),
     path('editar/<int:proposal_id>/', views.proposal_edit, name='proposal_edit'),
