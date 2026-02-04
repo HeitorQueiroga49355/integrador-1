@@ -110,6 +110,7 @@
 
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
+            {% if user.role == 'manager' %}
             <li class="nav-item">
                 <a href="{% url 'proposals:proposals' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
@@ -123,14 +124,40 @@
                     Submissões
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{% url 'evaluations:reviewers_list' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'reviewers_list' %}active{% endif %}">
+                    Avaliadores
+                </a>
+            </li>
+            {% endif %}
+
+            {% if user.role == 'reviewer' %}
+            <li class="nav-item">
+                <a href="{% url 'evaluations:my_evaluations' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'my_evaluations' %}active{% endif %}">
+                    Minhas avaliações
+                </a>
+            </li>
+            {% endif %}
         </ul>
+        
 
         <!-- Avatar à direita -->
         <div class="avatar"></div>
 
     </div>
 </nav>
-
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
 <div class="container mt-4">
     {% block content %}{% endblock %}
 </div>

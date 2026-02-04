@@ -14,6 +14,22 @@ class Submission(Base):
     expected_results = models.TextField(verbose_name='Resultados Esperados')
     researcher = models.ForeignKey('user.Profile', on_delete=models.CASCADE, related_name='submissions_researcher')
     status = models.CharField(max_length=50, verbose_name='Status da Submissão')
+    submission_file = models.FileField(
+        upload_to='submissions/',
+        null=True,
+        blank=True,
+        verbose_name='Arquivo Principal da Submissão',
+        help_text='Faça upload do arquivo PDF principal da submissão'
+    )
+    
+    # Outros campos opcionais para anexos
+    attachments = models.FileField(
+        upload_to='submissions/attachments',
+        null=True,
+        blank=True,
+        verbose_name='Anexos (opcional)',
+        help_text='Anexos complementares à submissão'
+    )
 
     def __str__(self):
         return self.title

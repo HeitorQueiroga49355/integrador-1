@@ -1,68 +1,133 @@
-<div class="modal fade" id="editModal{{ edital.id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            
-            <div class="modal-header" style="background-color: var(--azul-principal); color: white;">
-                <h5 class="modal-title">Editar: {{ edital.title }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+<div
+  class="modal fade"
+  id="editModal{{ edital.id }}"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div
+        class="modal-header"
+        style="background-color: var(--azul-principal); color: white"
+      >
+        <h5 class="modal-title">Editar: {{ edital.title }}</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <form
+          action="{% url 'proposals:proposal_edit' edital.id %}"
+          method="post"
+          enctype="multipart/form-data"
+          id="formEdit{{ edital.id }}"
+        >
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label>Título do Edital</label>
+            <input
+              type="text"
+              name="title"
+              class="form-control"
+              value="{{ edital.title }}"
+              required
+            />
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Data Abertura</label>
+              <input
+                type="date"
+                name="opening_date"
+                class="form-control"
+                value="{{ edital.opening_date|date:'Y-m-d' }}"
+                required
+              />
             </div>
-            
-            <div class="modal-body">
-                <form action="{% url 'proposals:proposal_edit' edital.id %}" method="post" enctype="multipart/form-data" id="formEdit{{ edital.id }}">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label>Título do Edital</label>
-                        <input type="text" name="title" class="form-control" value="{{ edital.title }}" required>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Data Abertura</label>
-                            <input type="date" name="opening_date" class="form-control" value="{{ edital.opening_date|date:'Y-m-d' }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Data Fechamento</label>
-                            <input type="date" name="closing_date" class="form-control" value="{{ edital.closing_date|date:'Y-m-d' }}" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Objetivos (Target)</label>
-                        <textarea name="target" class="form-control" rows="3">{{ edital.target }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Descrição / Regras</label>
-                        <textarea name="description" class="form-control" rows="4">{{ edital.description }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Substituir Arquivo (Opcional)</label>
-                        <input type="file" name="proposal_file" class="form-control">
-                        {% if edital.proposal_file %}
-                            <small class="text-muted">Atual: <a href="{{ edital.proposal_file.url }}" target="_blank">Ver Arquivo</a></small>
-                        {% endif %}
-                    </div>
-                </form>
-
-                <form action="{% url 'proposals:proposal_delete' edital.id %}" method="post" id="formDelete{{ edital.id }}">
-                    {% csrf_token %}
-                </form>
+            <div class="col-md-6 mb-3">
+              <label>Data Fechamento</label>
+              <input
+                type="date"
+                name="closing_date"
+                class="form-control"
+                value="{{ edital.closing_date|date:'Y-m-d' }}"
+                required
+              />
             </div>
+          </div>
 
-            <div class="modal-footer justify-content-between">
-                <button type="submit" form="formDelete{{ edital.id }}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja EXCLUIR este edital?');">
-                    <i class="bi bi-trash"></i> Excluir Edital
-                </button>
+          <div class="mb-3">
+            <label>Objetivos (Target)</label>
+            <textarea name="target" class="form-control" rows="3">
+{{ edital.target }}</textarea
+            >
+          </div>
 
-                <div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="formEdit{{ edital.id }}" class="btn btn-primary" style="background-color: var(--azul-principal);">
-                        Salvar Alterações
-                    </button>
-                </div>
-            </div>
+          <div class="mb-3">
+            <label>Descrição / Regras</label>
+            <textarea name="description" class="form-control" rows="4">
+{{ edital.description }}</textarea
+            >
+          </div>
+
+          <div class="mb-3">
+            <label>Substituir Arquivo (Opcional)</label>
+            <input type="file" name="proposal_file" class="form-control" />
+            {% if edital.proposal_file %}
+            <small class="text-muted"
+              >Atual:
+              <a href="{{ edital.proposal_file.url }}" target="_blank"
+                >Ver Arquivo</a
+              ></small
+            >
+            {% endif %}
+          </div>
+        </form>
+
+        <form
+          action="{% url 'proposals:proposal_delete' edital.id %}"
+          method="post"
+          id="formDelete{{ edital.id }}"
+        >
+          {% csrf_token %}
+        </form>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button
+          type="submit"
+          form="formDelete{{ edital.id }}"
+          class="btn btn-danger"
+          onclick="
+            return confirm('Tem certeza que deseja EXCLUIR este edital?');
+          "
+        >
+          <i class="bi bi-trash"></i> Excluir Edital
+        </button>
+
+        <div>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="formEdit{{ edital.id }}"
+            class="btn btn-primary"
+            style="background-color: var(--azul-principal)"
+          >
+            Salvar Alterações
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </div>
