@@ -5,6 +5,12 @@ from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .forms import LoginForm, RegisterForm
+from .models import Profile
+from .utils import get_default_page_alias_by_user
+
+
+def index_view(request):
+    return redirect(get_default_page_alias_by_user(request.user))
 
 
 class LoginView(AuthLoginView):
@@ -13,7 +19,7 @@ class LoginView(AuthLoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy('pesquisador-editais')
+        return reverse_lazy(get_default_page_alias_by_user(self.request.user))
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
