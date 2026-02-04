@@ -110,7 +110,7 @@
 
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
-            {% if user.role == 'manager' %}
+            {% if user.profile.role == 'manager' %}
             <li class="nav-item">
                 <a href="{% url 'proposals:proposals' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
@@ -132,7 +132,7 @@
             </li>
             {% endif %}
 
-            {% if user.role == 'reviewer' %}
+            {% if user.profile.role == 'manager' or user.profile.role == 'evaluator' %}
             <li class="nav-item">
                 <a href="{% url 'evaluations:my_evaluations' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'my_evaluations' %}active{% endif %}">
@@ -144,7 +144,47 @@
         
 
         <!-- Avatar à direita -->
-        <div class="avatar"></div>
+        <div class="navPesquisador-profileButton" id="profileButton">
+        <img src="/static/images/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img" alt="Perfil do usuário">
+        <span class="profile-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+        <i class="fas fa-chevron-down" id="dropdownIcon"></i>
+
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-header">
+                <img src="/static/images/user-icon-on-transparent-background.png" alt="Perfil do usuário">
+                <div class="user-info">
+                    <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="user-email">{{ request.user.email }}</span>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-user"></i>
+                        <span>Meu Perfil</span>
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-footer">
+                <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     </div>
 </nav>
