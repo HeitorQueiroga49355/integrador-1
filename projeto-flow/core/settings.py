@@ -311,6 +311,8 @@ JAZZMIN_SETTINGS = {
         "evaluations.Evaluation": "fa-solid fa-clipboard-check",
         "user.Profile": "fa-solid fa-id-badge",
         "user.User": "fa-solid fa-user-pen",
+        "evaluations.Reviewer": "fa-solid fa-user-check",
+        "evaluations.ReviewerInvite": "fa-solid fa-user-plus",
     },
     # Icons that are used when one is not manually specified
     #"default_icon_parents": "fas fa-chevron-circle-right",
