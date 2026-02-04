@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Count, Q, Avg
+
+from user.utils import get_default_page_alias_by_user
 from .models import Evaluation, Reviewer, SubmissionAssignment
 from .forms import EvaluationForm, ReviewerForm
 from submission.models import Submission
@@ -24,6 +26,7 @@ from django.db import transaction
 from django.core.mail import get_connection
 from django.contrib.auth.forms import PasswordResetForm
 
+
 # ============= VIEWS DE AVALIAÇÃO =============
 
 def evaluation_create(request, submission_id):
@@ -31,6 +34,9 @@ def evaluation_create(request, submission_id):
     View para criar/editar avaliação de uma submissão.
     O avaliador só pode avaliar submissões atribuídas a ele.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     submission = get_object_or_404(Submission, id=submission_id)
 
     # Busca o avaliador baseado no usuário logado
@@ -42,7 +48,7 @@ def evaluation_create(request, submission_id):
     except Reviewer.DoesNotExist:
         messages.error(request, "Você não está cadastrado como avaliador.")
         return redirect('proposals:submissions')
-    
+
     # Verifica se este avaliador tem atribuição para esta submissão
     try:
         assignment = SubmissionAssignment.objects.get(
@@ -96,6 +102,9 @@ def my_evaluations(request):
     Lista todas as avaliações atribuídas ao avaliador logado.
     """
     # TODO: Ajustar quando tiver autenticação real
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     try:
         reviewer = Reviewer.objects.filter(
             institution=Institution.objects.first()
@@ -149,54 +158,37 @@ def my_evaluations(request):
 # ============= VIEWS DE GERENCIAMENTO DE AVALIADORES =============
 
 def reviewers_list(request):
-    """
-    Lista e gerencia avaliadores.
-    """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
+    # SALVAR NOVO AVALIADOR
     if request.method == 'POST':
         form = ReviewerForm(request.POST)
         if form.is_valid():
             reviewer = form.save(commit=False)
             reviewer.institution = Institution.objects.first()
             reviewer.save()
-            messages.success(request, f"Avaliador {reviewer.name} cadastrado com sucesso!")
             return redirect('evaluations:reviewers_list')
     else:
         form = ReviewerForm()
 
+    # LISTAR AVALIADORES
     reviewers = Reviewer.objects.all().order_by('-created_at')
-    
-    # Estatísticas de cada avaliador
-    reviewers_data = []
-    for reviewer in reviewers:
-        total_assignments = SubmissionAssignment.objects.filter(reviewer=reviewer).count()
-        pending = Evaluation.objects.filter(
-            reviewer=reviewer,
-            status='pending'
-        ).count()
-        completed = Evaluation.objects.filter(
-            reviewer=reviewer,
-            status='completed'
-        ).count()
-
-        reviewers_data.append({
-            'reviewer': reviewer,
-            'total_assignments': total_assignments,
-            'pending': pending,
-            'completed': completed
-        })
 
     context = {
-        'reviewers_data': reviewers_data,
+        'reviewers': reviewers,
         'form': form
     }
-
-    return render(request, 'evaluations/reviewers_list.html', context)
+    return render(request, 'proposals/reviewers.html', context)
 
 
 def reviewer_delete(request, reviewer_id):
     """
     Remove um avaliador.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     reviewer = get_object_or_404(Reviewer, id=reviewer_id)
 
     if request.method == 'POST':
@@ -225,6 +217,9 @@ def distribute_submissions(request, proposal_id):
     """
     Distribui as submissões de um edital para os avaliadores.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     proposal = get_object_or_404(Proposal, id=proposal_id)
 
     if request.method == 'POST':
@@ -277,6 +272,9 @@ def distribution_status(request, proposal_id):
     """
     Mostra o status da distribuição de um edital.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     proposal = get_object_or_404(Proposal, id=proposal_id)
     service = SubmissionDistributionService(proposal)
     stats = service.get_distribution_stats()
@@ -328,6 +326,9 @@ def auto_distribute(request, proposal_id):
     """
     Distribui automaticamente quando o edital é fechado.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     if request.method == 'POST':
         result = auto_distribute_on_proposal_close(proposal_id)
 
@@ -345,6 +346,9 @@ def evaluation_report(request, proposal_id):
     """
     Gera relatório de avaliações de um edital.
     """
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     proposal = get_object_or_404(Proposal, id=proposal_id)
 
     # Busca todas as submissões com suas avaliações
@@ -378,10 +382,12 @@ def evaluation_report(request, proposal_id):
     return render(request, 'evaluations/evaluation_report.html', context)
 
 
-
 # Convidar um avaliador por email
 
 def send_invite(request):
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     if request.method == 'POST':
         form = InviteForm(request.POST)
         if form.is_valid():
@@ -401,12 +407,13 @@ def send_invite(request):
                 messages.success(request, f'Convite enviado com sucesso para {invite.email}!')
 
             except Exception as e:
-                invite.delete() # Remove o convite se o email falhar
+                invite.delete()  # Remove o convite se o email falhar
                 messages.error(request, f'Erro ao enviar e-mail: {e}')
         else:
             messages.error(request, 'Este e-mail já foi convidado ou é inválido.')
 
     return redirect('evaluations:reviewers_list')
+
 
 def accept_invite(request, token):
     invite = get_object_or_404(ReviewerInvite, token=token)
@@ -472,6 +479,9 @@ def accept_invite(request, token):
 
 # --- Função de adicionar manualmente ---
 def add_reviewer_manual(request):
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email', '').strip()
@@ -511,7 +521,7 @@ def add_reviewer_manual(request):
 
                 # Garante que o Profile é de avaliador (ou atualiza se já existir)
                 profile, _ = Profile.objects.get_or_create(user=user)
-                profile.role = 'avaliador' # Profile.Role.EVALUATOR
+                profile.role = 'avaliador'  # Profile.Role.EVALUATOR
                 profile.save()
 
                 # Cria o vínculo de Reviewer
@@ -554,13 +564,17 @@ def add_reviewer_manual(request):
 
     return redirect('evaluations:reviewers_list')
 
+
 # --- Função de promover avaliador a gestor ---
 def promote_to_manager(request, reviewer_id):
     # Busca o avaliador
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
+                                                                              Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
     reviewer = get_object_or_404(Reviewer, id=reviewer_id)
 
     try:
-        user = reviewer.user # Guardamos a referência do usuário antes de deletar o reviewer
+        user = reviewer.user  # Guardamos a referência do usuário antes de deletar o reviewer
 
         if not user:
             messages.error(request, 'Este avaliador não possui um usuário associado.')
@@ -576,7 +590,8 @@ def promote_to_manager(request, reviewer_id):
             # Isso fará com que ele suma da lista automaticamente
             reviewer.delete()
 
-        messages.success(request, f'Sucesso! {user.first_name} foi promovido a Manager e removido da lista de avaliadores.')
+        messages.success(request,
+                         f'Sucesso! {user.first_name} foi promovido a Manager e removido da lista de avaliadores.')
 
     except Exception as e:
         messages.error(request, f'Erro ao promover usuário: {e}')

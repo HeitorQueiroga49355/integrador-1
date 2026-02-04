@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Dropdown Demo</title>
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .demo-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .demo-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+        .demo-info h2 {
+            color: #1E3E91;
+            margin-bottom: 1rem;
+        }
+        .demo-info ul {
+            margin-left: 2rem;
+        }
+        .demo-info li {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navPesquisador">
+    <h1><a> <img alt="Logo do projeto flow" class="navPesquisador-logo" src="/static/images/logo-with-name-side.png"></a></h1>
+    <ul class="navPesquisador-list">
+        <li class="navPesquisador-list__item --active">
+            <a class="navPesquisador-list__item__link" href="#">Editais</a>
+        </li>
+        <li class="navPesquisador-list__item">
+            <a class="navPesquisador-list__item__link" href="#">Meus Projetos</a>
+        </li>
+    </ul>
+    <div class="navPesquisador-profileButton" id="profileButton">
+        <img src="/static/images/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img" alt="Perfil do usuário">
+        <span class="profile-name">João Silva</span>
+        <i class="fas fa-chevron-down" id="dropdownIcon"></i>
+
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-header">
+                <img src="/static/images/user-icon-on-transparent-background.png" alt="Perfil do usuário">
+                <div class="user-info">
+                    <span class="user-name">João Silva</span>
+                    <span class="user-email">joao.silva@example.com</span>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-user"></i>
+                        <span>Meu Perfil</span>
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-footer">
+                <button class="dropdown-logout" onclick="alert('Logout clicked!')">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="demo-content">
+    <div class="demo-info">
+        <h2>🎉 Profile Dropdown Implementado com Sucesso!</h2>
+        <p>O dropdown do perfil foi implementado com as seguintes funcionalidades:</p>
+        <ul>
+            <li><strong>Clique no botão de perfil</strong> (canto superior direito) para abrir o dropdown</li>
+            <li><strong>Animação suave</strong> de abertura e fechamento</li>
+            <li><strong>Ícone rotativo</strong> (chevron) que indica o estado do dropdown</li>
+            <li><strong>Informações do usuário</strong> exibidas no header do dropdown</li>
+            <li><strong>Links de navegação:</strong>
+                <ul>
+                    <li>Meu Perfil</li>
+                    <li>Configurações</li>
+                </ul>
+            </li>
+            <li><strong>Botão de Logout</strong> com estilo destacado em vermelho</li>
+            <li><strong>Fechamento automático</strong> ao clicar fora do dropdown</li>
+            <li><strong>Design responsivo</strong> para mobile e desktop</li>
+        </ul>
+
+        <h3 style="color: #1E3E91; margin-top: 2rem;">Características Técnicas:</h3>
+        <ul>
+            <li>✅ HTML semântico e acessível</li>
+            <li>✅ CSS com animações e transições suaves</li>
+            <li>✅ JavaScript vanilla (sem dependências)</li>
+            <li>✅ Integrado com Django templates e CSRF protection</li>
+            <li>✅ Font Awesome icons</li>
+            <li>✅ Compatível com o design existente do projeto</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Profile dropdown functionality
+const profileButton = document.getElementById('profileButton');
+const profileDropdown = document.getElementById('profileDropdown');
+const dropdownIcon = document.getElementById('dropdownIcon');
+
+// Toggle dropdown when profile button is clicked
+profileButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    profileDropdown.classList.toggle('show');
+    dropdownIcon.classList.toggle('rotate');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (!profileButton.contains(e.target)) {
+        profileDropdown.classList.remove('show');
+        dropdownIcon.classList.remove('rotate');
+    }
+});
+
+// Prevent dropdown from closing when clicking inside it
+profileDropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+</script>
+
+</body>
+</html>
