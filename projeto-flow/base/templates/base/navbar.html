@@ -110,6 +110,7 @@
 
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
+            {% if user.role == 'manager' %}
             <li class="nav-item">
                 <a href="{% url 'proposals:proposals' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
@@ -129,7 +130,18 @@
                     Avaliadores
                 </a>
             </li>
+            {% endif %}
+
+            {% if user.role == 'reviewer' %}
+            <li class="nav-item">
+                <a href="{% url 'evaluations:my_evaluations' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'my_evaluations' %}active{% endif %}">
+                    Minhas avaliações
+                </a>
+            </li>
+            {% endif %}
         </ul>
+        
 
         <!-- Avatar à direita -->
         <div class="avatar"></div>
