@@ -26,7 +26,8 @@
             <td>{{ submission.proposal.opening_date }}</td>
             <td>{{ submission.proposal.closing_date }}</td>
             <td>
-              <p>{{ submission.display_status|default:submission.get_status_display }}</p>
+              {# Esta variável 'submission.display_status' é calculada na view para mostrar o status real #}
+              <p>{{ submission.display_status }}</p>
             </td>
           </tr>
         {% empty %}
