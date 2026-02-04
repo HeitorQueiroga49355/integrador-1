@@ -25,6 +25,7 @@ from django.db import transaction
 
 from django.core.mail import get_connection
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.decorators import login_required
 
 
 # ============= VIEWS DE AVALIAÇÃO =============
