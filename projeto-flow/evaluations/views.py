@@ -149,48 +149,25 @@ def my_evaluations(request):
 # ============= VIEWS DE GERENCIAMENTO DE AVALIADORES =============
 
 def reviewers_list(request):
-    """
-    Lista e gerencia avaliadores.
-    """
+     # SALVAR NOVO AVALIADOR
     if request.method == 'POST':
         form = ReviewerForm(request.POST)
         if form.is_valid():
             reviewer = form.save(commit=False)
             reviewer.institution = Institution.objects.first()
             reviewer.save()
-            messages.success(request, f"Avaliador {reviewer.name} cadastrado com sucesso!")
             return redirect('evaluations:reviewers_list')
     else:
         form = ReviewerForm()
 
+    # LISTAR AVALIADORES
     reviewers = Reviewer.objects.all().order_by('-created_at')
     
-    # Estatísticas de cada avaliador
-    reviewers_data = []
-    for reviewer in reviewers:
-        total_assignments = SubmissionAssignment.objects.filter(reviewer=reviewer).count()
-        pending = Evaluation.objects.filter(
-            reviewer=reviewer,
-            status='pending'
-        ).count()
-        completed = Evaluation.objects.filter(
-            reviewer=reviewer,
-            status='completed'
-        ).count()
-
-        reviewers_data.append({
-            'reviewer': reviewer,
-            'total_assignments': total_assignments,
-            'pending': pending,
-            'completed': completed
-        })
-
     context = {
-        'reviewers_data': reviewers_data,
+        'reviewers': reviewers,
         'form': form
     }
-
-    return render(request, 'evaluations/reviewers_list.html', context)
+    return render(request, 'proposals/reviewers.html', context)
 
 
 def reviewer_delete(request, reviewer_id):
