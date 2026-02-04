@@ -6,6 +6,8 @@ from submission.models import Submission
 from .forms import CreateSubmissionForm
 from user.models import Profile
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
+from django.db.models import Avg, Q
 
 from .mixins import ResearcherRequiredMixin
 
@@ -34,9 +36,50 @@ class SubmissionListView(ResearcherRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated and hasattr(user, 'profile') and user.profile.role == Profile.Role.RESEARCHER:
-            # Assumindo que o campo em `Submission` se chama `researcher` e é uma FK para `Profile`
-            return Submission.objects.filter(researcher=user.profile)
+            # Otimiza a consulta para buscar o edital relacionado de uma só vez
+            return Submission.objects.filter(researcher=user.profile).select_related('proposal')
         return Submission.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        submissions = context['submissions']
+        today = timezone.now().date()
+        
+        # Cache para classificações de editais para evitar consultas repetidas
+        proposal_rankings = {}
+
+        for sub in submissions:
+            proposal = sub.proposal
+            
+            # Define o status padrão com base no banco de dados
+            sub.display_status = sub.get_status_display()
+
+            # Verifica se o edital está fechado para calcular a classificação
+            if proposal.closing_date and proposal.closing_date < today:
+                
+                # Se ainda não classificamos este edital, fazemos agora
+                if proposal.id not in proposal_rankings:
+                    ranked_submission_ids = list(
+                        Submission.objects.filter(proposal=proposal)
+                        .annotate(avg_score=Avg('evaluations__score', filter=Q(evaluations__status='completed')))
+                        .order_by('-avg_score')
+                        .values_list('id', flat=True)
+                    )
+                    proposal_rankings[proposal.id] = ranked_submission_ids
+
+                ranked_ids = proposal_rankings.get(proposal.id, [])
+                if sub.id in ranked_ids:
+                    # Verifica se a submissão está dentro do número de vagas
+                    if ranked_ids.index(sub.id) < proposal.number_of_places:
+                        sub.display_status = "Aprovado"
+                    else:
+                        sub.display_status = "Reprovado"
+                else:
+                    # Se não tem avaliação completa, é considerado reprovado após o fechamento
+                    sub.display_status = "Reprovado"
+
+        context['submissions'] = submissions
+        return context
 
 
 class SubmissionDetailView(ResearcherRequiredMixin, DetailView):

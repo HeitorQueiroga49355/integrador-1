@@ -26,7 +26,7 @@
             <td>{{ submission.proposal.opening_date }}</td>
             <td>{{ submission.proposal.closing_date }}</td>
             <td>
-              <p>{{ submission.status|default:"Em avaliação" }}</p>
+              <p>{{ submission.display_status|default:submission.get_status_display }}</p>
             </td>
           </tr>
         {% empty %}
