@@ -26,8 +26,17 @@
             <td>{{ submission.proposal.opening_date }}</td>
             <td>{{ submission.proposal.closing_date }}</td>
             <td>
-              {# Esta variável 'submission.display_status' é calculada na view para mostrar o status real #}
-              <p>{{ submission.display_status }}</p>
+              <div class="status status-{{ submission.display_status|slugify }}">
+                {% if submission.display_status == "Aprovado" %}
+                  <img src="{% static 'icons/aprovado.svg' %}" alt="Ícone de Aprovado">
+                {% elif submission.display_status == "Reprovado" %}
+                  <img src="{% static 'icons/reprovado.svg' %}" alt="Ícone de Reprovado">
+                {% else %}
+                  {# Status padrão: Em Avaliação #}
+                  <img src="{% static 'icons/espera.svg' %}" alt="Ícone de Em Avaliação">
+                {% endif %}
+                <span>{{ submission.display_status }}</span>
+              </div>
             </td>
           </tr>
         {% empty %}
