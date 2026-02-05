@@ -255,19 +255,19 @@ h3 {
   border-width: 0.1rem;
 }
 
-.input_pesquisador input[type="text"], input[type="date"], select, textarea{
-  width:100%;
-  min-width: 0; 
-  padding:0.625rem 0.75rem; 
-  border-radius:0.5rem;
-  border:0;
-  background:var(--input-bg);
-  color:#21333a;
-  font-size:0.875rem; 
-  display:block;
-  box-sizing:border-box;
+.input_pesquisador {
+  width: 100%;
+  min-width: 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ced4da; /* Adiciona uma borda visível permanente */
+  background: var(--branco);
+  color: #21333a;
+  font-size: 0.875rem;
+  display: block;
+  box-sizing: border-box;
   max-width: 100%;
-
+  font-family: inherit; /* Garante que a fonte seja a mesma para todos os campos */
 }
 
 

@@ -110,6 +110,7 @@
 
         <!-- Centro -->
         <ul class="navbar-nav mb-2 mb-lg-0">
+            {% if user.profile.role == 'manager' %}
             <li class="nav-item">
                 <a href="{% url 'proposals:proposals' %}"
                 class="nav-link {% if request.resolver_match.url_name == 'proposals' %}active{% endif %}">
@@ -123,14 +124,80 @@
                     Submissões
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{% url 'evaluations:reviewers_list' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'reviewers_list' %}active{% endif %}">
+                    Avaliadores
+                </a>
+            </li>
+            {% endif %}
+
+            {% if user.profile.role == 'manager' or user.profile.role == 'evaluator' %}
+            <li class="nav-item">
+                <a href="{% url 'evaluations:my_evaluations' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'my_evaluations' %}active{% endif %}">
+                    Minhas avaliações
+                </a>
+            </li>
+            {% endif %}
         </ul>
+        
 
         <!-- Avatar à direita -->
-        <div class="avatar"></div>
+        <div class="navPesquisador-profileButton" id="profileButton">
+        <img src="/static/images/user-icon-on-transparent-background.png" class="navPesquisador-profileButton__img" alt="Perfil do usuário">
+        <span class="profile-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+        <i class="fas fa-chevron-down" id="dropdownIcon"></i>
+
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-header">
+                <img src="/static/images/user-icon-on-transparent-background.png" alt="Perfil do usuário">
+                <div class="user-info">
+                    <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="user-email">{{ request.user.email }}</span>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-user"></i>
+                        <span>Meu Perfil</span>
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-footer">
+                <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     </div>
 </nav>
-
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
 <div class="container mt-4">
     {% block content %}{% endblock %}
 </div>
@@ -141,6 +208,34 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Profile dropdown functionality
+const profileButton = document.getElementById('profileButton');
+const profileDropdown = document.getElementById('profileDropdown');
+const dropdownIcon = document.getElementById('dropdownIcon');
+
+// Toggle dropdown when profile button is clicked
+profileButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    profileDropdown.classList.toggle('show');
+    dropdownIcon.classList.toggle('rotate');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (!profileButton.contains(e.target)) {
+        profileDropdown.classList.remove('show');
+        dropdownIcon.classList.remove('rotate');
+    }
+});
+
+// Prevent dropdown from closing when clicking inside it
+profileDropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+</script>
+
 
 </body>
 </html>

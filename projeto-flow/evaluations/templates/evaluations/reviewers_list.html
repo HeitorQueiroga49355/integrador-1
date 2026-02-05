@@ -1,0 +1,247 @@
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
+<style>
+  .card-header-custom {
+    background-color: var(--azul-principal) !important;
+    color: var(--branco) !important;
+  }
+
+  .btn-custom-primary {
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    border: none;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: var(--azul-escuro);
+  }
+
+  .stats-badge {
+    font-size: 0.875rem;
+    padding: 0.4em 0.65em;
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="text-dark fw-bold">
+        <i class="bi bi-people me-2"></i>Gerenciar Avaliadores
+      </h2>
+      <p class="text-muted">Cadastre e gerencie os avaliadores do sistema</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Formulário de Cadastro -->
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm border-0 sticky-top" style="top: 20px">
+        <div class="card-header card-header-custom">
+          <h5 class="mb-0">
+            <i class="bi bi-person-plus me-2"></i>Cadastrar Avaliador
+          </h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %} {% if form.errors %}
+            <div class="alert alert-danger small">
+              Por favor, corrija os erros abaixo.
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+              <label
+                for="{{ form.name.id_for_label }}"
+                class="form-label small"
+              >
+                <i class="bi bi-person me-1"></i> Nome Completo
+              </label>
+              {{ form.name }} {% if form.name.errors %}
+              <div class="text-danger small">{{ form.name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="{{ form.email.id_for_label }}"
+                class="form-label small"
+              >
+                <i class="bi bi-envelope me-1"></i> E-mail
+              </label>
+              {{ form.email }} {% if form.email.errors %}
+              <div class="text-danger small">{{ form.email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.cpf.id_for_label }}" class="form-label small">
+                <i class="bi bi-card-text me-1"></i> CPF
+              </label>
+              {{ form.cpf }} {% if form.cpf.errors %}
+              <div class="text-danger small">{{ form.cpf.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.expertise.id_for_label }}">
+                <i class="bi bi-lightbulb me-1"></i> Área de Atuação
+              </label>
+              {{ form.expertise }} {% if form.expertise.errors %}
+              <div class="text-danger small">{{ form.expertise.errors }}</div>
+              {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-custom-primary w-100">
+              <i class="bi bi-check-circle me-1"></i> Cadastrar Avaliador
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Avaliadores -->
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div
+          class="card-header card-header-custom d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">
+            <i class="bi bi-list-ul me-2"></i>Lista de Avaliadores
+          </h5>
+          <span class="badge bg-light text-dark"
+            >{{ reviewers_data|length }} cadastrado(s)</span
+          >
+        </div>
+        <div class="card-body p-0">
+          {% if reviewers_data %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Avaliador</th>
+                  <th>Email / CPF</th>
+                  <th>Área de Atuação</th>
+                  <th class="text-center">Atribuições</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for data in reviewers_data %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div
+                        class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
+                        style="width: 40px; height: 40px; font-weight: bold"
+                      >
+                        {{ data.reviewer.name|first|upper }}
+                      </div>
+                      <div>
+                        <strong>{{ data.reviewer.name }}</strong>
+                        <br />
+                        <small class="text-muted"
+                          >Cadastrado em {{
+                          data.reviewer.created_at|date:"d/m/Y" }}</small
+                        >
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <small>
+                      <i class="bi bi-envelope me-1"></i>{{ data.reviewer.email
+                      }}<br />
+                      <i class="bi bi-card-text me-1"></i>{{ data.reviewer.cpf
+                      }}
+                    </small>
+                  </td>
+                  <td>
+                    <span class="badge bg-info text-white"
+                      >{{ data.reviewer.expertise }}</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-primary stats-badge"
+                      >{{ data.total_assignments }}</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    {% if data.pending > 0 %}
+                    <span class="badge bg-warning stats-badge"
+                      >{{ data.pending }} pendente(s)</span
+                    >
+                    {% else %}
+                    <span class="badge bg-success stats-badge"
+                      >{{ data.completed }} concluída(s)</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    <form
+                      method="post"
+                      action="{% url 'evaluations:reviewer_delete' data.reviewer.id %}"
+                      style="display: inline"
+                      onsubmit="return confirm('Tem certeza que deseja remover {{ data.reviewer.name }}?');"
+                    >
+                      {% csrf_token %}
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                        title="{% if data.pending > 0 %}Não é possível remover avaliador com avaliações pendentes{% else %}Remover avaliador{% endif %}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="p-5 text-center">
+            <i class="bi bi-people" style="font-size: 4rem; color: #ddd"></i>
+            <p class="text-muted mt-3">
+              Nenhum avaliador cadastrado ainda.<br />
+              <small
+                >Use o formulário ao lado para cadastrar o primeiro
+                avaliador.</small
+              >
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Card de Informações -->
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-body">
+          <h6 class="fw-bold">
+            <i class="bi bi-info-circle me-2"></i>Sobre os Avaliadores
+          </h6>
+          <ul class="small text-muted mb-0">
+            <li>
+              Os avaliadores podem ser atribuídos manualmente ou automaticamente
+              às submissões
+            </li>
+            <li>Cada avaliador deve ter um email único no sistema</li>
+            <li>
+              Não é possível remover avaliadores que possuem avaliações
+              pendentes
+            </li>
+            <li>
+              A área de atuação ajuda a distribuir avaliações de forma mais
+              adequada
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

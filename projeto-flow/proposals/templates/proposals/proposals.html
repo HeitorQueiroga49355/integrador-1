@@ -1,332 +1,351 @@
-{% extends 'base/navbar.html' %}
-{% load static %}
+{% extends 'base/navbar.html' %} {% load static %} {% block content %}
 
-{% block content %}
+<div class="container-fluid py-4">
+  <div class="top-bar">
+    <div></div>
+  </div>
 
-    <div class="container-fluid py-4">
-        <div class="top-bar">
-            <div></div>
-        </div>
+  <style>
+    .table-container {
+      background-color: #1e40af;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
 
-        <style>
-            .table-container {
-                background-color: #1e40af;
-                border-radius: 8px;           
-                overflow: hidden;
-                margin-bottom: 30px;
-            }
-            
-            .table {
-                margin-bottom: 0;
-            }
-            
-            .table thead th {
-                background-color: #1e40af;
-                color: white;
-                font-size: 14px;
-                font-weight: 500;
-                border: none;
-                padding: 15px;
-                vertical-align: middle;
-            }
+    .table {
+      margin-bottom: 0;
+    }
 
-            /* Ajuste para os inputs dentro do modal ficarem organizados */
-            .modal-body label {
-                font-weight: bold;
-                margin-bottom: 5px;
-                display: block;
-                color: #333;
-            }
-        </style>
+    .table thead th {
+      background-color: #1e40af;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      padding: 15px;
+      vertical-align: middle;
+    }
 
+    .modal-body label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+      color: #333;
+    }
+  </style>
 
-        <div class="section-header d-flex align-items-center justify-content-between mb-3">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-file-earmark-text-fill text-success"></i>
-                <h5 class="m-0">Editais Abertos</h5>
-            </div>
-
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#proposalModal">
-                Lançar Edital
-            </button>
-        </div>
-
-        <div class="table-container">
-            <table class="table table-striped table-hover bg-white">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">Ano</th>
-                        <th style="width: 35%;">Título - Descrição</th>
-                        <th style="width: 25%;">Inscrições</th>
-                        <th style="width: 10%;" class="text-center">Status</th>
-                        <th style="width: 20%;" class="text-center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for edital in editais_abertos %}
-                    <tr>
-                        <td>{{ edital.opening_date|date:"Y" }}</td>
-                        
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div>
-                                    <strong>{{ edital.title }}</strong><br>
-                                    <small class="text-muted">{{ edital.description|truncatewords:10 }}</small>
-                                </div>
-                            </div>
-                        </td>
-                        
-                        <td>{{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}</td>
-                        
-                        <td class="text-center">
-                            <span class="badge bg-success">Aberto</span>
-                        </td>
-                        
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                {% if edital.proposal_file %}
-                                    <a href="{{ edital.proposal_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary" title="Baixar Arquivo">
-                                        <i class="bi bi-download"></i>
-                                    </a>
-                                {% endif %}
-
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{ edital.id }}" title="Editar/Excluir">
-                                    <i class="bi bi-gear-fill"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <div class="modal fade" id="editModal{{ edital.id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #1e40af; color: white;">
-                                    <h5 class="modal-title">Gerenciar Edital: {{ edital.title }}</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                
-                                <div class="modal-body text-start">
-                                    <form action="{% url 'proposals:proposal_edit' edital.id %}" method="post" enctype="multipart/form-data" id="formEdit{{ edital.id }}">
-                                        {% csrf_token %}
-                                        
-                                        <div class="mb-3">
-                                            <label>Título</label>
-                                            <input type="text" name="title" class="form-control" value="{{ edital.title }}" required>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label>Data de Abertura</label>
-                                                <input type="date" name="opening_date" class="form-control" value="{{ edital.opening_date|date:'Y-m-d' }}" required>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label>Data de Fechamento</label>
-                                                <input type="date" name="closing_date" class="form-control" value="{{ edital.closing_date|date:'Y-m-d' }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label>Objetivos (Target)</label>
-                                            <textarea name="target" class="form-control" rows="3">{{ edital.target }}</textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label>Descrição</label>
-                                            <textarea name="description" class="form-control" rows="4">{{ edital.description }}</textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label>Substituir Arquivo (Opcional)</label>
-                                            <input type="file" name="proposal_file" class="form-control">
-                                            {% if edital.proposal_file %}
-                                                <small class="text-muted">Arquivo atual: <a href="{{ edital.proposal_file.url }}" target="_blank">Visualizar</a></small>
-                                            {% endif %}
-                                        </div>
-                                    </form>
-
-                                    <form action="{% url 'proposals:proposal_delete' edital.id %}" method="post" id="formDelete{{ edital.id }}">
-                                        {% csrf_token %}
-                                    </form>
-                                </div>
-
-                                <div class="modal-footer justify-content-between">
-                                    <button type="submit" form="formDelete{{ edital.id }}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este edital permanentemente?');">
-                                        <i class="bi bi-trash"></i> Excluir Edital
-                                    </button>
-
-                                    <div>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" form="formEdit{{ edital.id }}" class="btn btn-primary" style="background-color: #1e40af; border: none;">Salvar Alterações</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">Nenhum edital aberto no momento.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="section-header d-flex align-items-center justify-content-between mb-3 mt-5">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-file-earmark-text-fill text-danger"></i>
-                <h5 class="m-0">Editais Fechados</h5>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <table class="table table-striped table-hover bg-white">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">Ano</th>
-                        <th style="width: 35%;">Título - Descrição</th>
-                        <th style="width: 25%;">Período</th>
-                        <th style="width: 10%;" class="text-center">Status</th>
-                        <th style="width: 20%;" class="text-center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for edital in editais_fechados %}
-                    <tr>
-                        <td>{{ edital.opening_date|date:"Y" }}</td>
-                        <td>
-                            <strong>{{ edital.title }}</strong>
-                        </td>
-                        <td>{{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}</td>
-                        <td class="text-center">
-                            <span class="badge bg-danger">Fechado</span>
-                        </td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                {% if edital.proposal_file %}
-                                    <a href="{{ edital.proposal_file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-file-earmark"></i>
-                                    </a>
-                                {% endif %}
-                                
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal{{ edital.id }}">
-                                    <i class="bi bi-gear-fill"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <div class="modal fade" id="editModal{{ edital.id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #dc3545; color: white;"> <h5 class="modal-title">Gerenciar Edital: {{ edital.title }}</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-start">
-                                    <form action="{% url 'proposals:proposal_edit' edital.id %}" method="post" enctype="multipart/form-data" id="formEdit{{ edital.id }}">
-                                        {% csrf_token %}
-                                        <div class="mb-3">
-                                            <label>Título</label>
-                                            <input type="text" name="title" class="form-control" value="{{ edital.title }}" required>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label>Abertura</label>
-                                                <input type="date" name="opening_date" class="form-control" value="{{ edital.opening_date|date:'Y-m-d' }}" required>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label>Fechamento</label>
-                                                <input type="date" name="closing_date" class="form-control" value="{{ edital.closing_date|date:'Y-m-d' }}" required>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Objetivos</label>
-                                            <textarea name="target" class="form-control" rows="3">{{ edital.target }}</textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Descrição</label>
-                                            <textarea name="description" class="form-control" rows="4">{{ edital.description }}</textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Substituir Arquivo</label>
-                                            <input type="file" name="proposal_file" class="form-control">
-                                        </div>
-                                    </form>
-                                    <form action="{% url 'proposals:proposal_delete' edital.id %}" method="post" id="formDelete{{ edital.id }}">{% csrf_token %}</form>
-                                </div>
-                                <div class="modal-footer justify-content-between">
-                                    <button type="submit" form="formDelete{{ edital.id }}" class="btn btn-danger" onclick="return confirm('Confirmar exclusão?');"><i class="bi bi-trash"></i> Excluir</button>
-                                    <div>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" form="formEdit{{ edital.id }}" class="btn btn-danger">Salvar Alterações</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">Nenhum histórico de editais fechados.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+  <!-- EDITAIS ABERTOS -->
+  <div
+    class="section-header d-flex align-items-center justify-content-between mb-3"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-file-earmark-text-fill text-success"></i>
+      <h5 class="m-0">Editais Abertos</h5>
     </div>
 
+    <button
+      type="button"
+      class="btn btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#proposalModal"
+    >
+      Lançar Edital
+    </button>
+  </div>
 
-    <div class="modal fade" id="proposalModal" tabindex="-1" aria-labelledby="proposalModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h1 class="modal-title fs-5" id="proposalModalLabel">Lançar Novo Edital</h1>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          
-          <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              <div class="modal-body">
-                  {% if form.errors %}
-                      <div class="alert alert-danger">Por favor, corrija os erros abaixo.</div>
-                  {% endif %}
-          
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Título do Edital</label>
-                      {{ form.title }}
-                  </div>
-          
-                  <div class="row">
-                      <div class="col-md-6 mb-3">
-                          <label class="form-label fw-bold">Abertura</label>
-                          {{ form.opening_date }}
-                      </div>
-                      <div class="col-md-6 mb-3">
-                          <label class="form-label fw-bold">Fechamento</label>
-                          {{ form.closing_date }}
-                      </div>
-                  </div>
-          
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Objetivos (Target)</label>
-                      {{ form.target }}
-                  </div>
-          
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Descrição / Regras</label>
-                      {{ form.description }}
-                  </div>
-          
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Arquivo PDF</label>
-                      {{ form.proposal_file }}
-                  </div>
+  <div class="table-container">
+    <table class="table table-striped table-hover bg-white">
+      <thead>
+        <tr>
+          <th style="width: 10%">Ano</th>
+          <th style="width: 30%">Título - Descrição</th>
+          <th style="width: 20%">Inscrições</th>
+          <th style="width: 10%" class="text-center">Status</th>
+          <th style="width: 30%" class="text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for edital in editais_abertos %}
+        <tr>
+          <td>{{ edital.opening_date|date:"Y" }}</td>
+
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div>
+                <strong>{{ edital.title }}</strong><br />
+                <small class="text-muted"
+                  >{{ edital.description|truncatewords:10 }}</small
+                >
               </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-success">Publicar Edital</button>
-              </div>
-          </form>
-        </div>
+            </div>
+          </td>
+
+          <td>
+<<<<<<< Updated upstream
+            <!-- prettier-ignore -->
+            {{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}
+=======
+            {{ edital.opening_date|date:"d/m/Y" }} até {{edital.closing_date|date:"d/m/Y" }}
+>>>>>>> Stashed changes
+          </td>
+
+          <td class="text-center">
+            <span class="badge bg-success">Aberto</span>
+          </td>
+
+          <td class="text-center">
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              {% if edital.proposal_file %}
+              <a
+                href="{{ edital.proposal_file.url }}"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary"
+                title="Baixar Arquivo"
+              >
+                <i class="bi bi-download"></i>
+              </a>
+              {% endif %}
+
+              <!-- NOVO: Botão Fechar Edital -->
+              <form
+                method="post"
+                action="{% url 'proposals:close_proposal' edital.id %}"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-warning"
+                  onclick="
+                    return confirm(
+                      'Tem certeza que deseja fechar este edital? A distribuição para avaliadores será iniciada automaticamente.',
+                    );
+                  "
+                  title="Fechar Edital e Distribuir"
+                >
+                  <i class="bi bi-lock"></i> Fechar
+                </button>
+              </form>
+
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                data-bs-toggle="modal"
+                data-bs-target="#editModal{{ edital.id }}"
+                title="Editar/Excluir"
+              >
+                <i class="bi bi-gear-fill"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        {% include 'proposals/proposal-modal-edit.html' %} {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">
+            Nenhum edital aberto no momento.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EDITAIS FECHADOS -->
+  <div
+    class="section-header d-flex align-items-center justify-content-between mb-3 mt-5"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-file-earmark-text-fill text-danger"></i>
+      <h5 class="m-0">Editais Fechados</h5>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="table table-striped table-hover bg-white">
+      <thead>
+        <tr>
+          <th style="width: 10%">Ano</th>
+          <th style="width: 30%">Título - Descrição</th>
+          <th style="width: 20%">Período</th>
+          <th style="width: 10%" class="text-center">Status</th>
+          <th style="width: 30%" class="text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for edital in editais_fechados %}
+        <tr>
+          <td>{{ edital.opening_date|date:"Y" }}</td>
+          <td>
+            <strong>{{ edital.title }}</strong><br />
+            <small class="text-muted"
+              >{{ edital.description|truncatewords:10 }}</small
+            >
+          </td>
+          <td>
+            <!-- prettier-ignore -->
+            {{ edital.opening_date|date:"d/m/Y" }} até {{ edital.closing_date|date:"d/m/Y" }}
+          </td>
+          <td class="text-center">
+            <span class="badge bg-danger">Fechado</span>
+          </td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              {% if edital.proposal_file %}
+              <a
+                href="{{ edital.proposal_file.url }}"
+                target="_blank"
+                class="btn btn-sm btn-outline-secondary"
+                title="Arquivo do Edital"
+              >
+                <i class="bi bi-file-earmark"></i>
+              </a>
+              {% endif %}
+
+              <a
+                href="{% url 'evaluations:distribution_status' edital.id %}"
+                class="btn btn-sm btn-info"
+                title="Status da Distribuição"
+              >
+                <i class="bi bi-pie-chart"></i> Status
+              </a>
+
+              <a
+                href="{% url 'evaluations:evaluation_report' edital.id %}"
+                class="btn btn-sm btn-success"
+                title="Ver Relatório"
+              >
+                <i class="bi bi-file-earmark-bar-graph"></i> Relatório
+              </a>
+
+              <!-- NOVO: Botões de Exportar -->
+              <a
+                href="{% url 'proposals:export_excel' edital.id %}"
+                class="btn btn-sm btn-outline-success"
+                title="Exportar Excel"
+              >
+                <i class="bi bi-file-earmark-excel"></i> Excel
+              </a>
+
+              <a
+                href="{% url 'proposals:export_pdf' edital.id %}"
+                class="btn btn-sm btn-outline-danger"
+                title="Exportar PDF"
+              >
+                <i class="bi bi-file-earmark-pdf"></i> PDF
+              </a>
+
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                data-bs-toggle="modal"
+                data-bs-target="#editModal{{ edital.id }}"
+                title="Editar"
+              >
+                <i class="bi bi-gear-fill"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        {% include 'proposals/proposal-modal-edit.html' %} {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">
+            Nenhum histórico de editais fechados.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL CRIAR EDITAL -->
+<div
+  class="modal fade"
+  id="proposalModal"
+  tabindex="-1"
+  aria-labelledby="proposalModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h1 class="modal-title fs-5" id="proposalModalLabel">
+          Lançar Novo Edital
+        </h1>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            Por favor, corrija os erros abaixo.
+          </div>
+          {% endif %}
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Título do Edital</label>
+            {{ form.title }}
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Abertura</label>
+              {{ form.opening_date }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Fechamento</label>
+              {{ form.closing_date }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Número de Vagas</label>
+              {{ form.number_of_places }}
+              <small class="text-muted"
+                >Informe o número total de vagas disponíveis</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Objetivos (Target)</label>
+            {{ form.target }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Descrição / Regras</label>
+            {{ form.description }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Arquivo PDF</label>
+            {{ form.proposal_file }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-success">Publicar Edital</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
 
 {% endblock %}
