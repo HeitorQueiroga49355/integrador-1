@@ -8,6 +8,8 @@ from .forms import LoginForm, RegisterForm
 from .models import Profile
 from .utils import get_default_page_alias_by_user
 
+from django.contrib.auth.decorators import login_required
+
 
 def index_view(request):
     return redirect(get_default_page_alias_by_user(request.user))
@@ -19,7 +21,7 @@ class LoginView(AuthLoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy(get_default_page_alias_by_user(self.request.user))
+        return reverse_lazy('dashboard')
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
@@ -67,3 +69,27 @@ class LogoutView(AuthLogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.info(request, 'Você saiu da sua conta.')
         return super().dispatch(request, *args, **kwargs)
+
+
+
+@login_required
+def dashboard_router(request):
+    user = request.user
+    
+    # Verifica se o usuário tem perfil
+    if not hasattr(user, 'profile'):
+        return redirect('proposals:proposals')
+
+    role = user.profile.role
+
+    if role == 'manager':
+        # Manager -> Lista de Avaliadores
+        return redirect('proposals:proposals')
+        
+    elif role == 'evaluator':
+        # Avaliador -> Minhas Avaliações 
+        return redirect('evaluations:my_evaluations')
+        
+    else:
+        # Pesquisador (padrão) -> Editais
+        return redirect('proposals:proposals')

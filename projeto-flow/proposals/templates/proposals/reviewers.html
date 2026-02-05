@@ -76,12 +76,10 @@
                                 <i class="bi bi-person-up" style="font-size: 1.2rem;"></i>
                             </a>
 
-                            <a href="{% url 'evaluations:reviewer_delete' reviewer.id %}" 
-                            class="btn btn-link text-danger p-0" 
-                            title="Excluir Avaliador"
-                            onclick="return confirm('Tem certeza que deseja remover o avaliador {{ reviewer.user.first_name }}?')">
+                            <button type="submit" class="btn btn-link text-danger p-0" title="Excluir Avaliador">
                                 <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
-                            </a>
+                            </button>
+                            
                         </div>
                     </form>
                     </td>
