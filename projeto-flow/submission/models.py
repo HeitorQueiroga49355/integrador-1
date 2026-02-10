@@ -13,7 +13,14 @@ class Submission(Base):
     project_budget = models.TextField(verbose_name='Orçamento do Projeto')
     expected_results = models.TextField(verbose_name='Resultados Esperados')
     researcher = models.ForeignKey('user.Profile', on_delete=models.CASCADE, related_name='submissions_researcher')
-    status = models.CharField(max_length=50, verbose_name='Status da Submissão')
+    
+    class Status(models.TextChoices):
+        IN_EVALUATION = "in_evaluation", "Em Avaliação"
+        APPROVED = "approved", "Aprovado"
+        REJECTED = "rejected", "Reprovado"
+
+    status = models.CharField(max_length=50, verbose_name='Status da Submissão', choices=Status.choices, default=Status.IN_EVALUATION)
+
     submission_file = models.FileField(
         upload_to='submissions/',
         null=True,
