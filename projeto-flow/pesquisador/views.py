@@ -19,14 +19,26 @@ def base(request):
     return render(request, './base/base.html')
 
 
+# pesquisador/views.py
+
 class ProposalListView(ResearcherRequiredMixin, ListView):
     model = Proposal
     template_name = 'pesquisador/editais.html'
     context_object_name = 'proposals'
-
-
-# def pesquisador_projetos(request):
-#   return render(request, 'pesquisador/pesquisador_meus_projetos_tabela.html')
+    
+    def get_queryset(self):
+        """
+        Retorna apenas editais ABERTOS (data de fechamento >= hoje)
+        """
+        today = timezone.now().date()
+        return Proposal.objects.filter(
+            closing_date__gte=today
+        ).order_by('-opening_date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['today'] = timezone.now().date()
+        return context
 
 class SubmissionListView(ResearcherRequiredMixin, ListView):
     model = Submission
@@ -99,6 +111,38 @@ class SubmissionDetailView(ResearcherRequiredMixin, DetailView):
         if user.is_authenticated and hasattr(user, 'profile') and user.profile.role == Profile.Role.RESEARCHER:
             return Submission.objects.filter(researcher=user.profile)
         return Submission.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        submission = context['submission']
+        today = timezone.now().date()
+        proposal = submission.proposal
+
+        # Status padrão do banco
+        submission.display_status = submission.get_status_display()
+
+        # Verifica se o edital já encerrou
+        if proposal.closing_date and proposal.closing_date < today:
+            # Calcula ranking das submissões do edital
+            ranked_submission_ids = list(
+                Submission.objects.filter(proposal=proposal)
+                .annotate(avg_score=Avg('evaluations__score', filter=Q(evaluations__status='completed')))
+                .order_by(F('avg_score').desc(nulls_last=True))
+                .values_list('id', flat=True)
+            )
+
+            # Verifica a posição da submissão
+            if submission.id in ranked_submission_ids:
+                rank_index = ranked_submission_ids.index(submission.id)
+                if rank_index < proposal.number_of_places:
+                    submission.display_status = "Aprovado"
+                else:
+                    submission.display_status = "Reprovado"
+            else:
+                submission.display_status = "Reprovado"
+
+        context['submission'] = submission
+        return context
 
 
 class SubmissionCreateView(ResearcherRequiredMixin, CreateView):

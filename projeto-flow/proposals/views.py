@@ -30,17 +30,43 @@ def proposals(request):
         return redirect(get_default_page_alias_by_user(request.user))
     
     if request.method == 'POST':
+        print("=" * 80)
+        print("🔵 POST RECEBIDO")
+        print("POST DATA:", dict(request.POST))
+        print("FILES:", dict(request.FILES))
+        print("=" * 80)
+        
         form = ProposalForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_proposal = form.save(commit=False)
-            institution = Institution.objects.first()
-            if institution:
-                new_proposal.institution = institution
-                new_proposal.save()
-                messages.success(request, f"Edital '{new_proposal.title}' criado com sucesso!")
-                return redirect('proposals:proposals')
-            else:
-                form.add_error(None, "Nenhuma instituição encontrada para vincular o edital.")
+        
+        print("🔵 VALIDANDO FORMULÁRIO...")
+        print("Is Valid:", form.is_valid())
+        
+        if not form.is_valid():
+            print("❌ ERROS DO FORMULÁRIO:")
+            for field, errors in form.errors.items():
+                print(f"  - Campo '{field}': {errors}")
+            print("=" * 80)
+            messages.error(request, 'Por favor, corrija os erros do formulário.')
+        else:
+            print("✅ FORMULÁRIO VÁLIDO")
+            try:
+                new_proposal = form.save(commit=False)
+                institution = Institution.objects.first()
+                
+                if institution:
+                    new_proposal.institution = institution
+                    new_proposal.save()
+                    print(f"✅ EDITAL SALVO: ID={new_proposal.id}, Título={new_proposal.title}")
+                    messages.success(request, f"Edital '{new_proposal.title}' criado com sucesso!")
+                    return redirect('proposals:proposals')
+                else:
+                    print("❌ NENHUMA INSTITUIÇÃO ENCONTRADA")
+                    form.add_error(None, "Nenhuma instituição encontrada para vincular o edital.")
+            except Exception as e:
+                print(f"❌ ERRO AO SALVAR: {e}")
+                import traceback
+                traceback.print_exc()
+                messages.error(request, f'Erro ao salvar: {e}')
     else:
         form = ProposalForm()
     

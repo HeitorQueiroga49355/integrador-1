@@ -1,77 +1,208 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base.html' %} {% load static %} {% block content %}
+<style>
+  .form-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  .form-section h3 {
+    color: #1e40af;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .page-header {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2);
+  }
+  .page-header h3 {
+    margin: 0;
+    font-weight: 700;
+  }
+  .proposal-info {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .proposal-info h4 {
+    color: #1e40af;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  .btn-download {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 500;
+  }
+  .btn-download:hover {
+    background: #4b5563;
+    color: white;
+    transform: translateY(-2px);
+  }
+  .form-control,
+  .form-select {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    transition: all 0.3s;
+  }
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #1e40af;
+    box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.15);
+  }
+  .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+  textarea.form-control {
+    min-height: 120px;
+  }
+  .btn-submit {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 0.75rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+  .submit-section {
+    text-align: right;
+    margin-top: 2rem;
+  }
+</style>
 
-{% block content %}
-    <main class="main_pesquisador_conteudo">
-        <h3>Adicionar Projeto</h3>
+<main class="main_pesquisador_conteudo">
+  <div class="page-header">
+    <h3><i class="bi bi-plus-circle me-2"></i>Adicionar Projeto</h3>
+    <div class="proposal-info">
+      <h4>{{ proposal.title }}</h4>
+      {% if proposal.proposal_file %}
+      <a
+        href="{{ proposal.proposal_file.url }}"
+        target="_blank"
+        class="btn-download"
+      >
+        <i class="bi bi-file-earmark-pdf me-1"></i>Ver arquivo
+      </a>
+      {% endif %}
+    </div>
+  </div>
 
-        <div class="titulo_com_btn">
-            <h3>{{ proposal.title }}</h3>
-            {% if proposal.proposal_file %}
-                <a href="{{ proposal.proposal_file.url }}" target="_blank" class="btn-cinza">Ver arquivo</a>
-            {% endif %}
+  <form id="form_pesquisador" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-section">
+      <h3><i class="bi bi-info-circle me-2"></i>Dados Gerais</h3>
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="{{ form.title.id_for_label }}"
+            >{{ form.title.label }}</label
+          >
+          {{ form.title }}
         </div>
+        <div class="col-12">
+          <label class="form-label" for="{{ form.keywords.id_for_label }}"
+            >{{ form.keywords.label }}</label
+          >
+          {{ form.keywords }}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="{{ form.abstract.id_for_label }}"
+            >{{ form.abstract.label }}</label
+          >
+          {{ form.abstract }}
+        </div>
+      </div>
+    </div>
 
-        <h3>Dados Gerais</h3>
+    <div class="form-section">
+      <h3><i class="bi bi-folder me-2"></i>Dados do Projeto</h3>
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="{{ form.justification.id_for_label }}"
+            >{{ form.justification.label }}</label
+          >
+          {{ form.justification }}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="{{ form.methodology.id_for_label }}"
+            >{{ form.methodology.label }}</label
+          >
+          {{ form.methodology }}
+        </div>
+        <div class="col-12">
+          <label
+            class="form-label"
+            for="{{ form.project_timeline.id_for_label }}"
+            >{{ form.project_timeline.label }}</label
+          >
+          {{ form.project_timeline }}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="{{ form.project_budget.id_for_label }}"
+            >{{ form.project_budget.label }}</label
+          >
+          {{ form.project_budget }}
+        </div>
+        <div class="col-12">
+          <label
+            class="form-label"
+            for="{{ form.expected_results.id_for_label }}"
+            >{{ form.expected_results.label }}</label
+          >
+          {{ form.expected_results }}
+        </div>
+      </div>
+    </div>
 
-        <section class="detalhes_projeto">
-            <form id= "form_pesquisador" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form_grid">
-                    <div class="completo">
-                        <label class="label_form_pesquisador" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
-                        {{ form.title }}
-                    </div>
-                    <div class="completo">
-                        <label class="label_form_pesquisador" for="{{ form.keywords.id_for_label }}">{{ form.keywords.label }}</label>
-                        {{ form.keywords }}
-                    </div>
-                    <div class="completo">
-                        <label class="label_form_pesquisador" for="{{ form.abstract.id_for_label }}">{{ form.abstract.label }}</label>
-                        {{ form.abstract }}
-                    </div>
-                </div>
-        </section>
+    <div class="form-section">
+      <h3><i class="bi bi-cloud-upload me-2"></i>Arquivo do Projeto</h3>
+      <div class="row g-3">
+        <div class="col-12">
+          <label
+            class="form-label"
+            for="{{ form.submission_file.id_for_label }}"
+            >{{ form.submission_file.label }}</label
+          >
+          {{ form.submission_file }}
+          <small class="text-muted d-block mt-2">
+            <i class="bi bi-info-circle me-1"></i>Formatos aceitos: PDF. Tamanho
+            máximo: 10MB
+          </small>
+        </div>
+      </div>
 
-        <h3>Dados do Projeto</h3>
-        <section class="detalhes_projeto">
-            <div class="form_grid">
-                <div class="completo">
-                    <label class="label_form_pesquisador" for="{{ form.justification.id_for_label }}">{{ form.justification.label }}</label>
-                    {{ form.justification }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador" for="{{ form.methodology.id_for_label }}">{{ form.methodology.label }}</label>
-                    {{ form.methodology }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador" for="{{ form.project_timeline.id_for_label }}">{{ form.project_timeline.label }}</label>
-                    {{ form.project_timeline }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador" for="{{ form.project_budget.id_for_label }}">{{ form.project_budget.label }}</label>
-                    {{ form.project_budget }}
-                </div>
-                <div class="completo">
-                    <label class="label_form_pesquisador" for="{{ form.expected_results.id_for_label }}">{{ form.expected_results.label }}</label>
-                    {{ form.expected_results }}
-                </div>
-            </div>
-        </section>
-
-        <h3>Adiçao do Projeto</h3>
-
-        <section class="detalhes_projeto">
-            <div class="">
-                <label class="label_form_pesquisador" for="{{ form.submission_file.id_for_label }}">{{ form.submission_file.label }}</label>
-                {{ form.submission_file }}
-            </div>
-
-            <div class="">
-                <div class="info_btn_editais">
-                    <button class="btn-verde" id="submitBtn" type="submit">Adicionar Projeto</button>
-                </div>
-            </div>
-            </form>
-        </section>
-    </main>
+      <div class="submit-section">
+        <button class="btn-submit" id="submitBtn" type="submit">
+          <i class="bi bi-check-circle me-2"></i>Adicionar Projeto
+        </button>
+      </div>
+    </div>
+  </form>
+</main>
 {% endblock content %}

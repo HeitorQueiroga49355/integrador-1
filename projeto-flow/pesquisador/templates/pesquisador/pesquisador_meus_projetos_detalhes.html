@@ -1,41 +1,197 @@
-{% extends './pesquisador_meus_projetos_tabela.html' %}
-{% load static %}
+{% extends 'base/base.html' %} {% load static %} {% block content %}
+<main class="main_pesquisador_conteudo">
+  <style>
+    .breadcrumb-custom {
+      background: none;
+      padding: 0;
+      margin-bottom: 2rem;
+    }
+    .breadcrumb-custom a {
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .breadcrumb-custom a:hover {
+      text-decoration: underline;
+    }
+    .detail-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .detail-card h4 {
+      color: #1e40af;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .detail-card p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+    .detail-card strong {
+      color: #374151;
+    }
+    .status-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .status-section h4 {
+      color: #1e40af;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .status-badge-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .status-badge {
+      background: #fef3c7;
+      color: #d97706;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .status-badge img {
+      width: 24px;
+      height: 24px;
+    }
+    .btn-edit {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+    .btn-edit:hover {
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    }
+    .project-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 0.5rem;
+    }
+    .alert-info-custom {
+      background: #f0f9ff;
+      border-left: 4px solid #3b82f6;
+      padding: 1rem;
+      border-radius: 8px;
+      color: #1e40af;
+    }
+  </style>
 
-{% block content_pesquisador %}
-    <h3><a href="{% url 'pesquisador-projetos' %}">Meus Projetos</a> / Detalhes</h3>
-    <section class="detalhes_projeto">
-      <div class="sub_title_project">
-        <h4>Sobre o Projeto: {{ submission.title }}</h4>
-        <p><strong>Edital:</strong> {{ submission.proposal.title }}</p>
-        <p><strong>Palavras-chave:</strong> {{ submission.keywords }}</p>
-      </div>
+  <h3 class="breadcrumb-custom">
+    <a href="{% url 'pesquisador-projetos' %}">
+      <i class="bi bi-arrow-left me-1"></i>Meus Projetos
+    </a>
+    / Detalhes
+  </h3>
 
-      <div class="sub_title_project">
-        <h4>Resumo</h4>
-        <p>{{ submission.abstract }}</p>
-      </div>
+  <div class="detail-card">
+    <div class="project-title">{{ submission.title }}</div>
+    <p>
+      <strong><i class="bi bi-megaphone me-1"></i>Edital:</strong>
+      <!-- prettier-ignore-->
+      {{submission.proposal.title }}
+    </p>
+    <p>
+      <strong><i class="bi bi-tags me-1"></i>Palavras-chave:</strong>
+      <!-- prettier-ignore-->
+      {{submission.keywords }}
+    </p>
+  </div>
 
-      <div class="sub_title_project">
-        <h4>Comentários da Avaliação</h4>
-        {% if submission.evaluation_score %}
-          <p><strong>Pontos Fortes:</strong> {{ submission.evaluation_score.strength_points|default:"Não informado." }}</p>
-          <p><strong>Pontos Fracos:</strong> {{ submission.evaluation_score.weak_points|default:"Não informado." }}</p>
-          <p><strong>Recomendações:</strong> {{ submission.evaluation_score.recommendations|default:"Não informado." }}</p>
-        {% else %}
-          <p>A avaliação para este projeto ainda não está disponível.</p>
-        {% endif %}
-      </div>
+  <div class="detail-card">
+    <h4><i class="bi bi-file-text me-2"></i>Resumo</h4>
+    <p>{{ submission.abstract }}</p>
+  </div>
 
-      <div class="sub_title_project">
-        <h4>Situação</h4>
-        <div class="status_btn_editar">
-          <div class="status_projeto">
-            <p>Em avaliação</p>
-            <img src="{% static 'icons/espera.svg' %}" alt=""/>
-           
-          </div>
-          <button class="btn_editar_projeto" onclick="window.location.href='{% url 'pesquisador-projetos-detalhes-editar' submission.pk %}'">Editar projeto</button>
+  <div class="detail-card">
+    <h4><i class="bi bi-chat-left-text me-2"></i>Comentários da Avaliação</h4>
+    {% if submission.evaluation_score %}
+    <div class="row g-3">
+      <div class="col-md-12">
+        <div class="alert alert-success border-0">
+          <strong><i class="bi bi-plus-circle me-1"></i>Pontos Fortes:</strong>
+          <p class="mb-0 mt-2">
+            {{ submission.evaluation_score.strength_points|default:"Não
+            informado." }}
+          </p>
         </div>
       </div>
-    </section>
-{% endblock content_pesquisador %}
+      <div class="col-md-12">
+        <div class="alert alert-warning border-0">
+          <strong><i class="bi bi-dash-circle me-1"></i>Pontos Fracos:</strong>
+          <p class="mb-0 mt-2">
+            {{ submission.evaluation_score.weak_points|default:"Não informado."
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="alert-info-custom">
+          <strong><i class="bi bi-lightbulb me-1"></i>Recomendações:</strong>
+          <p class="mb-0 mt-2">
+            {{ submission.evaluation_score.recommendations|default:"Não
+            informado." }}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-light border text-center">
+      <i class="bi bi-hourglass-split me-2"></i>
+      A avaliação para este projeto ainda não está disponível.
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="status-section">
+    <h4><i class="bi bi-info-circle me-2"></i>Situação do Projeto</h4>
+    <div class="status-badge-container">
+      <div class="status-badge">
+        {% if submission.display_status == "Aprovado" %}
+        <img src="{% static 'icons/aprovado.svg' %}" alt="Aprovado" />
+        {% elif submission.display_status == "Reprovado" %}
+        <img src="{% static 'icons/reprovado.svg' %}" alt="Reprovado" />
+        {% else %}
+        <img src="{% static 'icons/espera.svg' %}" alt="Em Avaliação" />
+        {% endif %}
+        <span>{{ submission.display_status }}</span>
+      </div>
+      {% if submission.display_status == "Em Avaliação" %}
+      <button
+        class="btn-edit"
+        onclick="window.location.href='{% url 'pesquisador-projetos-detalhes-editar' submission.pk %}'"
+      >
+        <i class="bi bi-pencil-square me-2"></i>Editar Projeto
+      </button>
+    </div>
+    {% endif %}
+  </div>
+</main>
+{% endblock content %}

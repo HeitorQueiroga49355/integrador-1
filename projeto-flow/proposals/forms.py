@@ -19,13 +19,29 @@ class ProposalForm(forms.ModelForm):
             'number_of_places': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': '1',
-                'placeholder': 'Ex: 10'
+                'placeholder': 'Ex: 10',
+                'value': '1',
             }),
         }
     
     def clean_number_of_places(self):
         number_of_places = self.cleaned_data.get('number_of_places')
         if number_of_places and number_of_places < 1:
+            raise forms.ValidationError("O número de vagas deve ser maior que zero.")
+        return number_of_places
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Torna number_of_places opcional com valor padrão
+        self.fields['number_of_places'].required = False
+        if not self.instance.pk:  # Se for novo registro
+            self.initial['number_of_places'] = 1
+    
+    def clean_number_of_places(self):
+        number_of_places = self.cleaned_data.get('number_of_places')
+        if not number_of_places:
+            return 1  # Valor padrão se não for fornecido
+        if number_of_places < 1:
             raise forms.ValidationError("O número de vagas deve ser maior que zero.")
         return number_of_places
         

@@ -7,6 +7,8 @@ from django.contrib import messages
 from .forms import LoginForm, RegisterForm
 from .models import Profile
 from .utils import get_default_page_alias_by_user
+from django.contrib.messages import get_messages
+
 
 from django.contrib.auth.decorators import login_required
 
@@ -67,8 +69,14 @@ class LogoutView(AuthLogoutView):
     next_page = reverse_lazy('login')
 
     def dispatch(self, request, *args, **kwargs):
+        # Limpa mensagens pendentes
+        storage = get_messages(request)
+        for _ in storage:
+            pass
+
         messages.info(request, 'Você saiu da sua conta.')
         return super().dispatch(request, *args, **kwargs)
+
 
 
 

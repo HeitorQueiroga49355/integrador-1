@@ -235,14 +235,51 @@ class Evaluation(Base):
 
         super().save(*args, **kwargs)
 
+# @receiver(post_save, sender=Profile)
+# def create_reviewer_for_staff(sender, instance, **kwargs):
+#     # Se o perfil for Manager ou Evaluator e ainda não tiver um objeto Reviewer
+#     if instance.role in [Profile.Role.MANAGER, Profile.Role.EVALUATOR]:
+#         Reviewer.objects.get_or_create(
+#             user=instance.user,
+#             defaults={
+#                 'expertise': 'Gestão Interna' if instance.role == Profile.Role.MANAGER else 'Avaliador Externo',
+#                 'institution': Institution.objects.first() # Define uma padrão
+#             }
+#         )
+
 @receiver(post_save, sender=Profile)
-def create_reviewer_for_staff(sender, instance, **kwargs):
-    # Se o perfil for Manager ou Evaluator e ainda não tiver um objeto Reviewer
-    if instance.role in [Profile.Role.MANAGER, Profile.Role.EVALUATOR]:
+def create_reviewer_for_staff(sender, instance, created, **kwargs):
+    """
+    Cria um Reviewer apenas para Managers/Evaluators que ainda não têm.
+    """
+    # Só processa se o perfil for Manager ou Evaluator
+    if instance.role not in [Profile.Role.MANAGER, Profile.Role.EVALUATOR]:
+        return
+    
+    # Se já existe um Reviewer para este usuário, não faz nada
+    if Reviewer.objects.filter(user=instance.user).exists():
+        return
+    
+    # Só cria se tiver email e CPF disponíveis
+    user = instance.user
+    if not user.email:
+        return  # Não cria se não tiver email
+    
+    # Tenta pegar ou criar um CPF temporário se não tiver
+    # (isso é uma gambiarra, idealmente você deveria ter o CPF)
+    cpf_temp = f"000.000.000-{user.id:02d}"  # CPF temporário baseado no ID
+    
+    try:
         Reviewer.objects.get_or_create(
-            user=instance.user,
+            user=user,
             defaults={
+                'name': user.get_full_name() or user.username,
+                'email': user.email,
+                'cpf': cpf_temp,  # CPF temporário
                 'expertise': 'Gestão Interna' if instance.role == Profile.Role.MANAGER else 'Avaliador Externo',
-                'institution': Institution.objects.first() # Define uma padrão
+                'institution': Institution.objects.first()
             }
         )
+    except Exception as e:
+        # Se der erro, apenas loga e continua
+        print(f"Erro ao criar Reviewer automático: {e}")

@@ -218,10 +218,10 @@
                   </td>
                   <td>{{ item.submission.researcher.user.get_full_name }}</td>
                   <td>
-                    <small
-                      >{{ item.assignment.assigned_date|date:"d/m/Y H:i"
-                      }}</small
-                    >
+                    <small>
+                      <!-- prettier-ignore -->
+                      {{ item.assignment.assigned_date|date:"d/m/Y H:i"}}
+                    </small>
                   </td>
                   <td class="text-center">
                     <a

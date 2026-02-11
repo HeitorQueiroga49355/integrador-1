@@ -255,14 +255,20 @@
                 >
               </td>
               <td class="text-center">
-                <span class="badge bg-warning">{{ workload.pending }}</span>
+                <span class="badge bg-warning">
+                  <!-- prettier-ignore -->
+                  {{ workload.pending }}</span
+                >
               </td>
               <td class="text-center">
-                <span class="badge bg-success">{{ workload.completed }}</span>
+                <span class="badge bg-success">
+                  <!-- prettier-ignore -->
+                  {{ workload.completed }}</span
+                >
               </td>
               <td>
-                {% widthratio workload.completed workload.total_assignments 100
-                as percentage %}
+                <!-- prettier-ignore -->
+                {% widthratio workload.completed workload.total_assignments 100 as percentage %}
                 <div class="progress">
                   <div
                     class="progress-bar bg-success"

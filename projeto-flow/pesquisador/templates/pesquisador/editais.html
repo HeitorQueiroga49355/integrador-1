@@ -1,28 +1,156 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base.html' %} {% load static %} {% block content %}
+<style>
+  .page-header {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2);
+    margin-top: 1rem;
+  }
+  .page-header h3 {
+    margin: 0;
+    font-weight: 700;
+  }
+  .edital-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+  }
+  .edital-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  .edital-title {
+    color: #1e40af;
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .edital-description {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .edital-dates {
+    background: #f3f4f6;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .edital-dates h5 {
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .edital-dates span {
+    color: #1e40af;
+    font-weight: 500;
+  }
+  .edital-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  .btn-add {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+  .btn-add:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+  .btn-view {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .btn-view:hover {
+    background: #4b5563;
+    color: white;
+    transform: translateY(-2px);
+  }
+  .empty-state {
+    background: white;
+    border-radius: 15px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  .empty-state i {
+    font-size: 4rem;
+    color: #e5e7eb;
+    margin-bottom: 1rem;
+  }
+  .empty-state p {
+    color: #6b7280;
+    font-size: 1.1rem;
+  }
+</style>
 
-{% block content %}
-    <main class="main_pesquisador_conteudo">
-        <h3>Editais em aberto</h3>
-        {% for proposal in object_list %}
-        <section class="detalhes_projeto">
-            <div class="sobre_projeto sub_title_project">
-                <h4 class="subtitulo_editais">{{ proposal.title }}</h4>
-                <p class="paragrafo_info_editais">{{ proposal.description }}</p>
-                
-                    <h4 class="subtitulo_editais">Inscrições:</h4>
-                
-                <div class="info_btn_editais">
-                    <span class="paragrafo_info_editais">{{ proposal.opening_date}} a {{ proposal.closing_date }}</span>
-                    <div class="botoes_editais">
-                        <button class="btn-verde" onclick="window.location.href='{% url 'pesquisador-adicionar-projeto' proposal.id %}'">Adicionar Projeto</button>
-                        {% if proposal.proposal_file %}
-                            <a href="{{ proposal.proposal_file.url }}" target="_blank" class="btn-cinza">Ver arquivo</a>
-                        {% endif %}
-                    </div>
-                </div>
-            
-            </div> 
-        </section>
-        {% endfor %}
-    </main>
+<main class="main_pesquisador_conteudo">
+  <div class="page-header">
+    <h3><i class="bi bi-megaphone me-2"></i>Editais em Aberto</h3>
+  </div>
+
+  {% if object_list %} {% for proposal in object_list %}
+  <div class="edital-card">
+    <h4 class="edital-title">{{ proposal.title }}</h4>
+    <p class="edital-description">{{ proposal.description }}</p>
+
+    <div class="edital-dates">
+      <h5><i class="bi bi-calendar-range me-1"></i>Período de Inscrições:</h5>
+      <span>{{ proposal.opening_date }} até {{ proposal.closing_date }}</span>
+    </div>
+
+    <div class="edital-actions">
+      {% if proposal.proposal_file %}
+      <a
+        href="{{ proposal.proposal_file.url }}"
+        target="_blank"
+        class="btn-view"
+      >
+        <i class="bi bi-file-earmark-pdf me-2"></i>Ver Arquivo
+      </a>
+      {% endif %}
+      <a
+        href="{% url 'pesquisador-adicionar-projeto' proposal.id %}"
+        class="btn-add"
+      >
+        <i class="bi bi-plus-circle me-2"></i>Adicionar Projeto
+      </a>
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <div class="empty-state">
+    <i class="bi bi-inbox"></i>
+    <p>Nenhum edital aberto no momento.</p>
+    <small class="text-muted"
+      >Novos editais aparecerão aqui assim que forem publicados.</small
+    >
+  </div>
+  {% endif %}
+</main>
 {% endblock content %}

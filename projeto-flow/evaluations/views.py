@@ -29,7 +29,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # ============= VIEWS DE AVALIAÇÃO =============
 
@@ -412,8 +413,7 @@ def evaluation_report(request, proposal_id):
 # Convidar um avaliador por email
 
 def send_invite(request):
-    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
-                                                                              Profile.Role.MANAGER]:
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR, Profile.Role.MANAGER]:
         return redirect(get_default_page_alias_by_user(request.user))
     if request.method == 'POST':
         form = InviteForm(request.POST)
@@ -506,63 +506,92 @@ def accept_invite(request, token):
 
 # --- Função de adicionar manualmente ---
 def add_reviewer_manual(request):
-    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR,
-                                                                              Profile.Role.MANAGER]:
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR, Profile.Role.MANAGER]:
         return redirect(get_default_page_alias_by_user(request.user))
+    
     if request.method == 'POST':
-        name = request.POST.get('name')
+        name = request.POST.get('name', '').strip()
         email = request.POST.get('email', '').strip()
-        cpf = request.POST.get('cpf')
-        expertise = request.POST.get('expertise')
+        cpf = request.POST.get('cpf', '').strip()
+        expertise = request.POST.get('expertise', '').strip()
         password = request.POST.get('password', '').strip()
 
+        # VALIDAÇÕES BÁSICAS
+        if not all([name, email, cpf, expertise]):
+            messages.error(request, 'Todos os campos são obrigatórios.')
+            return redirect('evaluations:reviewers_list')
+
+        if '@' not in email:
+            messages.error(request, 'Email inválido.')
+            return redirect('evaluations:reviewers_list')
+
         User = get_user_model()
-        user = None
         created_new_user = False
 
         try:
-            with transaction.atomic():
-                # Verifica se o usuário JÁ existe
-                if User.objects.filter(email=email).exists():
-                    user = User.objects.get(email=email)
-
-                    # Se ele já for avaliador, aí sim paramos
-                    if Reviewer.objects.filter(user=user).exists():
-                        messages.warning(request, 'Este usuário já está cadastrado como Avaliador.')
+            # IMPORTAR O SIGNAL PARA DESCONECTAR
+            from evaluations.models import create_reviewer_for_staff
+            
+            # DESCONECTA O SIGNAL TEMPORARIAMENTE
+            post_save.disconnect(create_reviewer_for_staff, sender=Profile)
+            print("🔴 SIGNAL DESCONECTADO")
+            
+            try:
+                with transaction.atomic():
+                    # Verifica se JÁ EXISTE um Reviewer com este email
+                    if Reviewer.objects.filter(email=email).exists():
+                        messages.warning(request, 'Já existe um avaliador cadastrado com este email.')
                         return redirect('evaluations:reviewers_list')
 
-                    # Se existe mas não é avaliador, vamos promovê-lo
-                    print(f"--- USUÁRIO EXISTENTE ENCONTRADO: {email}. PROMOVENDO... ---")
+                    # Verifica se o usuário JÁ existe
+                    if User.objects.filter(email=email).exists():
+                        user = User.objects.get(email=email)
 
-                else:
-                    # Se não existe, cria um novo
-                    if not password:
-                        messages.error(request, 'Senha é obrigatória para novos usuários.')
-                        return redirect('evaluations:reviewers_list')
+                        if Reviewer.objects.filter(user=user).exists():
+                            messages.warning(request, 'Este usuário já está cadastrado como Avaliador.')
+                            return redirect('evaluations:reviewers_list')
 
-                    user = User.objects.create_user(username=email, email=email, password=password)
-                    user.first_name = name.split()[0]
-                    user.save()
-                    created_new_user = True
-                    print(f"--- NOVO USUÁRIO CRIADO: {email} ---")
+                        print(f"--- USUÁRIO EXISTENTE ENCONTRADO: {email}. PROMOVENDO... ---")
 
-                # Garante que o Profile é de avaliador (ou atualiza se já existir)
-                profile, _ = Profile.objects.get_or_create(user=user)
-                profile.role =  Profile.Role.EVALUATOR
-                profile.save()
+                    else:
+                        # Se não existe, cria um novo
+                        if not password:
+                            messages.error(request, 'Senha é obrigatória para novos usuários.')
+                            return redirect('evaluations:reviewers_list')
 
-                # Cria o vínculo de Reviewer
-                Reviewer.objects.create(
-                    user=user,
-                    name=name, email=email, cpf=cpf, expertise=expertise,
-                    institution=Institution.objects.first()
-                )
+                        user = User.objects.create_user(username=email, email=email, password=password)
+                        user.first_name = name.split()[0]
+                        user.save()
+                        created_new_user = True
+                        print(f"--- NOVO USUÁRIO CRIADO: {email} ---")
 
-            # --- ENVIO DE E-MAIL  ---
+                    # Garante que o Profile é de avaliador (ou atualiza se já existir)
+                    profile, _ = Profile.objects.get_or_create(user=user)
+                    profile.role = Profile.Role.EVALUATOR
+                    profile.save()
+                    print(f"✅ PROFILE SALVO: {profile.role}")
+
+                    # Cria o vínculo de Reviewer MANUALMENTE
+                    reviewer = Reviewer.objects.create(
+                        user=user,
+                        name=name, 
+                        email=email,
+                        cpf=cpf, 
+                        expertise=expertise,
+                        institution=Institution.objects.first()
+                    )
+                    print(f"✅ REVIEWER CRIADO: {reviewer.email}")
+
+            finally:
+                # RECONECTA O SIGNAL (IMPORTANTE!)
+                post_save.connect(create_reviewer_for_staff, sender=Profile)
+                print("🟢 SIGNAL RECONECTADO")
+
+            # --- ENVIO DE E-MAIL ---
+            print("📧 PREPARANDO EMAIL...")
             subject = 'Projeto Flow - Novo Perfil de Acesso'
 
             if created_new_user:
-                # E-mail com SENHA
                 message = (
                     f"Olá, {name}.\n\n"
                     f"Seu cadastro de Avaliador foi criado.\n\n"
@@ -571,14 +600,18 @@ def add_reviewer_manual(request):
                     f"Acesse o sistema para validar."
                 )
             else:
-                # E-mail SEM SENHA
                 message = (
                     f"Olá, {name}.\n\n"
                     f"Seu perfil foi atualizado. Agora você também possui permissões de Avaliador.\n\n"
                     f"Acesse o sistema com seu login e senha atuais."
                 )
 
-            send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+            try:
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+                print("✅ EMAIL ENVIADO")
+            except Exception as email_error:
+                print(f"⚠️ ERRO AO ENVIAR EMAIL: {email_error}")
+                # Não bloqueia o fluxo se o email falhar
 
             if created_new_user:
                 messages.success(request, 'Avaliador criado e senha enviada!')
@@ -586,11 +619,39 @@ def add_reviewer_manual(request):
                 messages.success(request, 'Usuário existente promovido a Avaliador com sucesso!')
 
         except Exception as e:
-            print(f"ERRO: {e}")
+            print(f"❌ ERRO GERAL: {e}")
+            import traceback
+            traceback.print_exc()
             messages.error(request, f'Erro ao processar: {e}')
 
     return redirect('evaluations:reviewers_list')
 
+# --- Função de promover avaliador a gestor ---
+def promote_to_manager(request, reviewer_id):
+    if not request.user.is_authenticated or request.user.profile.role not in [Profile.Role.EVALUATOR, Profile.Role.MANAGER]:
+        return redirect(get_default_page_alias_by_user(request.user))
+    
+    reviewer = get_object_or_404(Reviewer, id=reviewer_id)
+
+    try:
+        user = reviewer.user
+
+        if not user:
+            messages.error(request, 'Este avaliador não possui um usuário associado.')
+            return redirect('evaluations:reviewers_list')
+
+        with transaction.atomic():
+            # Atualiza o perfil para Manager
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.role = Profile.Role.MANAGER
+            profile.save()
+
+        messages.success(request, f'Sucesso! {user.first_name} foi promovido a Manager.')
+
+    except Exception as e:
+        messages.error(request, f'Erro ao promover usuário: {e}')
+
+    return redirect('evaluations:reviewers_list')
 
 # --- Função de promover avaliador a gestor ---
 def promote_to_manager(request, reviewer_id):
