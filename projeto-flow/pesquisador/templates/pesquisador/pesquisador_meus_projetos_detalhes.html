@@ -67,6 +67,18 @@
       align-items: center;
       gap: 0.5rem;
     }
+    .status-aprovado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status-reprovado {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .status-em-avaliacao {
+      background: #fef3c7;
+      color: #d97706;
+    }
     .status-badge img {
       width: 24px;
       height: 24px;
@@ -173,7 +185,7 @@
   <div class="status-section">
     <h4><i class="bi bi-info-circle me-2"></i>Situação do Projeto</h4>
     <div class="status-badge-container">
-      <div class="status-badge">
+      <div class="status-badge status-{{ submission.display_status|slugify }}">
         {% if submission.display_status == "Aprovado" %}
         <img src="{% static 'icons/aprovado.svg' %}" alt="Aprovado" />
         {% elif submission.display_status == "Reprovado" %}
